@@ -1,0 +1,47 @@
+<p class="title">stock</p>
+
+<table>
+  <tr *ngFor="let item of stock; let i = index">
+    <td>
+      {{ i+1 }}.
+    </td>
+    <td class="functions">
+      <button mat-icon-button (click)="copyStockItem(item)">
+        <mat-icon>add</mat-icon>
+      </button>
+      <button mat-icon-button (click)="deleteStockItem(item)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </td>
+    <td>
+      <mat-form-field>
+        <input matInput placeholder="name" [(ngModel)]="item.description">
+      </mat-form-field>
+    </td>
+    <td>
+      <mat-form-field>
+        <input matInput type="number" placeholder="height" [(ngModel)]="item.height">
+      </mat-form-field>
+    </td>
+    <td>
+      <mat-form-field>
+        <input matInput type="number" placeholder="width" [(ngModel)]="item.width">
+      </mat-form-field>
+    </td>
+    <td>
+      <mat-form-field>
+        <input matInput type="number" placeholder="thickness" [(ngModel)]="item.thickness">
+      </mat-form-field>
+    </td>
+    <td>
+      <mat-form-field>
+        <input matInput type="number" placeholder="cut width" [(ngModel)]="item.cuttingWidth">
+      </mat-form-field>
+    </td>
+  </tr>
+</table>
+<div>
+    <button mat-icon-button (click)="addStockItem()">
+      <mat-icon>add</mat-icon>
+    </button>
+</div>
