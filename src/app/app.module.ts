@@ -6,12 +6,16 @@ import { AppComponent } from './app.component';
 import { StockComponent } from './stock/stock.component';
 import { PartsComponent } from './parts/parts.component';
 import { FormsModule } from '@angular/forms';
+import { ResultsComponent } from './results/results.component';
+import { MaterialsComponent } from './materials/materials.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     StockComponent,
-    PartsComponent
+    PartsComponent,
+    ResultsComponent,
+    MaterialsComponent
   ],
   imports: [
     BrowserModule,

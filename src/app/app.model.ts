@@ -1,9 +1,15 @@
-export interface Stock {
-    height: number;
-    width: number;
+export interface Material {
+    description: string;
     thickness: number;
     cuttingWidth: number;
+}
+
+export interface Stock {
     description: string;
+    height: number;
+    width: number;
+    count: number;
+    material: Material;
 }
 
 export interface Part {
@@ -15,10 +21,10 @@ export interface Part {
     description: string;
 }
 
-export interface Resultset {
-    stock: Stock;
-    cuts: Cut[];
-    stats: Statistics;
+export class Resultset {
+    stock: Stock[] = [];
+    cuts: Cut[] = [];
+    stats: Statistics = {usedPercentage: 0, wasteArea: null};
 }
 
 export interface CuttedPart {

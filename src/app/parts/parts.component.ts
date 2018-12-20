@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Part, Stock } from '../app.model';
+import { Part, Stock, Material } from '../app.model';
 import { StorageService } from '../storage.service';
+import { CutService } from '../cut.service';
 
 @Component({
   selector: 'app-parts',
@@ -9,10 +10,12 @@ import { StorageService } from '../storage.service';
 })
 export class PartsComponent implements OnInit {
 
+  materials: Material[];
   stock: Stock[];
   parts: Part[];
 
-  constructor(storage: StorageService) {
+  constructor(storage: StorageService, private readonly cutService: CutService) {
+    this.materials = storage.materials;
     this.parts = storage.parts;
     this.stock = storage.stock;
   }
@@ -30,6 +33,10 @@ export class PartsComponent implements OnInit {
 
   deletePartItem(item: Part) {
     this.parts.splice(this.parts.indexOf(item), 1);
+  }
+
+  cutParts() {
+    this.cutService.cutParts();
   }
 
 }

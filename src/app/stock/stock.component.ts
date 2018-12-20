@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Stock } from '../app.model';
+import { Stock, Material } from '../app.model';
 import { StorageService } from '../storage.service';
 
 @Component({
@@ -9,23 +9,25 @@ import { StorageService } from '../storage.service';
 })
 export class StockComponent implements OnInit {
 
+  materials: Material[];
   stock: Stock[];
 
-  constructor(storate: StorageService) {
-    this.stock = storate.stock;
+  constructor(storage: StorageService) {
+    this.materials = storage.materials;
+    this.stock = storage.stock;
   }
 
   ngOnInit() {
   }
 
   addStockItem() {
-    let lastUsedThickness = 0;
-
-    if (this.stock.length) {
-      lastUsedThickness = this.stock[this.stock.length - 1].thickness;
-    }
-
-    this.stock.push({height: 0, width: 0, cuttingWidth: 4, thickness: lastUsedThickness, description: ''});
+    this.stock.push({
+      height: 0,
+      width: 0,
+      count: 1,
+      description: '',
+      material: null
+    });
   }
 
   copyStockItem(item: Stock) {

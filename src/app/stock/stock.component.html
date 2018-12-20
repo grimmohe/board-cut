@@ -20,6 +20,13 @@
     </td>
     <td>
       <mat-form-field>
+        <select matNativeControl placeholder="material" [(ngModel)]="item.material">
+          <option *ngFor="let m of materials" (value)="m">{{ m.description }}</option>
+        </select>
+      </mat-form-field>
+    </td>
+    <td>
+      <mat-form-field>
         <input matInput type="number" placeholder="height" [(ngModel)]="item.height">
       </mat-form-field>
     </td>
@@ -30,12 +37,7 @@
     </td>
     <td>
       <mat-form-field>
-        <input matInput type="number" placeholder="thickness" [(ngModel)]="item.thickness">
-      </mat-form-field>
-    </td>
-    <td>
-      <mat-form-field>
-        <input matInput type="number" placeholder="cut width" [(ngModel)]="item.cuttingWidth">
+        <input matInput type="number" placeholder="count" [(ngModel)]="item.count">
       </mat-form-field>
     </td>
   </tr>
