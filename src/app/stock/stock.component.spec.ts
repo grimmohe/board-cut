@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { FormsModule } from '@angular/forms';
+import { MatButtonModule, MatCardModule, MatIconModule, MatInputModule } from '@angular/material';
 import { StockComponent } from './stock.component';
+
 
 describe('StockComponent', () => {
   let component: StockComponent;
@@ -8,7 +10,8 @@ describe('StockComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ StockComponent ]
+      declarations: [ StockComponent ],
+      imports: [MatIconModule, MatButtonModule, MatCardModule, FormsModule, MatInputModule]
     })
     .compileComponents();
   }));
