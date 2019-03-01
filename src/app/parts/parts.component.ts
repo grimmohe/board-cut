@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Part, Stock, Material } from '../app.model';
+import { Material, Part, Stock } from '../app.model';
+import { CutService } from '../cut/cut.service';
 import { StorageService } from '../storage.service';
-import { CutService } from '../cut.service';
 
 @Component({
   selector: 'app-parts',
@@ -9,7 +9,6 @@ import { CutService } from '../cut.service';
   styleUrls: ['./parts.component.scss']
 })
 export class PartsComponent implements OnInit {
-
   materials: Material[];
   stock: Stock[];
   parts: Part[];
@@ -20,11 +19,17 @@ export class PartsComponent implements OnInit {
     this.stock = storage.stock;
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   addPartItem() {
-    this.parts.push({description: '', height: 0, width: 0, followGrain: false, count: 1, stock: null});
+    this.parts.push({
+      description: '',
+      height: 0,
+      width: 0,
+      followGrain: false,
+      count: 1,
+      stock: null
+    });
   }
 
   copyPartItem(item: Part) {
@@ -38,5 +43,4 @@ export class PartsComponent implements OnInit {
   cutParts() {
     this.cutService.cutParts();
   }
-
 }
