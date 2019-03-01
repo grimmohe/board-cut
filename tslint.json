@@ -28,10 +28,13 @@
     "interface-over-type-literal": true,
     "label-position": true,
     "max-line-length": [
-      true,
-      140
+      false,
+      100
     ],
-    "member-access": false,
+    "member-access": [
+      true,
+      "no-public"
+    ],
     "member-ordering": [
       true,
       {
@@ -65,7 +68,6 @@
     ],
     "no-misused-new": true,
     "no-non-null-assertion": true,
-    "no-redundant-jsdoc": true,
     "no-shadowed-variable": true,
     "no-string-literal": false,
     "no-string-throw": true,
@@ -73,7 +75,7 @@
     "no-trailing-whitespace": true,
     "no-unnecessary-initializer": true,
     "no-unused-expression": true,
-    "no-use-before-declare": true,
+    "no-use-before-declare": false,
     "no-var-keyword": true,
     "object-literal-sort-keys": false,
     "one-line": [
@@ -126,6 +128,20 @@
     "use-life-cycle-interface": true,
     "use-pipe-transform-interface": true,
     "component-class-suffix": true,
-    "directive-class-suffix": true
+    "directive-class-suffix": true,
+    "no-parameter-reassignment": true,
+    "switch-default": true,
+    "no-duplicate-imports": true,
+    "prefer-readonly": true,
+    "arrow-parens": true,
+    "interface-name": [
+      true,
+      "never-prefix"
+    ],
+    "newline-before-return": true,
+    "no-consecutive-blank-lines": [
+      true,
+      2
+    ]
   }
 }
