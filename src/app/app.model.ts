@@ -9,6 +9,7 @@ export interface Stock {
   height: number;
   width: number;
   count: number;
+  countLeft?: number;
   material: Material;
 }
 
@@ -29,6 +30,7 @@ export class Resultset {
 export interface UsedStock {
   usedParts: UsedPart[];
   stock: Stock;
+  usedArea: Position;
 }
 
 export interface UsedPart {

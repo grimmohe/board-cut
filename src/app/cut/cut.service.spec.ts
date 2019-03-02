@@ -149,4 +149,15 @@ describe('CutService', () => {
     expect(usedStock2.usedParts[0].position.y).toBe(0, 'stock 2 part position y');
     expect(usedStock2.stock).toBe(usedStock2.usedParts[0].part.stock, 'stock 2 matches part stock');
   });
+
+  it('should use 3 of 3 stock counts', () => {
+    addMeterial(4, 8, '');
+    addStock(3, 50, 50);
+    addPart(3, 50, 50, false);
+
+    service.cutParts();
+
+    expect(storage.results.length).toBe(1, 'one result');
+    expect(storage.results[0].usedStock.length).toBe(3, 'three stock items used');
+  });
 });
