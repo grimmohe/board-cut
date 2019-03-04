@@ -8,8 +8,8 @@ interface ModelCheck {
     stock: Stock;
     parts: {
       part: Part;
-      x: number;
-      y: number;
+      x?: number;
+      y?: number;
       turned?: boolean;
     }[];
   }[];
@@ -41,17 +41,28 @@ function addStock(count: number, width: number, height: number, material?: Mater
 }
 
 function allPartsFitStock(result: Resultset) {
-  result.usedStock.forEach((usedStock) => {
-    usedStock.usedParts.forEach((usedPart) => {
+  result.usedStock.forEach((usedStock, stockIndex) => {
+    usedStock.usedParts.forEach((usedPart, partIndex) => {
       expect(
         usedPart.position.x + (usedPart.turned ? usedPart.part.height : usedPart.part.width)
       ).toBeLessThanOrEqual(
         usedStock.stock.width,
-        'width overstepped x:' + usedPart.position.x + ' width:' + usedPart.part.width
+        'width overstepped x:' +
+          usedPart.position.x +
+          ' width:' +
+          usedPart.part.width +
+          '(' +
+          stockIndex +
+          ',' +
+          partIndex +
+          ')'
       );
       expect(
-        usedPart.position.x + (usedPart.turned ? usedPart.part.width : usedPart.part.height)
-      ).toBeLessThanOrEqual(usedStock.stock.height, 'height overstepped');
+        usedPart.position.y + (usedPart.turned ? usedPart.part.width : usedPart.part.height)
+      ).toBeLessThanOrEqual(
+        usedStock.stock.height,
+        'height overstepped (' + stockIndex + ',' + partIndex + ')'
+      );
     });
   });
 }
@@ -83,15 +94,15 @@ function checkResult(result: Resultset, model: ModelCheck) {
 
   model.stocks.forEach((s, stockIndex) => {
     const usedStock = result.usedStock[stockIndex];
-    expect(s.stock).toBe(usedStock.stock, 'the right stock');
-    expect(s.parts.length).toBe(usedStock.usedParts.length, 'used parts');
+    expect(s.stock).toBe(usedStock.stock, 'the right stock (' + stockIndex + ')');
+    expect(s.parts.length).toBe(usedStock.usedParts.length, 'used parts(' + stockIndex + ')');
 
     s.parts.forEach((p, partIndex) => {
       const usedPart = usedStock.usedParts[partIndex];
-      expect(p.part).toBe(usedPart.part, 'the right part');
-      expect(!!p.turned).toBe(usedPart.turned, 'turned');
-      expect(p.x).toBe(usedPart.position.x, 'x');
-      expect(p.y).toBe(usedPart.position.y, 'y');
+      expect(p.part).toBe(usedPart.part, 'the right part(' + stockIndex + ',' + partIndex + ')');
+      expect(!!p.turned).toBe(usedPart.turned, 'turned(' + stockIndex + ',' + partIndex + ')');
+      expect(p.x).toBe(usedPart.position.x, 'x(' + stockIndex + ',' + partIndex + ')');
+      expect(p.y).toBe(usedPart.position.y, 'y(' + stockIndex + ',' + partIndex + ')');
     });
   });
 }
@@ -229,6 +240,31 @@ describe('CutService', () => {
     };
 
     service.cutParts();
+
+    allPartsFitStock(storage.result);
+    checkResult(storage.result, model);
+  });
+
+  it('should fit many parts', () => {
+    addMaterial(4, 12, '');
+    const model: ModelCheck = {
+      stocks: [
+        {
+          stock: addStock(1, 2780, 2070),
+          parts: [
+            { part: addPart(2, 1975, 389, false) },
+            { part: addPart(2, 762, 374, false) },
+            { part: addPart(2, 862, 389, false) },
+            { part: addPart(2, 862, 374, false) },
+            { part: addPart(6, 862, 369, false) }
+          ]
+        }
+      ]
+    };
+
+    service.cutParts();
+
+    console.log(storage.result);
 
     allPartsFitStock(storage.result);
     checkResult(storage.result, model);
