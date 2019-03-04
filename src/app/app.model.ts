@@ -48,3 +48,9 @@ export interface Statistics {
   usedPercentage: number;
   wasteArea: number;
 }
+
+export interface HowToFit {
+  usable: boolean;
+  turned: boolean;
+  position: Position;
+}

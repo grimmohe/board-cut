@@ -32,14 +32,15 @@ function allPartsFitStock(results: Resultset[]) {
   results.forEach((result) => {
     result.usedStock.forEach((usedStock) => {
       usedStock.usedParts.forEach((usedPart) => {
-        expect(usedPart.position.x + usedPart.part.width).toBeLessThanOrEqual(
+        expect(
+          usedPart.position.x + (usedPart.turned ? usedPart.part.height : usedPart.part.width)
+        ).toBeLessThanOrEqual(
           usedStock.stock.width,
-          'width overstepped'
+          'width overstepped x:' + usedPart.position.x + ' width:' + usedPart.part.width
         );
-        expect(usedPart.position.x + usedPart.part.height).toBeLessThanOrEqual(
-          usedStock.stock.height,
-          'height overstepped'
-        );
+        expect(
+          usedPart.position.x + (usedPart.turned ? usedPart.part.width : usedPart.part.height)
+        ).toBeLessThanOrEqual(usedStock.stock.height, 'height overstepped');
       });
     });
   });
@@ -123,11 +124,11 @@ describe('CutService', () => {
 
   it('should cut two pieces out of one stock item', () => {
     const cuttingWidth = 4;
-    const partWidth = 50;
+    const partWidthAntHeight = 50;
 
     addMaterial(cuttingWidth, 8, '');
     addStock(1, 100, 200);
-    addPart(2, partWidth, 50, false);
+    addPart(2, partWidthAntHeight, partWidthAntHeight, false);
 
     service.cutParts();
 
@@ -145,8 +146,8 @@ describe('CutService', () => {
     const usedPart2 = usedParts[1];
     expect(usedPart2.part).toBe(storage.parts[0], 'the right part 2');
     expect(usedPart2.turned).toBe(false, 'part 2 not turned');
-    expect(usedPart2.position.x).toBe(partWidth + cuttingWidth, 'part 2 position x');
-    expect(usedPart2.position.y).toBe(0, 'part 2 position y');
+    expect(usedPart2.position.x).toBe(0, 'part 2 position x');
+    expect(usedPart2.position.y).toBe(partWidthAntHeight + cuttingWidth, 'part 2 position y');
   });
 
   it('should use two stock items for two parts', () => {
@@ -188,9 +189,9 @@ describe('CutService', () => {
     expect(storage.results[0].usedStock.length).toBe(3, 'three stock items used');
   });
 
-  it('should fit 3 parts on one stock item (a, b \r c)', () => {
+  it('should fit 3 parts on one stock item (a, b / c)', () => {
     addMaterial(5, 12, '');
-    addStock(1, 200, 200);
+    addStock(1, 100, 150);
     addPart(2, 45, 45, false);
     addPart(1, 100, 100, false);
 

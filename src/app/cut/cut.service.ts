@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Part, Resultset, Stock, UsedPart, UsedStock } from 'app/app.model';
+import { HowToFit, Part, Resultset, Stock, UsedPart, UsedStock } from 'app/app.model';
 import { StorageService } from 'app/storage.service';
 
 @Injectable({
@@ -54,40 +54,89 @@ export class CutService {
 
     parts.forEach((part) => {
       for (; part.countLeft > 0; part.countLeft--) {
-        if (!this.stockStillUsable(usedStock)) {
+        let howToFit = this.fitPartOntoStock(stock, usedStock, part);
+
+        if (!usedStock || !howToFit.usable) {
           usedStock = {
-            stock: parts[0].stock,
+            stock: stock,
             usedParts: [],
             usedArea: { x: 0, y: 0 }
           };
           usedStocks.push(usedStock);
+
+          if (!howToFit.usable) {
+            howToFit = this.fitPartOntoStock(stock, usedStock, part);
+          }
         }
 
         const usedPart: UsedPart = {
           part: part,
-          position: Object.assign({}, usedStock.usedArea),
-          turned: false
+          position: Object.assign({}, howToFit.position),
+          turned: howToFit.turned
         };
-
-        if (parts[0].stock.width < parts[0].width) {
-          usedPart.turned = true;
-        }
-
-        usedStock.usedArea.x += part.width + stock.material.cuttingWidth;
-
         usedStock.usedParts.push(usedPart);
+
+        this.updateUsedArea(usedStock, howToFit, part);
       }
     });
 
     return usedStocks;
   }
 
-  private stockStillUsable(usedStock: UsedStock) {
-    return (
-      usedStock &&
-      usedStock.usedArea.x < usedStock.stock.width &&
-      usedStock.usedArea.y < usedStock.stock.height
+  private updateUsedArea(usedStock: UsedStock, howToFit: HowToFit, part: Part) {
+    usedStock.usedArea.x = Math.max(
+      usedStock.usedArea.x,
+      howToFit.position.x + (howToFit.turned ? part.height : part.width)
     );
+    usedStock.usedArea.y = Math.max(
+      usedStock.usedArea.y,
+      howToFit.position.y + (howToFit.turned ? part.width : part.height)
+    );
+  }
+
+  private fitPartOntoStock(stock: Stock, usedStock: UsedStock, part: Part): HowToFit {
+    const usedX = usedStock ? usedStock.usedArea.x : 0;
+    const usedY = usedStock ? usedStock.usedArea.y : 0;
+
+    const cutX = usedX > 0 ? stock.material.cuttingWidth : 0;
+    const cutY = usedY > 0 ? stock.material.cuttingWidth : 0;
+
+    const usableFit: HowToFit = {
+      usable: true,
+      turned: false,
+      position: { x: 0, y: 0 }
+    };
+
+    if (stock.height >= part.height && usedX + cutX + part.width <= stock.width) {
+      usableFit.position.x = usedX + cutX;
+
+      return usableFit;
+    }
+
+    if (stock.width >= part.width && usedY + cutY + part.height <= stock.height) {
+      usableFit.position.y = usedY + cutY;
+
+      return usableFit;
+    }
+
+    if (!part.followGrain) {
+      usableFit.turned = true;
+
+      if (stock.height >= part.width && usedX + cutX + part.height <= stock.width) {
+        usableFit.position.x = usedX + cutX;
+
+        return usableFit;
+      }
+
+      if (stock.width >= part.height && usedY + cutY + part.width <= stock.height) {
+        usableFit.position.y = usedY + cutY;
+        usableFit.turned = true;
+
+        return usableFit;
+      }
+    }
+
+    return { usable: false, turned: null, position: null };
   }
 
   private getPartsForStock(stock: Stock, partsPool: Part[]): Part[] {
