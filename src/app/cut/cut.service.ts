@@ -17,11 +17,11 @@ export class CutService {
       return;
     }
 
-    this.cut(new Resultset(), this.storage.stock, this.storage.parts);
+    this.cut(this.storage.result, this.storage.stock, this.storage.parts);
   }
 
   private cleanResultStorage() {
-    this.storage.results = [];
+    this.storage.result = { usedStock: [] };
   }
 
   private resetPartCounter(parts: Part[]) {
@@ -37,8 +37,6 @@ export class CutService {
   }
 
   private cut(result: Resultset, stocks: Stock[], parts: Part[]) {
-    this.storage.results.push(result);
-
     stocks.forEach((stock) => {
       const partsForStock = this.getPartsForStock(stock, parts);
 

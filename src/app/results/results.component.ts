@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { StorageService } from '../storage.service';
 import { Resultset } from '../app.model';
+import { StorageService } from '../storage.service';
 
 @Component({
   selector: 'app-results',
@@ -8,14 +8,11 @@ import { Resultset } from '../app.model';
   styleUrls: ['./results.component.scss']
 })
 export class ResultsComponent implements OnInit {
-
-  results: Resultset[];
+  result: Resultset;
 
   constructor(storage: StorageService) {
-    this.results = storage.results;
+    this.result = storage.result;
   }
 
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }

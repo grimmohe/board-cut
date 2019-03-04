@@ -1,16 +1,14 @@
 import { Injectable } from '@angular/core';
-import { Part, Resultset, Stock, Material } from './app.model';
+import { Material, Part, Resultset, Stock } from './app.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class StorageService {
-
   materials: Material[] = [];
   stock: Stock[] = [];
   parts: Part[] = [];
-  results: Resultset[] = [];
+  result: Resultset;
 
-  constructor() { }
-
+  constructor() {}
 }
