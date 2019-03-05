@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { Material, Part, Resultset, Stock } from 'app/app.model';
+import { Material, Part, Resultset, Stock, UsedStock } from 'app/app.model';
 import { CutService } from 'app/cut/cut.service';
 import { StorageService } from 'app/storage.service';
 
@@ -90,7 +90,7 @@ function addPart(
 }
 
 function checkResult(result: Resultset, model: ModelCheck) {
-  expect(model.stocks.length).toBe(result.usedStock.length, 'used stock');
+  expect(result.usedStock.length).toBe(model.stocks.length, 'used stock');
 
   model.stocks.forEach((s, stockIndex) => {
     const usedStock = result.usedStock[stockIndex];
@@ -269,4 +269,76 @@ describe('CutService', () => {
     allPartsFitStock(storage.result);
     checkResult(storage.result, model);
   });*/
+
+  it('should use one part wisely', () => {
+    addMaterial(4, 12, '');
+    const stock = addStock(1, 100, 100);
+    stock.countLeft = 1;
+    const part = addPart(1, 100, 100, false);
+    part.countLeft = 1;
+    const parts = [part];
+
+    const usedStocks: UsedStock[] = [];
+
+    service.usePart(0, parts, usedStocks, stock);
+
+    expect(part.countLeft).toBe(0, 'part count left');
+    expect(stock.countLeft).toBe(0, 'stock count left');
+    expect(usedStocks.length).toBe(1, 'used stock count');
+    expect(usedStocks[0].stock).toBe(stock, 'stock kept real');
+    expect(usedStocks[0].usedArea.x).toBe(100, 'x used');
+    expect(usedStocks[0].usedArea.y).toBe(100, 'y used');
+    expect(usedStocks[0].usedParts.length).toBe(1, 'used parts length');
+    expect(usedStocks[0].usedParts[0].part).toBe(part, 'part kept real');
+    expect(usedStocks[0].usedParts[0].position.x).toBe(0, 'part x');
+    expect(usedStocks[0].usedParts[0].position.y).toBe(0, 'part y');
+    expect(usedStocks[0].usedParts[0].turned).toBeFalsy('part not turned');
+  });
+
+  it('should use cut part on stock', () => {
+    addMaterial(4, 12, '');
+    const stock = addStock(1, 100, 100);
+    stock.countLeft = 1;
+    const part = addPart(1, 100, 100, false);
+    part.countLeft = 1;
+    const parts = [part];
+
+    const usedStocks: UsedStock[] = [];
+
+    service.cutForStockItem(stock, parts, usedStocks);
+
+    expect(usedStocks.length).toBe(1, 'used stock');
+    expect(usedStocks[0].stock).toBe(stock, 'stock kept real');
+    expect(usedStocks[0].usedParts.length).toBe(1, 'used part');
+    expect(usedStocks[0].usedParts[0].part).toBe(part, 'part kept real');
+  });
+
+  it('should use cut two parts on stock', () => {
+    addMaterial(4, 12, '');
+    const stock = addStock(1, 100, 50);
+    stock.countLeft = 1;
+    const part = addPart(2, 48, 50, false);
+    part.countLeft = 2;
+    const parts = [part];
+
+    const usedStocks: UsedStock[] = [];
+
+    service.cutForStockItem(stock, parts, usedStocks);
+
+    expect(part.countLeft).toBe(0, 'part count left');
+    expect(stock.countLeft).toBe(0, 'stock count left');
+    expect(usedStocks.length).toBe(1, 'used stock count');
+    expect(usedStocks[0].stock).toBe(stock, 'stock kept real');
+    expect(usedStocks[0].usedArea.x).toBe(100, 'x used');
+    expect(usedStocks[0].usedArea.y).toBe(50, 'y used');
+    expect(usedStocks[0].usedParts.length).toBe(2, 'used parts length');
+    expect(usedStocks[0].usedParts[0].part).toBe(part, 'part kept real');
+    expect(usedStocks[0].usedParts[0].position.x).toBe(0, 'part x');
+    expect(usedStocks[0].usedParts[0].position.y).toBe(0, 'part y');
+    expect(usedStocks[0].usedParts[0].turned).toBeFalsy('part not turned');
+    expect(usedStocks[0].usedParts[1].part).toBe(part, 'part kept real');
+    expect(usedStocks[0].usedParts[1].position.x).toBe(52, 'part x');
+    expect(usedStocks[0].usedParts[1].position.y).toBe(0, 'part y');
+    expect(usedStocks[0].usedParts[1].turned).toBeFalsy('part not turned');
+  });
 });
