@@ -25,6 +25,7 @@ export interface Part {
 
 export class Resultset {
   usedStock: UsedStock[] = [];
+  stockArea?: number;
 }
 
 export interface UsedStock {
