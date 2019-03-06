@@ -100,6 +100,14 @@ export class CutService {
       return best;
     }
 
+    return this.ceateBestFallbackResult(baseUsedStocks, useOrder, baseParts);
+  }
+
+  private ceateBestFallbackResult(
+    baseUsedStocks: UsedStock[],
+    useOrder: UseOrder[],
+    baseParts: Part[]
+  ) {
     const ratio = this.statistics.getUsageRatio(
       this.statistics.getStockArea(baseUsedStocks),
       this.statistics.getPartsArea(baseUsedStocks)
