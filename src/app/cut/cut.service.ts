@@ -52,11 +52,20 @@ export class CutService {
     });
   }
 
-  cutForStockItem(stock: Stock, baseParts: Part[], baseUsedStocks: UsedStock[]): void {
-    const best = {
-      partIndex: 0,
-      ratio: 0
-    };
+  cutForStockItem(stock: Stock, parts: Part[], usedStocks: UsedStock[]): void {
+    const best = this.recursiveCutWalk(stock, [], parts, usedStocks);
+    best.useOrder.forEach((use) => {
+      this.usePart(use.partIndex, parts, usedStocks, stock);
+    });
+  }
+
+  private recursiveCutWalk(
+    stock: Stock,
+    useOrder: UseOrder[],
+    baseParts: Part[],
+    baseUsedStocks: UsedStock[]
+  ): Best {
+    let best: Best;
 
     const usedStocksString = JSON.stringify(baseUsedStocks);
     const partsString = JSON.stringify(baseParts);
@@ -70,23 +79,38 @@ export class CutService {
       const copiedParts: Part[] = JSON.parse(partsString);
       const copiedStock: Stock = Object.assign({}, stock);
 
+      const copiedUseOrder: UseOrder[] = [];
+      copiedUseOrder.push(...useOrder, { partIndex: partIndex });
+
       this.usePart(partIndex, copiedParts, copiedUsedStocks, copiedStock);
 
-      const ratio = this.statistics.getUsageRatio(
-        this.statistics.getStockArea(copiedUsedStocks),
-        this.statistics.getPartsArea(copiedUsedStocks)
+      const newBest = this.recursiveCutWalk(
+        copiedStock,
+        copiedUseOrder,
+        copiedParts,
+        copiedUsedStocks
       );
 
-      if (ratio > best.ratio) {
-        best.ratio = ratio;
-        best.partIndex = partIndex;
+      if (!best || newBest.ratio > best.ratio) {
+        best = newBest;
       }
     });
 
-    if (best.ratio) {
-      this.usePart(best.partIndex, baseParts, baseUsedStocks, stock);
-      this.cutForStockItem(stock, baseParts, baseUsedStocks);
+    if (best) {
+      return best;
     }
+
+    const ratio = this.statistics.getUsageRatio(
+      this.statistics.getStockArea(baseUsedStocks),
+      this.statistics.getPartsArea(baseUsedStocks)
+    );
+
+    return {
+      ratio: ratio,
+      useOrder: useOrder,
+      usedStock: baseUsedStocks,
+      parts: baseParts
+    } as Best;
   }
 
   usePart(partIndex: number, parts: Part[], usedStocks: UsedStock[], stock: Stock): void {
@@ -122,4 +146,15 @@ export class CutService {
       return part.stock === stock;
     });
   }
+}
+
+interface Best {
+  ratio: number;
+  useOrder: UseOrder[];
+  usedStock: UsedStock[];
+  parts: Part[];
+}
+
+interface UseOrder {
+  partIndex: number;
 }
