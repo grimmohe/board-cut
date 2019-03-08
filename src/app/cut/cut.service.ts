@@ -1,16 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Part, Resultset, Stock, UsedPart, UsedStock } from 'app/app.model';
-import { CutToolbox } from 'app/cut/cut-toolbox';
+import { PartDistribution } from 'app/cut/part-distribution';
 import { Statistics } from 'app/cut/statistics';
+import { UsedAreaCalculation } from 'app/cut/used-area-calculation';
+import { UsedStockBuilder } from 'app/cut/used-stock.builder';
 import { StorageService } from 'app/storage.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CutService {
-  statistics = new Statistics();
-  tool = new CutToolbox();
-
   constructor(private readonly storage: StorageService) {}
 
   cutParts() {
@@ -108,9 +107,9 @@ export class CutService {
     useOrder: UseOrder[],
     baseParts: Part[]
   ) {
-    const ratio = this.statistics.getUsageRatio(
-      this.statistics.getStockArea(baseUsedStocks),
-      this.statistics.getPartsArea(baseUsedStocks)
+    const ratio = Statistics.getUsageRatio(
+      Statistics.getStockArea(baseUsedStocks),
+      Statistics.getPartsArea(baseUsedStocks)
     );
 
     return {
@@ -126,15 +125,15 @@ export class CutService {
 
     let usedStock: UsedStock = usedStocks.length
       ? usedStocks[usedStocks.length - 1]
-      : this.tool.getNewUsedStock(stock, usedStocks);
+      : UsedStockBuilder.getNewUsedStock(stock, usedStocks);
 
-    let howToFit = this.tool.fitPartOntoStock(stock, usedStock, part);
+    let howToFit = PartDistribution.fitPartOntoStock(stock, usedStock, part);
 
     if (!howToFit.usable) {
-      usedStock = this.tool.getNewUsedStock(stock, usedStocks);
+      usedStock = UsedStockBuilder.getNewUsedStock(stock, usedStocks);
 
       if (!howToFit.usable) {
-        howToFit = this.tool.fitPartOntoStock(stock, usedStock, part);
+        howToFit = PartDistribution.fitPartOntoStock(stock, usedStock, part);
       }
     }
 
@@ -146,7 +145,7 @@ export class CutService {
     };
     usedStock.usedParts.push(usedPart);
 
-    this.tool.updateUsedArea(usedStock, howToFit, part);
+    UsedAreaCalculation.updateUsedArea(usedStock, howToFit, part);
   }
 
   private getPartsForStock(stock: Stock, partsPool: Part[]): Part[] {

@@ -2,8 +2,6 @@ import { Resultset } from 'app/app.model';
 import { Statistics } from 'app/cut/statistics';
 
 describe('Statistics', () => {
-  let statistics: Statistics;
-
   const result: Resultset = {
     usedStock: [
       {
@@ -44,36 +42,28 @@ describe('Statistics', () => {
     ]
   };
 
-  beforeEach(() => {
-    statistics = new Statistics();
-  });
-
-  it('should be created', () => {
-    expect(statistics).toBeTruthy();
-  });
-
   it('should have updateStatistics Method', () => {
     const r: Resultset = { usedStock: [] };
-    statistics.updateStatistics(r);
+    Statistics.updateStatistics(r);
   });
 
   it('should get me the stock area', () => {
-    expect(statistics.getStockArea(result.usedStock)).toBe(10000);
+    expect(Statistics.getStockArea(result.usedStock)).toBe(10000);
   });
 
   it('should get me the parts area', () => {
-    expect(statistics.getPartsArea(result.usedStock)).toBe(5000);
+    expect(Statistics.getPartsArea(result.usedStock)).toBe(5000);
   });
 
   it('should get me the usage ratio', () => {
-    expect(statistics.getUsageRatio(10, 5)).toBe(0.5);
-    expect(statistics.getUsageRatio(10, 0)).toBe(0);
-    expect(statistics.getUsageRatio(10, 10)).toBe(1);
-    expect(statistics.getUsageRatio(10, 11)).toBe(1.1);
+    expect(Statistics.getUsageRatio(10, 5)).toBe(0.5);
+    expect(Statistics.getUsageRatio(10, 0)).toBe(0);
+    expect(Statistics.getUsageRatio(10, 10)).toBe(1);
+    expect(Statistics.getUsageRatio(10, 11)).toBe(1.1);
   });
 
   it('should create areas and ratio', () => {
-    statistics.updateStatistics(result);
+    Statistics.updateStatistics(result);
 
     expect(result.partsArea).toBe(5000, 'parts');
     expect(result.stockArea).toBe(10000, 'stock');

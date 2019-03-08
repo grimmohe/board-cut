@@ -1,31 +1,7 @@
 import { HowToFit, Part, Stock, UsedStock } from 'app/app.model';
 
-export class CutToolbox {
-  updateUsedArea(usedStock: UsedStock, howToFit: HowToFit, part: Part) {
-    usedStock.usedArea.x = Math.max(
-      usedStock.usedArea.x,
-      howToFit.position.x + (howToFit.turned ? part.height : part.width)
-    );
-    usedStock.usedArea.y = Math.max(
-      usedStock.usedArea.y,
-      howToFit.position.y + (howToFit.turned ? part.width : part.height)
-    );
-  }
-
-  getNewUsedStock(stock: Stock, usedStocks: UsedStock[]): UsedStock {
-    const usedStock: UsedStock = {
-      stock: stock,
-      usedParts: [],
-      usedArea: { x: 0, y: 0 }
-    };
-    usedStocks.push(usedStock);
-
-    stock.countLeft -= 1;
-
-    return usedStock;
-  }
-
-  fitPartOntoStock(stock: Stock, usedStock: UsedStock, part: Part): HowToFit {
+export class PartDistribution {
+  static fitPartOntoStock(stock: Stock, usedStock: UsedStock, part: Part): HowToFit {
     const usedX = usedStock ? usedStock.usedArea.x : 0;
     const usedY = usedStock ? usedStock.usedArea.y : 0;
 
