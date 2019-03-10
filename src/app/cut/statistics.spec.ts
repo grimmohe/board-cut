@@ -1,11 +1,11 @@
-import { Resultset } from 'app/app.model';
+import { Resultset, UsedPart } from 'app/app.model';
 import { Statistics } from 'app/cut/statistics';
 
 describe('Statistics', () => {
   const result: Resultset = {
     usedStock: [
       {
-        stock: { count: 1, width: 100, height: 96, material: null, description: '' },
+        stock: { count: 1, width: 100, height: 96, material: null },
         usedParts: [
           {
             part: {
@@ -13,8 +13,7 @@ describe('Statistics', () => {
               width: 50,
               height: 50,
               stock: null,
-              followGrain: false,
-              description: ''
+              followGrain: false
             },
             turned: null,
             position: null
@@ -25,8 +24,7 @@ describe('Statistics', () => {
               width: 50,
               height: 50,
               stock: null,
-              followGrain: false,
-              description: ''
+              followGrain: false
             },
             turned: null,
             position: null
@@ -35,7 +33,7 @@ describe('Statistics', () => {
         usedArea: null
       },
       {
-        stock: { count: 1, width: 20, height: 20, material: null, description: '' },
+        stock: { count: 1, width: 20, height: 20, material: null },
         usedParts: [],
         usedArea: null
       }
@@ -68,5 +66,47 @@ describe('Statistics', () => {
     expect(result.partsArea).toBe(5000, 'parts');
     expect(result.stockArea).toBe(10000, 'stock');
     expect(result.usageRatio).toBe(0.5, 'ratio');
+  });
+
+  it('should get a row ratio', () => {
+    const usedParts: UsedPart[] = [
+      {
+        part: {
+          count: 2,
+          width: 50,
+          height: 50,
+          stock: null,
+          followGrain: false
+        },
+        turned: null,
+        position: { x: 0, y: 0 }
+      },
+      {
+        part: {
+          count: 2,
+          width: 50,
+          height: 50,
+          stock: null,
+          followGrain: false
+        },
+        turned: null,
+        position: { x: 50, y: 0 }
+      },
+      {
+        part: {
+          count: 2,
+          width: 50,
+          height: 100,
+          stock: null,
+          followGrain: false
+        },
+        turned: null,
+        position: { x: 100, y: 0 }
+      }
+    ];
+
+    const ratio = Statistics.getRowRatio(usedParts, 0, 0);
+
+    expect(ratio).toBe(0.6666666666666666);
   });
 });

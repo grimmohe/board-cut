@@ -1,11 +1,11 @@
 export interface Material {
-  description: string;
+  description?: string;
   thickness: number;
   cuttingWidth: number;
 }
 
 export interface Stock {
-  description: string;
+  description?: string;
   height: number;
   width: number;
   count: number;
@@ -19,7 +19,7 @@ export interface Part {
   count: number;
   stock: Stock;
   followGrain: boolean;
-  description: string;
+  description?: string;
 }
 
 export class Resultset {
