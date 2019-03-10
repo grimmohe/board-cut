@@ -156,4 +156,26 @@ describe('PartDistribution', () => {
     expect(result.position.x).toBe(0, 'large x');
     expect(result.position.y).toBe(50, 'large y');
   });
+
+  describe('row making', () => {
+    it('should build a simple row', () => {
+      const stock: Stock = {
+        count: 1,
+        width: 100,
+        height: 100,
+        countLeft: 1,
+        material: null,
+        description: ''
+      };
+      const parts: Part[] = [
+        { count: 1, width: 10, height: 10, stock: stock, followGrain: false, description: '' },
+        { count: 1, width: 10, height: 10, stock: stock, followGrain: false, description: '' },
+        { count: 1, width: 10, height: 10, stock: stock, followGrain: false, description: '' }
+      ];
+
+      const usedParts = PartDistribution.getRowFor(0, parts, 100, 100);
+
+      expect(usedParts.length).toBe(3);
+    });
+  });
 });

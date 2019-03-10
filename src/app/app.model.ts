@@ -17,7 +17,6 @@ export interface Part {
   height: number;
   width: number;
   count: number;
-  countLeft?: number;
   stock: Stock;
   followGrain: boolean;
   description: string;

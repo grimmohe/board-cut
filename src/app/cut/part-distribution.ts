@@ -1,6 +1,16 @@
-import { HowToFit, Part, Stock, UsedStock } from 'app/app.model';
+import { HowToFit, Part, Stock, UsedPart, UsedStock } from 'app/app.model';
 
 export class PartDistribution {
+  static getRowFor(partIndex: number, parts: Part[], width: number, height: number): UsedPart[] {
+    const usedParts: UsedPart[] = [];
+
+    parts.forEach((part) => {
+      usedParts.push({ part: part, position: { x: 0, y: 0 }, turned: false });
+    });
+
+    return usedParts;
+  }
+
   static fitPartOntoStock(stock: Stock, usedStock: UsedStock, part: Part): HowToFit {
     const usedX = usedStock ? usedStock.usedArea.x : 0;
     const usedY = usedStock ? usedStock.usedArea.y : 0;

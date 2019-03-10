@@ -14,24 +14,19 @@ export class CutService {
 
   cutParts() {
     this.cleanResultStorage();
-    this.resetPartCounter(this.storage.parts);
     this.resetStockCounter(this.storage.stock);
 
     if (!this.storage.parts.length) {
       return;
     }
 
-    this.cut(this.storage.result, this.storage.stock, this.storage.parts);
+    const flatPartList = this.extentPartArray(this.storage.parts);
+
+    this.cut(this.storage.result, this.storage.stock, flatPartList);
   }
 
   private cleanResultStorage() {
     this.storage.result = { usedStock: [] };
-  }
-
-  private resetPartCounter(parts: Part[]) {
-    parts.forEach((part) => {
-      part.countLeft = part.count;
-    });
   }
 
   private resetStockCounter(stocks: Stock[]) {
@@ -53,35 +48,47 @@ export class CutService {
 
   cutForStockItem(stock: Stock, parts: Part[], usedStocks: UsedStock[]): void {
     const best = this.recursiveCutWalk(stock, [], parts, usedStocks);
+
+    const partsCopy = [...parts];
     best.useOrder.forEach((use) => {
-      this.usePart(use.partIndex, parts, usedStocks, stock);
+      this.usePart(partsCopy[use.partIndex], usedStocks, stock);
+      partsCopy.splice(use.partIndex, 1);
     });
+  }
+
+  private extentPartArray(parts: Part[]): Part[] {
+    const e: Part[] = [];
+
+    parts.forEach((part) => {
+      for (let i = 0; i < part.count; i++) {
+        e.push(part);
+      }
+    });
+
+    return e;
   }
 
   private recursiveCutWalk(
     stock: Stock,
     useOrder: UseOrder[],
-    baseParts: Part[],
+    parts: Part[],
     baseUsedStocks: UsedStock[]
   ): Best {
     let best: Best;
 
     const usedStocksString = JSON.stringify(baseUsedStocks);
-    const partsString = JSON.stringify(baseParts);
 
-    baseParts.forEach((part, partIndex) => {
-      if (!part.countLeft) {
-        return;
-      }
-
+    parts.forEach((part, partIndex) => {
       const copiedUsedStocks: UsedStock[] = JSON.parse(usedStocksString);
-      const copiedParts: Part[] = JSON.parse(partsString);
+      const copiedParts: Part[] = [];
+      copiedParts.push(...parts);
+      copiedParts.splice(partIndex, 1);
       const copiedStock: Stock = Object.assign({}, stock);
 
       const copiedUseOrder: UseOrder[] = [];
       copiedUseOrder.push(...useOrder, { partIndex: partIndex });
 
-      this.usePart(partIndex, copiedParts, copiedUsedStocks, copiedStock);
+      this.usePart(part, copiedUsedStocks, copiedStock);
 
       const newBest = this.recursiveCutWalk(
         copiedStock,
@@ -99,7 +106,7 @@ export class CutService {
       return best;
     }
 
-    return this.ceateBestFallbackResult(baseUsedStocks, useOrder, baseParts);
+    return this.ceateBestFallbackResult(baseUsedStocks, useOrder, parts);
   }
 
   private ceateBestFallbackResult(
@@ -120,9 +127,7 @@ export class CutService {
     } as Best;
   }
 
-  usePart(partIndex: number, parts: Part[], usedStocks: UsedStock[], stock: Stock): void {
-    const part = parts[partIndex];
-
+  usePart(part: Part, usedStocks: UsedStock[], stock: Stock): void {
     let usedStock: UsedStock = usedStocks.length
       ? usedStocks[usedStocks.length - 1]
       : UsedStockBuilder.getNewUsedStock(stock, usedStocks);
@@ -137,7 +142,6 @@ export class CutService {
       }
     }
 
-    part.countLeft -= 1;
     const usedPart: UsedPart = {
       part: part,
       position: Object.assign({}, howToFit.position),

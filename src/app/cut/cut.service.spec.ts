@@ -275,14 +275,11 @@ describe('CutService', () => {
     const stock = addStock(1, 100, 100);
     stock.countLeft = 1;
     const part = addPart(1, 100, 100, false);
-    part.countLeft = 1;
-    const parts = [part];
 
     const usedStocks: UsedStock[] = [];
 
-    service.usePart(0, parts, usedStocks, stock);
+    service.usePart(part, usedStocks, stock);
 
-    expect(part.countLeft).toBe(0, 'part count left');
     expect(stock.countLeft).toBe(0, 'stock count left');
     expect(usedStocks.length).toBe(1, 'used stock count');
     expect(usedStocks[0].stock).toBe(stock, 'stock kept real');
@@ -300,7 +297,6 @@ describe('CutService', () => {
     const stock = addStock(1, 100, 100);
     stock.countLeft = 1;
     const part = addPart(1, 100, 100, false);
-    part.countLeft = 1;
     const parts = [part];
 
     const usedStocks: UsedStock[] = [];
@@ -318,14 +314,12 @@ describe('CutService', () => {
     const stock = addStock(1, 100, 50);
     stock.countLeft = 1;
     const part = addPart(2, 48, 50, false);
-    part.countLeft = 2;
-    const parts = [part];
+    const parts = [part, part];
 
     const usedStocks: UsedStock[] = [];
 
     service.cutForStockItem(stock, parts, usedStocks);
 
-    expect(part.countLeft).toBe(0, 'part count left');
     expect(stock.countLeft).toBe(0, 'stock count left');
     expect(usedStocks.length).toBe(1, 'used stock count');
     expect(usedStocks[0].stock).toBe(stock, 'stock kept real');
