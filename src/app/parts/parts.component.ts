@@ -41,6 +41,6 @@ export class PartsComponent implements OnInit {
   }
 
   cutParts() {
-    this.cutService.cutParts();
+    this.cutService.cut();
   }
 }

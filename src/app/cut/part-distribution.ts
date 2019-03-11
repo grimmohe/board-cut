@@ -1,29 +1,33 @@
 import { HowToFit, Part, Position, Stock, UsedPart, UsedStock } from 'app/app.model';
 import { Statistics } from 'app/cut/statistics';
+import { UsedAreaCalculation } from 'app/cut/used-area-calculation';
 
 export class PartDistribution {
-  static getRowFor(parts: Part[], width: number, height: number): UsedPart[] {
+  static addRowFor(parts: Part[], usedStock: UsedStock): number {
     const rowParts = [...parts];
     const row: UsedPart[] = [];
-    this.addToRow(rowParts, row, 'x', width, height);
+    this.addToRow(rowParts, row, 'x', usedStock);
 
     const colParts = [...parts];
     const col: UsedPart[] = [];
-    this.addToRow(colParts, col, 'y', width, height);
+    this.addToRow(colParts, col, 'y', usedStock);
 
     parts.length = 0;
+    const freeX = usedStock.stock.width - usedStock.usedArea.x;
+    const freeY = usedStock.stock.height - usedStock.usedArea.y;
 
-    if (
-      width - row[row.length - 1].position.x - row[row.length - 1].part.width <
-      height - col[col.length - 1].position.y - col[col.length - 1].part.height
-    ) {
+    if (Statistics.getRowRatio(row, freeX, 0) > Statistics.getRowRatio(col, 0, freeY)) {
       parts.push(...rowParts);
+      usedStock.usedParts.push(...row);
+      UsedAreaCalculation.updateUsedArea(usedStock, row, 'x');
 
-      return row;
+      return row.length;
     } else {
       parts.push(...colParts);
+      usedStock.usedParts.push(...col);
+      UsedAreaCalculation.updateUsedArea(usedStock, col, 'y');
 
-      return col;
+      return col.length;
     }
   }
 
@@ -31,35 +35,39 @@ export class PartDistribution {
     parts: Part[],
     usedParts: UsedPart[],
     direction: 'x' | 'y',
-    width: number,
-    height: number
+    usedStock: UsedStock
   ): void {
     const best = { parts: [...parts], usedParts: [...usedParts], usedRatio: 0 };
-    const position = this.getNextPartPosition(usedParts, direction);
+    const position = this.getNextPartPosition(usedParts, usedStock, direction);
 
     parts.forEach((part, partIndex) => {
-      if (position.x + part.width > width || position.y + part.height > height) {
-        return;
-      }
+      [false, true].forEach((turning) => {
+        if (
+          this.hinderTurning(turning, part) ||
+          !this.partFits(position, part, usedStock, turning)
+        ) {
+          return;
+        }
 
-      const partsCopy = [...parts];
-      partsCopy.splice(partIndex, 1);
+        const partsCopy = [...parts];
+        partsCopy.splice(partIndex, 1);
 
-      const usedPartsCopy = [...usedParts, { part: part, position: position, turned: false }];
+        const usedPartsCopy = [...usedParts, { part: part, position: position, turned: turning }];
 
-      this.addToRow(partsCopy, usedPartsCopy, direction, width, height);
+        this.addToRow(partsCopy, usedPartsCopy, direction, usedStock);
 
-      const usedRatio = Statistics.getRowRatio(
-        usedPartsCopy,
-        direction === 'x' ? width : 0,
-        direction === 'y' ? height : 0
-      );
+        const usedRatio = Statistics.getRowRatio(
+          usedPartsCopy,
+          direction === 'x' ? usedStock.stock.width : 0,
+          direction === 'y' ? usedStock.stock.height : 0
+        );
 
-      if (usedRatio > best.usedRatio) {
-        best.usedRatio = usedRatio;
-        best.usedParts = usedPartsCopy;
-        best.parts = partsCopy;
-      }
+        if (usedRatio > best.usedRatio) {
+          best.usedRatio = usedRatio;
+          best.usedParts = usedPartsCopy;
+          best.parts = partsCopy;
+        }
+      });
     });
 
     usedParts.length = 0;
@@ -69,19 +77,44 @@ export class PartDistribution {
     parts.push(...best.parts);
   }
 
-  private static getNextPartPosition(usedParts: UsedPart[], direction: 'x' | 'y'): Position {
-    if (usedParts.length === 0) {
-      return { x: 0, y: 0 };
+  private static partFits(
+    position: Position,
+    part: Part,
+    usedStock: UsedStock,
+    turning: boolean
+  ): boolean {
+    const width = turning ? part.height : part.width;
+    const height = turning ? part.width : part.height;
+
+    return (
+      position.x + width <= usedStock.stock.width && position.y + height <= usedStock.stock.height
+    );
+  }
+
+  private static hinderTurning(turning: boolean, part: Part): boolean {
+    return (turning && part.followGrain) || (turning && part.width === part.height);
+  }
+
+  private static getNextPartPosition(
+    usedParts: UsedPart[],
+    usedStock: UsedStock,
+    direction: 'x' | 'y'
+  ): Position {
+    const cuttingWidth = usedStock.stock.material.cuttingWidth;
+    const newPosition = Object.assign({}, usedStock.usedArea);
+
+    if (usedParts.length > 0) {
+      const last = usedParts[usedParts.length - 1];
+      const width = last.turned ? last.part.height : last.part.width;
+      const height = last.turned ? last.part.width : last.part.height;
+      if (direction === 'x') {
+        newPosition.x = last.position.x + width + cuttingWidth;
+      } else {
+        newPosition.y = last.position.y + height + cuttingWidth;
+      }
     }
-    const last = usedParts[usedParts.length - 1];
-    if (direction === 'x') {
-      return { x: last.position.x + last.part.width + last.part.stock.material.cuttingWidth, y: 0 };
-    } else {
-      return {
-        x: 0,
-        y: last.position.y + last.part.height + last.part.stock.material.cuttingWidth
-      };
-    }
+
+    return newPosition;
   }
 
   static fitPartOntoStock(stock: Stock, usedStock: UsedStock, part: Part): HowToFit {

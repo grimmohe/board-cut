@@ -56,3 +56,5 @@ export interface HowToFit {
   turned: boolean;
   position: Position;
 }
+
+export type Direction = 'x' | 'y';

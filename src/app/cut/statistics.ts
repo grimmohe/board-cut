@@ -33,7 +33,7 @@ export class Statistics {
     r.usageRatio = this.getUsageRatio(r.stockArea, r.partsArea);
   }
 
-  static getRowRatio(usedParts: UsedPart[], width: number, height: number): number {
+  static getRowRatio(usedParts: UsedPart[], stockWidth: number, stockHeight: number): number {
     if (usedParts.length === 0) {
       return 0;
     }
@@ -43,7 +43,10 @@ export class Statistics {
     let partArea = 0;
 
     usedParts.forEach((usedPart) => {
-      partArea += usedPart.part.width * usedPart.part.height;
+      const width = usedPart.turned ? usedPart.part.height : usedPart.part.width;
+      const height = usedPart.turned ? usedPart.part.width : usedPart.part.height;
+
+      partArea += width * height;
       if (usedPart.position.x < min.x) {
         min.x = usedPart.position.x;
       }
@@ -51,15 +54,15 @@ export class Statistics {
         min.y = usedPart.position.y;
       }
 
-      if (usedPart.position.x + usedPart.part.width > max.x) {
-        max.x = usedPart.position.x + usedPart.part.width;
+      if (usedPart.position.x + width > max.x) {
+        max.x = usedPart.position.x + width;
       }
-      if (usedPart.position.y + usedPart.part.height > max.y) {
-        max.y = usedPart.position.y + usedPart.part.height;
+      if (usedPart.position.y + height > max.y) {
+        max.y = usedPart.position.y + height;
       }
     });
 
-    const minMaxArea = Math.max(width, max.x - min.x) * Math.max(height, max.y - min.y);
+    const minMaxArea = Math.max(stockWidth, max.x - min.x) * Math.max(stockHeight, max.y - min.y);
 
     return partArea / minMaxArea;
   }

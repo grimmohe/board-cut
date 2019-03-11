@@ -123,7 +123,7 @@ describe('CutService', () => {
   });
 
   it('should run with empty input', () => {
-    service.cutParts();
+    service.cut();
 
     expect(storage.result).toBeDefined();
   });
@@ -140,7 +140,7 @@ describe('CutService', () => {
       ]
     };
 
-    service.cutParts();
+    service.cut();
 
     allPartsFitStock(storage.result);
     checkResult(storage.result, model);
@@ -158,7 +158,7 @@ describe('CutService', () => {
       ]
     };
 
-    service.cutParts();
+    service.cut();
 
     allPartsFitStock(storage.result);
     checkResult(storage.result, model);
@@ -184,7 +184,7 @@ describe('CutService', () => {
       ]
     };
 
-    service.cutParts();
+    service.cut();
 
     allPartsFitStock(storage.result);
     checkResult(storage.result, model);
@@ -202,7 +202,7 @@ describe('CutService', () => {
       ]
     };
 
-    service.cutParts();
+    service.cut();
 
     allPartsFitStock(storage.result);
     checkResult(storage.result, model);
@@ -213,14 +213,14 @@ describe('CutService', () => {
     addStock(3, 50, 50);
     addPart(3, 50, 50, false);
 
-    service.cutParts();
+    service.cut();
 
     allPartsFitStock(storage.result);
 
     expect(storage.result.usedStock.length).toBe(3, 'three stock items used');
   });
 
-  it('should fit 3 parts on one stock item (a, b / c)', () => {
+  it('should fit 3 parts on one stock item (a / b, c)', () => {
     addMaterial(5, 12, '');
     const stock = addStock(1, 100, 150);
     const doublePart = addPart(2, 45, 45, false);
@@ -231,65 +231,18 @@ describe('CutService', () => {
         {
           stock: stock,
           parts: [
-            { part: doublePart, x: 0, y: 0 },
-            { part: doublePart, x: 50, y: 0 },
-            { part: longPart, x: 0, y: 50 }
+            { part: longPart, x: 0, y: 0 },
+            { part: doublePart, x: 0, y: 105 },
+            { part: doublePart, x: 50, y: 105 }
           ]
         }
       ]
     };
 
-    service.cutParts();
+    service.cut();
 
     allPartsFitStock(storage.result);
     checkResult(storage.result, model);
-  });
-
-  /*it('should fit many parts', () => {
-    addMaterial(4, 12, '');
-    const model: ModelCheck = {
-      stocks: [
-        {
-          stock: addStock(1, 2780, 2070),
-          parts: [
-            { part: addPart(2, 1975, 389, false) },
-            { part: addPart(2, 762, 374, false) },
-            { part: addPart(2, 862, 389, false) },
-            { part: addPart(2, 862, 374, false) },
-            { part: addPart(6, 862, 369, false) }
-          ]
-        }
-      ]
-    };
-
-    service.cutParts();
-
-    console.log(storage.result);
-
-    allPartsFitStock(storage.result);
-    checkResult(storage.result, model);
-  });*/
-
-  it('should use one part wisely', () => {
-    addMaterial(4, 12, '');
-    const stock = addStock(1, 100, 100);
-    stock.countLeft = 1;
-    const part = addPart(1, 100, 100, false);
-
-    const usedStocks: UsedStock[] = [];
-
-    service.usePart(part, usedStocks, stock);
-
-    expect(stock.countLeft).toBe(0, 'stock count left');
-    expect(usedStocks.length).toBe(1, 'used stock count');
-    expect(usedStocks[0].stock).toBe(stock, 'stock kept real');
-    expect(usedStocks[0].usedArea.x).toBe(100, 'x used');
-    expect(usedStocks[0].usedArea.y).toBe(100, 'y used');
-    expect(usedStocks[0].usedParts.length).toBe(1, 'used parts length');
-    expect(usedStocks[0].usedParts[0].part).toBe(part, 'part kept real');
-    expect(usedStocks[0].usedParts[0].position.x).toBe(0, 'part x');
-    expect(usedStocks[0].usedParts[0].position.y).toBe(0, 'part y');
-    expect(usedStocks[0].usedParts[0].turned).toBeFalsy('part not turned');
   });
 
   it('should use cut part on stock', () => {
@@ -323,8 +276,6 @@ describe('CutService', () => {
     expect(stock.countLeft).toBe(0, 'stock count left');
     expect(usedStocks.length).toBe(1, 'used stock count');
     expect(usedStocks[0].stock).toBe(stock, 'stock kept real');
-    expect(usedStocks[0].usedArea.x).toBe(100, 'x used');
-    expect(usedStocks[0].usedArea.y).toBe(50, 'y used');
     expect(usedStocks[0].usedParts.length).toBe(2, 'used parts length');
     expect(usedStocks[0].usedParts[0].part).toBe(part, 'part kept real');
     expect(usedStocks[0].usedParts[0].position.x).toBe(0, 'part x');
@@ -335,4 +286,27 @@ describe('CutService', () => {
     expect(usedStocks[0].usedParts[1].position.y).toBe(0, 'part y');
     expect(usedStocks[0].usedParts[1].turned).toBeFalsy('part not turned');
   });
+
+  /*it('should fit many parts', () => {
+    addMaterial(4, 12, '');
+    const model: ModelCheck = {
+      stocks: [
+        {
+          stock: addStock(1, 2780, 2070),
+          parts: [
+            { part: addPart(2, 1975, 389, false) },
+            { part: addPart(2, 762, 374, false) },
+            { part: addPart(2, 862, 389, false) },
+            { part: addPart(2, 862, 374, false) },
+            { part: addPart(6, 862, 369, false) }
+          ]
+        }
+      ]
+    };
+
+    service.cut();
+
+    allPartsFitStock(storage.result);
+    checkResult(storage.result, model);
+  });*/
 });
