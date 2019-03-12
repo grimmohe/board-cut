@@ -8,6 +8,8 @@ import { StorageService } from 'app/storage.service';
   providedIn: 'root'
 })
 export class CutService {
+  partDistribution = new PartDistribution();
+
   constructor(private readonly storage: StorageService) {}
 
   cut() {
@@ -70,7 +72,7 @@ export class CutService {
         usedStock = UsedStockBuilder.getNewUsedStock(stock, usedStocks);
       }
 
-      const useCount = PartDistribution.addRowFor(parts, usedStock);
+      const useCount = this.partDistribution.addRowFor(parts, usedStock);
 
       if (!useCount) {
         if (usedStock.usedArea.x === 0 && usedStock.usedArea.y === 0) {

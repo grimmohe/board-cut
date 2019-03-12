@@ -2,6 +2,26 @@ import { Part, Stock, UsedStock } from 'app/app.model';
 import { PartDistribution } from 'app/cut/part-distribution';
 
 describe('PartDistribution', () => {
+  const defaultStock: Stock = {
+    count: 1,
+    width: 100,
+    height: 100,
+    countLeft: 1,
+    material: { cuttingWidth: 4, thickness: 12 },
+    description: ''
+  };
+  const defaultUsedStock: UsedStock = {
+    stock: defaultStock,
+    usedArea: { x: 0, y: 0 },
+    usedParts: []
+  };
+
+  beforeEach(() => {
+    defaultUsedStock.usedArea.x = 0;
+    defaultUsedStock.usedArea.y = 0;
+    defaultUsedStock.usedParts.length = 0;
+  });
+
   it('should fit part into top left corner', () => {
     const stock: Stock = {
       count: 1,
@@ -9,7 +29,6 @@ describe('PartDistribution', () => {
       height: 10,
       material: { cuttingWidth: 4, thickness: 12 }
     };
-    const usedStock: UsedStock = { stock: stock, usedParts: [], usedArea: { x: 0, y: 0 } };
     const part: Part = {
       count: 1,
       width: 5,
@@ -18,10 +37,10 @@ describe('PartDistribution', () => {
       followGrain: false
     };
 
-    PartDistribution.addRowFor([part], usedStock);
+    new PartDistribution().addRowFor([part], defaultUsedStock);
 
-    expect(usedStock.usedParts.length).toBe(1);
-    const usedPart = usedStock.usedParts[0];
+    expect(defaultUsedStock.usedParts.length).toBe(1);
+    const usedPart = defaultUsedStock.usedParts[0];
     expect(usedPart.position.x).toBe(0, 'x');
     expect(usedPart.position.y).toBe(0, 'y');
     expect(usedPart.turned).toBeFalsy('turned');
@@ -43,7 +62,7 @@ describe('PartDistribution', () => {
       followGrain: false
     };
 
-    PartDistribution.addRowFor([part], usedStock);
+    new PartDistribution().addRowFor([part], usedStock);
 
     expect(usedStock.usedParts.length).toBe(1);
     const usedPart = usedStock.usedParts[0];
@@ -68,7 +87,7 @@ describe('PartDistribution', () => {
       followGrain: false
     };
 
-    PartDistribution.addRowFor([part], usedStock);
+    new PartDistribution().addRowFor([part], usedStock);
     const usedParts = usedStock.usedParts;
 
     expect(usedParts.length).toBe(1);
@@ -94,7 +113,7 @@ describe('PartDistribution', () => {
       followGrain: false
     };
 
-    PartDistribution.addRowFor([part], usedStock);
+    new PartDistribution().addRowFor([part], usedStock);
     const usedParts = usedStock.usedParts;
 
     expect(usedParts.length).toBe(0);
@@ -128,127 +147,127 @@ describe('PartDistribution', () => {
     };
     const parts = [partSmall, partSmall, partLarge];
 
-    expect(PartDistribution.addRowFor(parts, usedStock)).toBe(1);
-    expect(PartDistribution.addRowFor(parts, usedStock)).toBe(1);
-    expect(PartDistribution.addRowFor(parts, usedStock)).toBe(1);
-    expect(PartDistribution.addRowFor(parts, usedStock)).toBe(0);
+    expect(new PartDistribution().addRowFor(parts, usedStock)).toBe(1);
+    expect(new PartDistribution().addRowFor(parts, usedStock)).toBe(1);
+    expect(new PartDistribution().addRowFor(parts, usedStock)).toBe(1);
+    expect(new PartDistribution().addRowFor(parts, usedStock)).toBe(0);
     expect(usedStock.usedParts.length).toBe(3);
   });
 
-  describe('row making', () => {
-    const defaultStock: Stock = {
+  it('should build a simple row', () => {
+    const parts: Part[] = [
+      {
+        count: 1,
+        width: 10,
+        height: 10,
+        stock: defaultStock,
+        followGrain: false,
+        description: ''
+      },
+      {
+        count: 1,
+        width: 10,
+        height: 10,
+        stock: defaultStock,
+        followGrain: false,
+        description: ''
+      },
+      {
+        count: 1,
+        width: 10,
+        height: 10,
+        stock: defaultStock,
+        followGrain: false,
+        description: ''
+      }
+    ];
+
+    const count = new PartDistribution().addRowFor(parts, defaultUsedStock);
+
+    expect(count).toBe(3);
+    expect(defaultUsedStock.usedParts.length).toBe(3);
+  });
+
+  it('should make the row horrizontal', () => {
+    const stock: Stock = {
       count: 1,
       width: 100,
       height: 100,
       countLeft: 1,
-      material: { cuttingWidth: 4, thickness: 12 },
-      description: ''
+      material: { cuttingWidth: 4, thickness: 0 }
     };
-    const usedStock: UsedStock = { stock: defaultStock, usedArea: { x: 0, y: 0 }, usedParts: [] };
+    const parts: Part[] = [
+      { count: 1, width: 48, height: 10, stock: stock, followGrain: false },
+      { count: 1, width: 48, height: 10, stock: stock, followGrain: false }
+    ];
+    defaultUsedStock.usedArea.y = 20;
 
-    beforeEach(() => {
-      usedStock.usedArea.x = 0;
-      usedStock.usedArea.y = 0;
-      usedStock.usedParts.length = 0;
+    new PartDistribution().addRowFor(parts, defaultUsedStock);
+    const usedParts = defaultUsedStock.usedParts;
+
+    expect(usedParts[0].position.x).toBe(0, '0 x');
+    expect(usedParts[0].position.y).toBe(20, '0 y');
+    expect(usedParts[1].position.x).toBe(52, '1 x');
+    expect(usedParts[1].position.y).toBe(20, '1 y');
+  });
+
+  it('should make the row vertival', () => {
+    const stock: Stock = {
+      count: 1,
+      width: 100,
+      height: 100,
+      countLeft: 1,
+      material: { cuttingWidth: 4, thickness: 0 }
+    };
+    const parts: Part[] = [
+      { count: 1, width: 10, height: 48, stock: stock, followGrain: false },
+      { count: 1, width: 10, height: 48, stock: stock, followGrain: false }
+    ];
+
+    new PartDistribution().addRowFor(parts, defaultUsedStock);
+    const usedParts = defaultUsedStock.usedParts;
+
+    expect(usedParts[0].position.x).toBe(0, '0 x');
+    expect(usedParts[0].position.y).toBe(0, '0 y');
+    expect(usedParts[1].position.x).toBe(0, '1 x');
+    expect(usedParts[1].position.y).toBe(52, '1 y');
+  });
+
+  it('should use the right 2 parts for a row', () => {
+    const stock: Stock = {
+      count: 1,
+      width: 100,
+      height: 100,
+      countLeft: 1,
+      material: { cuttingWidth: 4, thickness: 0 }
+    };
+    const parts: Part[] = [
+      { count: 1, width: 48, height: 10, stock: stock, followGrain: false },
+      { count: 1, width: 50, height: 10, stock: stock, followGrain: false },
+      { count: 1, width: 48, height: 10, stock: stock, followGrain: false }
+    ];
+
+    new PartDistribution().addRowFor(parts, defaultUsedStock);
+    const usedParts = defaultUsedStock.usedParts;
+    expect(usedParts.length).toBe(2, 'parts in a row');
+    expect(parts.length).toBe(1, 'part left');
+  });
+
+  it('should tell on every full row', () => {
+    const pd = new PartDistribution();
+    let fullRowCount = 0;
+
+    pd.updateOnFullRow.subscribe(() => {
+      fullRowCount += 1;
     });
 
-    it('should build a simple row', () => {
-      const parts: Part[] = [
-        {
-          count: 1,
-          width: 10,
-          height: 10,
-          stock: defaultStock,
-          followGrain: false,
-          description: ''
-        },
-        {
-          count: 1,
-          width: 10,
-          height: 10,
-          stock: defaultStock,
-          followGrain: false,
-          description: ''
-        },
-        {
-          count: 1,
-          width: 10,
-          height: 10,
-          stock: defaultStock,
-          followGrain: false,
-          description: ''
-        }
-      ];
+    const part: Part = { count: 3, width: 10, height: 10, stock: defaultStock, followGrain: false };
 
-      const count = PartDistribution.addRowFor(parts, usedStock);
+    const parts = [part, part, part];
 
-      expect(count).toBe(3);
-      expect(usedStock.usedParts.length).toBe(3);
-    });
+    pd.addRowFor(parts, defaultUsedStock);
 
-    it('should make the row horrizontal', () => {
-      const stock: Stock = {
-        count: 1,
-        width: 100,
-        height: 100,
-        countLeft: 1,
-        material: { cuttingWidth: 4, thickness: 0 }
-      };
-      const parts: Part[] = [
-        { count: 1, width: 48, height: 10, stock: stock, followGrain: false },
-        { count: 1, width: 48, height: 10, stock: stock, followGrain: false }
-      ];
-      usedStock.usedArea.y = 20;
-
-      PartDistribution.addRowFor(parts, usedStock);
-      const usedParts = usedStock.usedParts;
-
-      expect(usedParts[0].position.x).toBe(0, '0 x');
-      expect(usedParts[0].position.y).toBe(20, '0 y');
-      expect(usedParts[1].position.x).toBe(52, '1 x');
-      expect(usedParts[1].position.y).toBe(20, '1 y');
-    });
-
-    it('should make the row vertival', () => {
-      const stock: Stock = {
-        count: 1,
-        width: 100,
-        height: 100,
-        countLeft: 1,
-        material: { cuttingWidth: 4, thickness: 0 }
-      };
-      const parts: Part[] = [
-        { count: 1, width: 10, height: 48, stock: stock, followGrain: false },
-        { count: 1, width: 10, height: 48, stock: stock, followGrain: false }
-      ];
-
-      PartDistribution.addRowFor(parts, usedStock);
-      const usedParts = usedStock.usedParts;
-
-      expect(usedParts[0].position.x).toBe(0, '0 x');
-      expect(usedParts[0].position.y).toBe(0, '0 y');
-      expect(usedParts[1].position.x).toBe(0, '1 x');
-      expect(usedParts[1].position.y).toBe(52, '1 y');
-    });
-
-    it('should use the right 2 parts for a row', () => {
-      const stock: Stock = {
-        count: 1,
-        width: 100,
-        height: 100,
-        countLeft: 1,
-        material: { cuttingWidth: 4, thickness: 0 }
-      };
-      const parts: Part[] = [
-        { count: 1, width: 48, height: 10, stock: stock, followGrain: false },
-        { count: 1, width: 50, height: 10, stock: stock, followGrain: false },
-        { count: 1, width: 48, height: 10, stock: stock, followGrain: false }
-      ];
-
-      PartDistribution.addRowFor(parts, usedStock);
-      const usedParts = usedStock.usedParts;
-      expect(usedParts.length).toBe(2, 'parts in a row');
-      expect(parts.length).toBe(1, 'part left');
-    });
+    const exxpectedFullRowsForRowAndColumn = 2;
+    expect(fullRowCount).toBe(exxpectedFullRowsForRowAndColumn);
   });
 });

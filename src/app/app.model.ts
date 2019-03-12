@@ -51,10 +51,4 @@ export interface Statistics {
   wasteArea: number;
 }
 
-export interface HowToFit {
-  usable: boolean;
-  turned: boolean;
-  position: Position;
-}
-
 export type Direction = 'x' | 'y';

@@ -1,9 +1,16 @@
-import { HowToFit, Part, Position, Stock, UsedPart, UsedStock } from 'app/app.model';
+import { EventEmitter } from '@angular/core';
+import { Part, Position, UsedPart, UsedStock } from 'app/app.model';
 import { Statistics } from 'app/cut/statistics';
 import { UsedAreaCalculation } from 'app/cut/used-area-calculation';
+import { Observable } from 'rxjs';
 
 export class PartDistribution {
-  static addRowFor(parts: Part[], usedStock: UsedStock): number {
+  readonly updateOnFullRowEmitter = new EventEmitter<void>();
+  get updateOnFullRow(): Observable<void> {
+    return this.updateOnFullRowEmitter.asObservable();
+  }
+
+  addRowFor(parts: Part[], usedStock: UsedStock): number {
     const rowParts = [...parts];
     const row: UsedPart[] = [];
     this.addToRow(rowParts, row, 'x', usedStock);
@@ -31,7 +38,7 @@ export class PartDistribution {
     }
   }
 
-  private static addToRow(
+  private addToRow(
     parts: Part[],
     usedParts: UsedPart[],
     direction: 'x' | 'y',
@@ -39,8 +46,13 @@ export class PartDistribution {
   ): void {
     const best = { parts: [...parts], usedParts: [...usedParts], usedRatio: 0 };
     const position = this.getNextPartPosition(usedParts, usedStock, direction);
+    let rowIsFinished = true;
 
     parts.forEach((part, partIndex) => {
+      if (parts.indexOf(part) < partIndex) {
+        return;
+      }
+
       [false, true].forEach((turning) => {
         if (
           this.hinderTurning(turning, part) ||
@@ -54,7 +66,10 @@ export class PartDistribution {
 
         const usedPartsCopy = [...usedParts, { part: part, position: position, turned: turning }];
 
-        this.addToRow(partsCopy, usedPartsCopy, direction, usedStock);
+        if (partsCopy.length) {
+          this.addToRow(partsCopy, usedPartsCopy, direction, usedStock);
+          rowIsFinished = false;
+        }
 
         const usedRatio = Statistics.getRowRatio(
           usedPartsCopy,
@@ -75,9 +90,13 @@ export class PartDistribution {
 
     parts.length = 0;
     parts.push(...best.parts);
+
+    if (rowIsFinished) {
+      this.updateOnFullRowEmitter.next();
+    }
   }
 
-  private static partFits(
+  private partFits(
     position: Position,
     part: Part,
     usedStock: UsedStock,
@@ -91,11 +110,11 @@ export class PartDistribution {
     );
   }
 
-  private static hinderTurning(turning: boolean, part: Part): boolean {
+  private hinderTurning(turning: boolean, part: Part): boolean {
     return (turning && part.followGrain) || (turning && part.width === part.height);
   }
 
-  private static getNextPartPosition(
+  private getNextPartPosition(
     usedParts: UsedPart[],
     usedStock: UsedStock,
     direction: 'x' | 'y'
@@ -115,50 +134,5 @@ export class PartDistribution {
     }
 
     return newPosition;
-  }
-
-  static fitPartOntoStock(stock: Stock, usedStock: UsedStock, part: Part): HowToFit {
-    const usedX = usedStock ? usedStock.usedArea.x : 0;
-    const usedY = usedStock ? usedStock.usedArea.y : 0;
-
-    const cutX = usedX > 0 ? stock.material.cuttingWidth : 0;
-    const cutY = usedY > 0 ? stock.material.cuttingWidth : 0;
-
-    const usableFit: HowToFit = {
-      usable: true,
-      turned: false,
-      position: { x: 0, y: 0 }
-    };
-
-    if (stock.height >= part.height && usedX + cutX + part.width <= stock.width) {
-      usableFit.position.x = usedX + cutX;
-
-      return usableFit;
-    }
-
-    if (stock.width >= part.width && usedY + cutY + part.height <= stock.height) {
-      usableFit.position.y = usedY + cutY;
-
-      return usableFit;
-    }
-
-    if (!part.followGrain) {
-      usableFit.turned = true;
-
-      if (stock.height >= part.width && usedX + cutX + part.height <= stock.width) {
-        usableFit.position.x = usedX + cutX;
-
-        return usableFit;
-      }
-
-      if (stock.width >= part.height && usedY + cutY + part.width <= stock.height) {
-        usableFit.position.y = usedY + cutY;
-        usableFit.turned = true;
-
-        return usableFit;
-      }
-    }
-
-    return { usable: false, turned: null, position: null };
   }
 }
