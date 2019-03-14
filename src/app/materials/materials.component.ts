@@ -8,30 +8,34 @@ import { StorageService } from '../storage.service';
   styleUrls: ['./materials.component.scss']
 })
 export class MaterialsComponent implements OnInit {
+  constructor(readonly storage: StorageService) {}
 
-  materials: Material[];
+  ngOnInit() {}
 
-  constructor(storage: StorageService) {
-    this.materials = storage.materials;
-  }
-
-  ngOnInit() {
+  emitUpdate() {
+    this.storage.sourceMatsChanged.emit();
   }
 
   addMaterialItem() {
-    this.materials.push({
+    this.storage.materials.push({
       description: '',
       cuttingWidth: 4,
       thickness: 19
     });
+    this.emitUpdate();
   }
 
   copyMaterialItem(item: Material) {
-    this.materials.splice(this.materials.indexOf(item) + 1, 0, Object.assign({}, item));
+    this.storage.materials.splice(
+      this.storage.materials.indexOf(item) + 1,
+      0,
+      Object.assign({}, item)
+    );
+    this.emitUpdate();
   }
 
   deleteMaterialItem(item: Material) {
-    this.materials.splice(this.materials.indexOf(item), 1);
+    this.storage.materials.splice(this.storage.materials.indexOf(item), 1);
+    this.emitUpdate();
   }
-
 }

@@ -1,37 +1,54 @@
 <p class="title">materials</p>
 
 <table>
-  <tr *ngFor="let item of materials; let i = index">
-    <td>
-      {{ i+1 }}.
-    </td>
+  <tr *ngFor="let item of storage.materials; let i = index">
+    <td>{{ i + 1 }}.</td>
     <td class="functions">
-      <button mat-icon-button (click)="copyMaterialItem(item)">
+      <button class="copy" mat-icon-button (click)="copyMaterialItem(item)">
         <mat-icon>add</mat-icon>
       </button>
-      <button mat-icon-button (click)="deleteMaterialItem(item)">
+      <button class="delete" mat-icon-button (click)="deleteMaterialItem(item)">
         <mat-icon>delete</mat-icon>
       </button>
     </td>
     <td>
       <mat-form-field>
-        <input matInput placeholder="name" [(ngModel)]="item.description">
+        <input
+          class="desc"
+          matInput
+          placeholder="name"
+          [(ngModel)]="item.description"
+          (input)="emitUpdate()"
+        />
       </mat-form-field>
     </td>
     <td>
       <mat-form-field>
-        <input matInput type="number" placeholder="thickness" [(ngModel)]="item.thickness">
+        <input
+          class="thickness"
+          matInput
+          type="number"
+          placeholder="thickness"
+          [(ngModel)]="item.thickness"
+          (input)="emitUpdate()"
+        />
       </mat-form-field>
     </td>
     <td>
       <mat-form-field>
-        <input matInput type="number" placeholder="cut width" [(ngModel)]="item.cuttingWidth">
+        <input
+          class="width"
+          matInput
+          type="number"
+          placeholder="cut width"
+          [(ngModel)]="item.cuttingWidth"
+          (input)="emitUpdate()"
+        />
       </mat-form-field>
     </td>
   </tr>
 </table>
+
 <div>
-    <button mat-icon-button (click)="addMaterialItem()">
-      <mat-icon>add</mat-icon>
-    </button>
+  <button class="add" mat-icon-button (click)="addMaterialItem()"><mat-icon>add</mat-icon></button>
 </div>
