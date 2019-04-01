@@ -1,55 +1,88 @@
 <p class="title">parts</p>
 
 <table>
-  <tr *ngFor="let item of parts; let i = index">
-    <td>
-      {{ i+1 }}.
-    </td>
+  <tr *ngFor="let item of storage.parts; let i = index">
+    <td>{{ i + 1 }}.</td>
     <td class="functions">
-      <button mat-icon-button (click)="copyPartItem(item)">
+      <button mat-icon-button class="copy" (click)="copyPartItem(item)">
         <mat-icon>add</mat-icon>
       </button>
-      <button mat-icon-button (click)="deletePartItem(item)">
+      <button mat-icon-button class="delete" (click)="deletePartItem(item)">
         <mat-icon>delete</mat-icon>
       </button>
     </td>
     <td>
       <mat-form-field>
-        <input matInput placeholder="name" [(ngModel)]="item.description">
+        <input
+          matInput
+          placeholder="name"
+          class="name"
+          [(ngModel)]="item.description"
+          (input)="emitUpdate()"
+        />
       </mat-form-field>
     </td>
     <td>
       <mat-form-field>
-        <input matInput type="number" placeholder="height" [(ngModel)]="item.height">
+        <input
+          matInput
+          type="number"
+          placeholder="height"
+          class="height"
+          [(ngModel)]="item.height"
+          (input)="emitUpdate()"
+        />
       </mat-form-field>
     </td>
     <td>
       <mat-form-field>
-        <input matInput type="number" placeholder="width" [(ngModel)]="item.width">
+        <input
+          matInput
+          type="number"
+          placeholder="width"
+          class="width"
+          [(ngModel)]="item.width"
+          (input)="emitUpdate()"
+        />
       </mat-form-field>
     </td>
     <td>
       <mat-form-field>
-        <input matInput type="number" placeholder="count" [(ngModel)]="item.count">
+        <input
+          matInput
+          type="number"
+          placeholder="count"
+          class="count"
+          [(ngModel)]="item.count"
+          (input)="emitUpdate()"
+        />
       </mat-form-field>
     </td>
     <td>
       <mat-form-field>
-        <select matNativeControl placeholder="from stock" [(ngModel)]="item.stock">
-          <option *ngFor="let s of stock" (value)="s">{{ s.description }} ({{ s.height }}:{{ s.width }}:{{ s.thickness }})</option>
+        <select
+          matNativeControl
+          placeholder="from stock"
+          class="stock"
+          [(ngModel)]="item.stock"
+          (ngModelChange)="emitUpdate()"
+        >
+          <option *ngFor="let s of storage.stock" [(ngValue)]="s">
+            {{ s.description }} ({{ s.height }}:{{ s.width }})
+          </option>
         </select>
       </mat-form-field>
     </td>
     <td>
-      <mat-checkbox [(ngModel)]="item.followGrain">follow grain</mat-checkbox>
+      <mat-checkbox class="follow" [(ngModel)]="item.followGrain" (change)="emitUpdate()">
+        follow grain
+      </mat-checkbox>
     </td>
   </tr>
 </table>
+
 <div>
-    <button mat-icon-button (click)="addPartItem()">
-      <mat-icon>add</mat-icon>
-    </button>
-</div>
-<div class="cut-action">
-    <button mat-raised-button color="primary" (click)="cutParts()">cut it</button>
+  <button mat-icon-button class="add" (click)="addPartItem()">
+    <mat-icon>add</mat-icon>
+  </button>
 </div>

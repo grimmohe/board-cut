@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Material, Part, Stock } from '../app.model';
-import { CutService } from '../cut/cut.service';
+import { Part } from '../app.model';
 import { StorageService } from '../storage.service';
 
 @Component({
@@ -9,20 +8,16 @@ import { StorageService } from '../storage.service';
   styleUrls: ['./parts.component.scss']
 })
 export class PartsComponent implements OnInit {
-  materials: Material[];
-  stock: Stock[];
-  parts: Part[];
-
-  constructor(storage: StorageService, private readonly cutService: CutService) {
-    this.materials = storage.materials;
-    this.parts = storage.parts;
-    this.stock = storage.stock;
-  }
+  constructor(readonly storage: StorageService) {}
 
   ngOnInit() {}
 
+  emitUpdate() {
+    this.storage.sourceMatsChanged.emit();
+  }
+
   addPartItem() {
-    this.parts.push({
+    this.storage.parts.push({
       description: '',
       height: 0,
       width: 0,
@@ -30,17 +25,16 @@ export class PartsComponent implements OnInit {
       count: 1,
       stock: null
     });
+    this.emitUpdate();
   }
 
   copyPartItem(item: Part) {
-    this.parts.splice(this.parts.indexOf(item) + 1, 0, Object.assign({}, item));
+    this.storage.parts.splice(this.storage.parts.indexOf(item) + 1, 0, Object.assign({}, item));
+    this.emitUpdate();
   }
 
   deletePartItem(item: Part) {
-    this.parts.splice(this.parts.indexOf(item), 1);
-  }
-
-  cutParts() {
-    this.cutService.cut();
+    this.storage.parts.splice(this.storage.parts.indexOf(item), 1);
+    this.emitUpdate();
   }
 }

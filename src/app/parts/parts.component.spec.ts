@@ -1,28 +1,235 @@
+import { Component, ViewChild } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { MatButtonModule, MatCardModule, MatCheckboxModule, MatIconModule, MatInputModule } from '@angular/material';
+import {
+  MatButtonModule,
+  MatCardModule,
+  MatCheckboxModule,
+  MatIconModule,
+  MatInputModule
+} from '@angular/material';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { StorageService } from 'app/storage.service';
 import { PartsComponent } from './parts.component';
 
-
 describe('PartsComponent', () => {
-  let component: PartsComponent;
-  let fixture: ComponentFixture<PartsComponent>;
+  let testHost: TestHostComponent;
+  let fixture: ComponentFixture<TestHostComponent>;
+  let storage: StorageService;
+  let element: HTMLElement;
+  let changeTriggerCount: number;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PartsComponent ],
-      imports: [MatIconModule, MatButtonModule, MatCardModule, FormsModule, MatInputModule, MatCheckboxModule]
-    })
-    .compileComponents();
+      declarations: [PartsComponent, TestHostComponent],
+      imports: [
+        MatIconModule,
+        MatButtonModule,
+        MatCardModule,
+        FormsModule,
+        MatInputModule,
+        MatCheckboxModule,
+        NoopAnimationsModule
+      ]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PartsComponent);
-    component = fixture.componentInstance;
+    fixture = TestBed.createComponent(TestHostComponent);
+    testHost = fixture.componentInstance;
+    element = fixture.debugElement.nativeElement;
     fixture.detectChanges();
   });
 
+  beforeEach(async(() => {
+    storage = TestBed.get(StorageService);
+    storage.materials = [{ description: 'Spahn', thickness: 12, cuttingWidth: 4 }];
+    storage.stock = [
+      {
+        description: 'Standard',
+        height: 3000,
+        width: 1200,
+        count: 1,
+        material: storage.materials[0]
+      },
+      {
+        description: 'Alternativ',
+        height: 5000,
+        width: 1000,
+        count: 1,
+        material: storage.materials[0]
+      }
+    ];
+    storage.parts = [
+      {
+        description: 'Tür',
+        height: 1000,
+        width: 600,
+        count: 2,
+        followGrain: true,
+        stock: storage.stock[0]
+      }
+    ];
+    storage.sourceMatsChanged.subscribe(() => {
+      changeTriggerCount++;
+    });
+
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      changeTriggerCount = 0;
+    });
+  }));
+
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(testHost).toBeTruthy();
   });
+
+  it('should display parts', () => {
+    expect(getDescInput().value).toBe('Tür');
+    expect(getHeightInput().value).toBe('1000');
+    expect(getWidthInput().value).toBe('600');
+    expect(getCountInput().value).toBe('2');
+    // expect(getFollowInput().checked).toBe(true);
+    expect(getStockOption().textContent.trim()).toBe('Standard (3000:1200)');
+  });
+
+  it('should add a part', async(() => {
+    const button: HTMLButtonElement = element.querySelector('button.add');
+    button.click();
+
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      const names = element.querySelectorAll('input.name');
+      expect(names.length).toBe(2);
+      expect((names.item(1) as HTMLInputElement).value).toBe('');
+      expect(changeTriggerCount).toBe(1);
+    });
+  }));
+
+  it('should copy a part', async(() => {
+    const button: HTMLButtonElement = element.querySelector('button.copy');
+    button.click();
+
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      const names = element.querySelectorAll('input.name');
+      expect(names.length).toBe(2);
+      expect((names.item(1) as HTMLInputElement).value).toBe('Tür');
+      expect(storage.parts.length).toBe(2);
+      expect(storage.parts[0]).not.toBe(storage.parts[1]);
+      expect(storage.parts[0]).toEqual(storage.parts[1]);
+      expect(changeTriggerCount).toBe(1);
+    });
+  }));
+
+  it('should delete a part', async(() => {
+    const button: HTMLButtonElement = element.querySelector('button.delete');
+    button.click();
+
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      const names = element.querySelectorAll('input.name');
+      expect(names.length).toBe(0);
+      expect(storage.parts.length).toBe(0);
+      expect(changeTriggerCount).toBe(1);
+    });
+  }));
+
+  it('should change the name', async(() => {
+    getDescInput().value = 'Test';
+    getDescInput().dispatchEvent(new Event('input'));
+
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      expect(storage.parts[0].description).toBe('Test');
+      expect(changeTriggerCount).toBe(1);
+    });
+  }));
+
+  it('should change the height', async(() => {
+    getHeightInput().value = '123';
+    getHeightInput().dispatchEvent(new Event('input'));
+
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      expect(storage.parts[0].height).toBe(123);
+      expect(changeTriggerCount).toBe(1);
+    });
+  }));
+
+  it('should change the width', async(() => {
+    getWidthInput().value = '123';
+    getWidthInput().dispatchEvent(new Event('input'));
+
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      expect(storage.parts[0].width).toBe(123);
+      expect(changeTriggerCount).toBe(1);
+    });
+  }));
+
+  it('should change the count', async(() => {
+    getCountInput().value = '123';
+    getCountInput().dispatchEvent(new Event('input'));
+
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      expect(storage.parts[0].count).toBe(123);
+      expect(changeTriggerCount).toBe(1);
+    });
+  }));
+
+  it('should change follow grain', async(() => {
+    getFollowInput().checked = false;
+    getFollowInput().click();
+
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      expect(storage.parts[0].followGrain).toBe(false);
+      expect(changeTriggerCount).toBe(1);
+    });
+  }));
+
+  it('should change the stock', async(() => {
+    storage.parts[0].stock = storage.stock[1];
+    getStockSelect().dispatchEvent(new Event('change'));
+
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      expect(changeTriggerCount).toBe(1);
+    });
+  }));
+
+  function getDescInput(): HTMLInputElement {
+    return element.querySelector('input.name');
+  }
+
+  function getHeightInput(): HTMLInputElement {
+    return element.querySelector('input.height');
+  }
+
+  function getWidthInput(): HTMLInputElement {
+    return element.querySelector('input.width');
+  }
+
+  function getCountInput(): HTMLInputElement {
+    return element.querySelector('input.count');
+  }
+
+  function getFollowInput(): HTMLInputElement {
+    return element.querySelector('.follow input');
+  }
+
+  function getStockSelect(): HTMLElement {
+    return element.querySelector('select.stock');
+  }
+
+  function getStockOption(): HTMLElement {
+    return element.querySelector('.stock option');
+  }
 });
+
+@Component({ template: '<app-parts></app-parts>' })
+class TestHostComponent {
+  @ViewChild(PartsComponent) component: PartsComponent;
+}
