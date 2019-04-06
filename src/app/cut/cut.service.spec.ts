@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { Material, Part, Resultset, Stock, UsedStock } from 'app/app.model';
 import { CutService } from 'app/cut/cut.service';
-import { StorageService } from 'app/storage.service';
+import { StorageService } from 'app/storage/storage.service';
 
 interface ModelCheck {
   stocks: {

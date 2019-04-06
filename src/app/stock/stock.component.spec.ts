@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule, MatCardModule, MatIconModule, MatInputModule } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { StorageService } from 'app/storage.service';
+import { StorageService } from 'app/storage/storage.service';
 import { StockComponent } from './stock.component';
 
 describe('StockComponent', () => {

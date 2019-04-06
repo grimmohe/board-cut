@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Part, Resultset, Stock, UsedStock } from 'app/app.model';
 import { PartDistribution } from 'app/cut/part-distribution';
 import { UsedStockBuilder } from 'app/cut/used-stock.builder';
-import { StorageService } from 'app/storage.service';
+import { StorageService } from 'app/storage/storage.service';
 
 @Injectable({
   providedIn: 'root'

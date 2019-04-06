@@ -8,7 +8,7 @@ import {
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule, MatCardModule, MatIconModule, MatInputModule } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { StorageService } from 'app/storage.service';
+import { StorageService } from 'app/storage/storage.service';
 import { MaterialsComponent } from './materials.component';
 
 describe('MaterialsComponent', () => {

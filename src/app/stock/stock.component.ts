@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Material, Stock } from '../app.model';
-import { StorageService } from '../storage.service';
+import { StorageService } from '../storage/storage.service';
 
 @Component({
   selector: 'app-stock',
