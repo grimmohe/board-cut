@@ -2,48 +2,81 @@
 
 <table>
   <tr *ngFor="let item of stock; let i = index">
-    <td>
-      {{ i+1 }}.
-    </td>
+    <td>{{ i + 1 }}.</td>
     <td class="functions">
-      <button mat-icon-button (click)="copyStockItem(item)">
+      <button mat-icon-button class="copy" (click)="copyStockItem(item)">
         <mat-icon>add</mat-icon>
       </button>
-      <button mat-icon-button (click)="deleteStockItem(item)">
+      <button mat-icon-button class="delete" (click)="deleteStockItem(item)">
         <mat-icon>delete</mat-icon>
       </button>
     </td>
     <td>
       <mat-form-field>
-        <input matInput placeholder="name" [(ngModel)]="item.description">
+        <input
+          matInput
+          placeholder="name"
+          class="desc"
+          (input)="emitUpdate()"
+          [(ngModel)]="item.description"
+        />
       </mat-form-field>
     </td>
     <td>
       <mat-form-field>
-        <select matNativeControl placeholder="material" [(ngModel)]="item.material">
-          <option *ngFor="let m of materials" (value)="m">{{ m.description }}</option>
+        <select
+          matNativeControl
+          placeholder="material"
+          class="material"
+          (input)="emitUpdate()"
+          [(ngModel)]="item.material"
+          (ngModelChange)="emitUpdate()"
+        >
+          <option *ngFor="let m of materials" (value)="(m)">{{ m.description }}</option>
         </select>
       </mat-form-field>
     </td>
     <td>
       <mat-form-field>
-        <input matInput type="number" placeholder="height" [(ngModel)]="item.height">
+        <input
+          matInput
+          type="number"
+          placeholder="height"
+          class="height"
+          (input)="emitUpdate()"
+          [(ngModel)]="item.height"
+        />
       </mat-form-field>
     </td>
     <td>
       <mat-form-field>
-        <input matInput type="number" placeholder="width" [(ngModel)]="item.width">
+        <input
+          matInput
+          type="number"
+          placeholder="width"
+          class="width"
+          (input)="emitUpdate()"
+          [(ngModel)]="item.width"
+        />
       </mat-form-field>
     </td>
     <td>
       <mat-form-field>
-        <input matInput type="number" placeholder="count" [(ngModel)]="item.count">
+        <input
+          matInput
+          type="number"
+          placeholder="count"
+          class="count"
+          (input)="emitUpdate()"
+          [(ngModel)]="item.count"
+        />
       </mat-form-field>
     </td>
   </tr>
 </table>
+
 <div>
-    <button mat-icon-button (click)="addStockItem()">
-      <mat-icon>add</mat-icon>
-    </button>
+  <button mat-icon-button class="add" (click)="addStockItem()">
+    <mat-icon>add</mat-icon>
+  </button>
 </div>

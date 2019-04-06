@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Stock, Material } from '../app.model';
+import { Material, Stock } from '../app.model';
 import { StorageService } from '../storage.service';
 
 @Component({
@@ -8,17 +8,15 @@ import { StorageService } from '../storage.service';
   styleUrls: ['./stock.component.scss']
 })
 export class StockComponent implements OnInit {
-
   materials: Material[];
   stock: Stock[];
 
-  constructor(storage: StorageService) {
+  constructor(private readonly storage: StorageService) {
     this.materials = storage.materials;
     this.stock = storage.stock;
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   addStockItem() {
     this.stock.push({
@@ -28,13 +26,20 @@ export class StockComponent implements OnInit {
       description: '',
       material: null
     });
+    this.emitUpdate();
   }
 
   copyStockItem(item: Stock) {
     this.stock.splice(this.stock.indexOf(item) + 1, 0, Object.assign({}, item));
+    this.emitUpdate();
   }
 
   deleteStockItem(item: Stock) {
     this.stock.splice(this.stock.indexOf(item), 1);
+    this.emitUpdate();
+  }
+
+  emitUpdate() {
+    this.storage.sourceMatsChanged.emit();
   }
 }
