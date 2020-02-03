@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Resultset } from '../app.model';
+import { CutService } from 'app/cut/cut.service';
+import { Pdf } from 'app/pdf/pdf';
+import { debounceTime } from 'rxjs/operators';
 import { StorageService } from '../storage/storage.service';
 
 @Component({
@@ -8,11 +10,19 @@ import { StorageService } from '../storage/storage.service';
   styleUrls: ['./results.component.scss']
 })
 export class ResultsComponent implements OnInit {
-  result: Resultset;
+  iframeSrcUrl: string;
 
-  constructor(storage: StorageService) {
-    this.result = storage.result;
+  constructor(private readonly storage: StorageService, private readonly cut: CutService) {}
+
+  ngOnInit() {
+    this.storage.sourceMatsChanged
+      .pipe(debounceTime(5000))
+      .subscribe(this.calculateAndDisplayNewCut.bind(this));
   }
 
-  ngOnInit() {}
+  calculateAndDisplayNewCut() {
+    console.log('called');
+    this.cut.cut();
+    this.iframeSrcUrl = Pdf.generatePdf(this.storage.result);
+  }
 }

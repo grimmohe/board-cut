@@ -1,13 +1,11 @@
 import { Component, ViewChild } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import {
-  MatButtonModule,
-  MatCardModule,
-  MatCheckboxModule,
-  MatIconModule,
-  MatInputModule
-} from '@angular/material';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { StorageService } from 'app/storage/storage.service';
 import { PartsComponent } from './parts.component';
@@ -42,7 +40,7 @@ describe('PartsComponent', () => {
   });
 
   beforeEach(async(() => {
-    storage = TestBed.get(StorageService);
+    storage = TestBed.inject(StorageService);
     storage.materials = [{ description: 'Spahn', thickness: 12, cuttingWidth: 4 }];
     storage.stock = [
       {
@@ -231,5 +229,5 @@ describe('PartsComponent', () => {
 
 @Component({ template: '<app-parts></app-parts>' })
 class TestHostComponent {
-  @ViewChild(PartsComponent) component: PartsComponent;
+  @ViewChild(PartsComponent, /* TODO: add static flag */ {}) component: PartsComponent;
 }

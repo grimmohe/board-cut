@@ -8,7 +8,6 @@
     "javascript.preferences.importModuleSpecifier": "non-relative",
     "javascript.preferences.quoteStyle": "single",
     "prettier.requireConfig": true,
-    "prettier.tslintIntegration": true,
     "typescript.preferences.importModuleSpecifier": "non-relative",
     "typescript.preferences.quoteStyle": "single"
 }

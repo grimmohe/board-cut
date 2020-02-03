@@ -16,7 +16,7 @@ interface ModelCheck {
 }
 
 function addMaterial(cuttingWidth: number, thickness: number, description: string) {
-  const storage: StorageService = TestBed.get(StorageService);
+  const storage: StorageService = TestBed.inject(StorageService);
 
   storage.materials.push({
     cuttingWidth: cuttingWidth,
@@ -26,7 +26,7 @@ function addMaterial(cuttingWidth: number, thickness: number, description: strin
 }
 
 function addStock(count: number, width: number, height: number, material?: Material) {
-  const storage: StorageService = TestBed.get(StorageService);
+  const storage: StorageService = TestBed.inject(StorageService);
 
   const stock: Stock = {
     material: material ? material : storage.materials[0],
@@ -74,7 +74,7 @@ function addPart(
   followGrain: boolean,
   stock?: Stock
 ): Part {
-  const storage: StorageService = TestBed.get(StorageService);
+  const storage: StorageService = TestBed.inject(StorageService);
   const part = {
     height: height,
     width: width,
@@ -114,8 +114,8 @@ describe('CutService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({});
 
-    service = TestBed.get(CutService);
-    storage = TestBed.get(StorageService);
+    service = TestBed.inject(CutService);
+    storage = TestBed.inject(StorageService);
   });
 
   it('should be created', () => {
