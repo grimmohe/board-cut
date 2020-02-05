@@ -67,7 +67,7 @@
           [(ngModel)]="item.stock"
           (ngModelChange)="emitUpdate()"
         >
-          <option *ngFor="let s of storage.stock" [(ngValue)]="s">
+          <option *ngFor="let s of storage.stock" [ngValue]="s">
             {{ s.description }} ({{ s.height }}:{{ s.width }})
           </option>
         </select>
