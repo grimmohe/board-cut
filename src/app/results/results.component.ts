@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CutService } from 'app/cut/cut.service';
-import { Pdf } from 'app/pdf/pdf';
+import { ResultSvg } from 'app/svg/result-svg';
 import { debounceTime } from 'rxjs/operators';
 import { StorageService } from '../storage/storage.service';
 
@@ -10,7 +10,7 @@ import { StorageService } from '../storage/storage.service';
   styleUrls: ['./results.component.scss']
 })
 export class ResultsComponent implements OnInit {
-  iframeSrcUrl: string;
+  svg: string;
 
   constructor(private readonly storage: StorageService, private readonly cut: CutService) {}
 
@@ -23,6 +23,6 @@ export class ResultsComponent implements OnInit {
   calculateAndDisplayNewCut() {
     console.log('called');
     this.cut.cut();
-    this.iframeSrcUrl = Pdf.generatePdf(this.storage.result);
+    this.svg = new ResultSvg().render(this.storage.result).svg();
   }
 }

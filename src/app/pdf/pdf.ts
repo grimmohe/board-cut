@@ -1,7 +1,9 @@
 import { Resultset } from 'app/app.model';
 
+var PDFDocument = require('pdfkit');
+
 export class Pdf {
-  static generatePdf(cutResult: Resultset): string {
+  generatePdf(cutResult: Resultset): string {
     return '~';
   }
 }
