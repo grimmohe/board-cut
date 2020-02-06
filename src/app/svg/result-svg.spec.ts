@@ -23,8 +23,8 @@ describe('ResultSvg', () => {
   it('should render blank for no results', () => {
     const draw = new ResultSvg().render(new Resultset());
     expect(draw).toBeTruthy();
-    expect(draw.height()).toBe(0);
-    expect(draw.width()).toBe(0);
+    expect(draw.viewbox().height).toBe(0);
+    expect(draw.viewbox().width).toBe(0);
     expect(draw.svg(false)).toBeFalsy();
   });
 
@@ -35,37 +35,35 @@ describe('ResultSvg', () => {
       stock,
       usedParts: [
         { part, turned: false, position: { x: 0, y: 0 } },
-        { part, turned: false, position: { x: 0, y: part2Y } }
+        { part, turned: true, position: { x: 0, y: part2Y } }
       ],
       usedArea: null
     });
 
     const draw = new ResultSvg().render(resultset);
-    expect(draw.height()).toBe(matHeight + 2 * margin);
-    expect(draw.width()).toBe(matWidth + 2 * margin);
+    expect(draw.viewbox().height).toBe(matHeight + 2 * margin);
+    expect(draw.viewbox().width).toBe(matWidth + 2 * margin);
 
-    const rects = draw.children();
-    expect(rects.length).toBe(1);
+    const rects = draw.children().toArray();
+    expect(rects.length).toBe(3);
 
-    rects.forEach((r) => {
-      expect(r.x()).toBe(margin);
-      expect(r.y()).toBe(margin);
-      expect(r.width()).toBe(matWidth);
-      expect(r.height()).toBe(matHeight);
+    const rect = rects[0];
+    expect(rect.x()).toBe(margin);
+    expect(rect.y()).toBe(margin);
+    expect(rect.width()).toBe(matWidth);
+    expect(rect.height()).toBe(matHeight);
 
-      const parts = r.children().toArray();
-      expect(parts.length).toBe(2);
+    const part1 = rects[1];
+    expect(part1.x()).toBe(margin);
+    expect(part1.y()).toBe(margin);
+    expect(part1.width()).toBe(part.width);
+    expect(part1.height()).toBe(part.height);
 
-      expect(parts[0].x()).toBe(0);
-      expect(parts[0].y()).toBe(0);
-      expect(parts[0].width()).toBe(part.width);
-      expect(parts[0].height()).toBe(part.height);
-
-      expect(parts[1].x()).toBe(0);
-      expect(parts[1].y()).toBe(part2Y);
-      expect(parts[1].width()).toBe(part.width);
-      expect(parts[1].height()).toBe(part.height);
-    });
+    const part2 = rects[2];
+    expect(part2.x()).toBe(margin);
+    expect(part2.y()).toBe(margin + part2Y);
+    expect(part2.width()).toBe(part.height);
+    expect(part2.height()).toBe(part.width);
 
     expect(draw.svg()).toBeTruthy();
   });

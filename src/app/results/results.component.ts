@@ -21,13 +21,14 @@ export class ResultsComponent implements OnInit {
 
   ngOnInit() {
     this.storage.sourceMatsChanged
-      .pipe(debounceTime(5000))
+      .pipe(debounceTime(1000))
       .subscribe(this.calculateAndDisplayNewCut.bind(this));
   }
 
   calculateAndDisplayNewCut() {
-    console.log('called');
     this.cut.cut();
+
+    console.log(this.storage.result);
 
     const svgString = new ResultSvg().render(this.storage.result).svg();
     this.svg = this.sanitizer.bypassSecurityTrustHtml(svgString);
