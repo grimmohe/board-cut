@@ -5,7 +5,7 @@ import { UsedAreaCalculation } from 'app/cut/used-area-calculation';
 import { Observable } from 'rxjs';
 
 export class PartDistribution {
-  readonly updateOnFullRowEmitter = new EventEmitter<void>();
+  private readonly updateOnFullRowEmitter = new EventEmitter<void>();
   get updateOnFullRow(): Observable<void> {
     return this.updateOnFullRowEmitter.asObservable();
   }

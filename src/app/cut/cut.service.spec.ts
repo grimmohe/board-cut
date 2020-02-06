@@ -308,4 +308,21 @@ describe('CutService', () => {
 
     allPartsFitStock(storage.result);
   });
+
+  it('should fit 4 parts', () => {
+    addMaterial(4, 12, '');
+    const model: ModelCheck = {
+      stocks: [
+        {
+          stock: addStock(1, 700, 500),
+          parts: [{ part: addPart(4, 200, 300, false) }]
+        }
+      ]
+    };
+
+    service.cut();
+
+    allPartsFitStock(storage.result);
+    checkResult(storage.result, model);
+  });
 });
