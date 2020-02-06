@@ -166,11 +166,11 @@ describe('CutService', () => {
 
   it('should cut two pieces out of one stock item', () => {
     const cuttingWidth = 4;
-    const partWidthAntHeight = 50;
+    const partWidthAndHeight = 50;
 
     addMaterial(cuttingWidth, 8, '');
     const stock = addStock(1, 100, 200);
-    const part = addPart(2, partWidthAntHeight, partWidthAntHeight, false);
+    const part = addPart(2, partWidthAndHeight, partWidthAndHeight, false);
 
     const model: ModelCheck = {
       stocks: [
@@ -178,7 +178,7 @@ describe('CutService', () => {
           stock: stock,
           parts: [
             { part: part, x: 0, y: 0 },
-            { part: part, x: 0, y: partWidthAntHeight + cuttingWidth }
+            { part: part, x: 0, y: partWidthAndHeight + cuttingWidth }
           ]
         }
       ]
