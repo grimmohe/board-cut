@@ -13,7 +13,7 @@ export class MaterialsComponent implements OnInit {
   ngOnInit() {}
 
   emitUpdate() {
-    this.storage.sourceMatsChanged.emit();
+    this.storage.sourceMatsChanged.next();
   }
 
   addMaterialItem() {
