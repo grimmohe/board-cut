@@ -13,7 +13,7 @@ export class PartsComponent implements OnInit {
   ngOnInit() {}
 
   emitUpdate() {
-    this.storage.sourceMatsChanged.emit();
+    this.storage.sourceMatsChanged.next();
   }
 
   addPartItem() {

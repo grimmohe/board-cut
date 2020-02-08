@@ -31,7 +31,6 @@ import { StockComponent } from './stock/stock.component';
     FormsModule,
     BrowserAnimationsModule
   ],
-  providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

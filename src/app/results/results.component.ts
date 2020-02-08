@@ -23,6 +23,9 @@ export class ResultsComponent implements OnInit {
     this.storage.sourceMatsChanged
       .pipe(debounceTime(1000))
       .subscribe(this.calculateAndDisplayNewCut.bind(this));
+
+    this.storage.loadLocalStorage();
+    this.calculateAndDisplayNewCut();
   }
 
   calculateAndDisplayNewCut() {

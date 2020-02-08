@@ -40,6 +40,6 @@ export class StockComponent implements OnInit {
   }
 
   emitUpdate() {
-    this.storage.sourceMatsChanged.emit();
+    this.storage.sourceMatsChanged.next();
   }
 }
