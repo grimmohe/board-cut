@@ -31,7 +31,7 @@ export class ResultsComponent implements OnInit {
   calculateAndDisplayNewCut() {
     this.cut.cut();
 
-    const svgString = new ResultSvg().render(this.storage.result).svg();
+    const svgString = new ResultSvg().render(this.storage.result, true).svg();
     this.svg = this.sanitizer.bypassSecurityTrustHtml(svgString);
   }
 }

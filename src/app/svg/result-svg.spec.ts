@@ -21,7 +21,7 @@ describe('ResultSvg', () => {
   });
 
   it('should render blank for no results', () => {
-    const draw = new ResultSvg().render(new Resultset());
+    const draw = new ResultSvg().render(new Resultset(), false);
     expect(draw).toBeTruthy();
     expect(draw.viewbox().height).toBe(0);
     expect(draw.viewbox().width).toBe(0);
@@ -40,7 +40,7 @@ describe('ResultSvg', () => {
       usedArea: null
     });
 
-    const draw = new ResultSvg().render(resultset);
+    const draw = new ResultSvg().render(resultset, false);
     expect(draw.viewbox().height).toBe(matHeight + 2 * margin);
     expect(draw.viewbox().width).toBe(matWidth + 2 * margin);
 
@@ -83,7 +83,7 @@ describe('ResultSvg', () => {
       }
     );
 
-    const draw = new ResultSvg().render(resultset);
+    const draw = new ResultSvg().render(resultset, false);
 
     const mats = draw.children();
     expect(mats.length).toBe(2);
