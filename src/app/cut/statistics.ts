@@ -66,4 +66,11 @@ export class Statistics {
 
     return partArea / minMaxArea;
   }
+
+  static getLeftoverArea(usedStock: UsedStock): number {
+    return (
+      (usedStock.stock.width - usedStock.usedArea.x) *
+      (usedStock.stock.height - usedStock.usedArea.y)
+    );
+  }
 }

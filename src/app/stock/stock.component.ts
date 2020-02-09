@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { IdService } from 'app/id/id.service';
 import { Material, Stock } from '../app.model';
 import { StorageService } from '../storage/storage.service';
 
@@ -11,7 +12,7 @@ export class StockComponent implements OnInit {
   materials: Material[];
   stock: Stock[];
 
-  constructor(private readonly storage: StorageService) {
+  constructor(private readonly storage: StorageService, private readonly idService: IdService) {
     this.materials = storage.materials;
     this.stock = storage.stock;
   }
@@ -20,6 +21,7 @@ export class StockComponent implements OnInit {
 
   addStockItem() {
     this.stock.push({
+      id: this.idService.getNextId(),
       height: 0,
       width: 0,
       count: 1,

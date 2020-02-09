@@ -1,10 +1,12 @@
 export interface Material {
+  id: number;
   description?: string;
   thickness: number;
   cuttingWidth: number;
 }
 
 export interface Stock {
+  id: number;
   description?: string;
   height: number;
   width: number;
@@ -14,6 +16,7 @@ export interface Stock {
 }
 
 export interface Part {
+  id: number;
   height: number;
   width: number;
   count: number;

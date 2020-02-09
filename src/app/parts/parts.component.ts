@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { IdService } from 'app/id/id.service';
 import { Part } from '../app.model';
 import { StorageService } from '../storage/storage.service';
 
@@ -8,7 +9,7 @@ import { StorageService } from '../storage/storage.service';
   styleUrls: ['./parts.component.scss']
 })
 export class PartsComponent implements OnInit {
-  constructor(readonly storage: StorageService) {}
+  constructor(readonly storage: StorageService, private readonly idService: IdService) {}
 
   ngOnInit() {}
 
@@ -18,6 +19,7 @@ export class PartsComponent implements OnInit {
 
   addPartItem() {
     this.storage.parts.push({
+      id: this.idService.getNextId(),
       description: '',
       height: 0,
       width: 0,

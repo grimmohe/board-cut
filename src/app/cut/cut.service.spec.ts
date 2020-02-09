@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { Material, Part, Resultset, Stock, UsedStock } from 'app/app.model';
+import { Material, Part, Resultset, Stock } from 'app/app.model';
 import { CutService } from 'app/cut/cut.service';
 import { StorageService } from 'app/storage/storage.service';
 
@@ -19,6 +19,7 @@ function addMaterial(cuttingWidth: number, thickness: number, description: strin
   const storage: StorageService = TestBed.inject(StorageService);
 
   storage.materials.push({
+    id: storage.materials.length,
     cuttingWidth: cuttingWidth,
     thickness: thickness,
     description: description
@@ -29,6 +30,7 @@ function addStock(count: number, width: number, height: number, material?: Mater
   const storage: StorageService = TestBed.inject(StorageService);
 
   const stock: Stock = {
+    id: storage.stock.length,
     material: material ? material : storage.materials[0],
     count: count,
     width: width,
@@ -76,6 +78,7 @@ function addPart(
 ): Part {
   const storage: StorageService = TestBed.inject(StorageService);
   const part = {
+    id: storage.parts.length,
     height: height,
     width: width,
     count: count,
@@ -92,17 +95,32 @@ function addPart(
 function checkResult(result: Resultset, model: ModelCheck) {
   expect(result.usedStock.length).toBe(model.stocks.length, 'used stock');
 
-  model.stocks.forEach((s, stockIndex) => {
+  model.stocks.forEach((modelStock, stockIndex) => {
     const usedStock = result.usedStock[stockIndex];
-    expect(usedStock.stock).toBe(s.stock, 'the right stock (' + stockIndex + ')');
-    expect(usedStock.usedParts.length).toBe(s.parts.length, 'used parts(' + stockIndex + ')');
+    expect(usedStock.stock).toEqual(modelStock.stock, 'the right stock (' + stockIndex + ')');
+    expect(usedStock.usedParts.length).toBe(
+      modelStock.parts.length,
+      'used parts(' + stockIndex + ')'
+    );
 
-    s.parts.forEach((p, partIndex) => {
+    modelStock.parts.forEach((modelPart, partIndex) => {
       const usedPart = usedStock.usedParts[partIndex];
-      expect(usedPart.part).toBe(p.part, 'the right part(' + stockIndex + ',' + partIndex + ')');
-      expect(usedPart.turned).toBe(!!p.turned, 'turned(' + stockIndex + ',' + partIndex + ')');
-      expect(usedPart.position.x).toBe(p.x, 'x(' + stockIndex + ',' + partIndex + ')');
-      expect(usedPart.position.y).toBe(p.y, 'y(' + stockIndex + ',' + partIndex + ')');
+      expect(usedPart.part).toEqual(
+        modelPart.part,
+        'the right part(' + stockIndex + ',' + partIndex + ')'
+      );
+      if (modelPart.turned !== undefined) {
+        expect(usedPart.turned).toBe(
+          !!modelPart.turned,
+          'turned(' + stockIndex + ',' + partIndex + ')'
+        );
+      }
+      if (modelPart.x !== undefined) {
+        expect(usedPart.position.x).toBe(modelPart.x, 'x(' + stockIndex + ',' + partIndex + ')');
+      }
+      if (modelPart.y !== undefined) {
+        expect(usedPart.position.y).toBe(modelPart.y, 'y(' + stockIndex + ',' + partIndex + ')');
+      }
     });
   });
 }
@@ -252,9 +270,7 @@ describe('CutService', () => {
     const part = addPart(1, 100, 100, false);
     const parts = [part];
 
-    const usedStocks: UsedStock[] = [];
-
-    service.cutForStockItem(stock, parts, usedStocks);
+    const usedStocks = service.cutForStockItem(stock, parts);
 
     expect(usedStocks.length).toBe(1, 'used stock');
     expect(usedStocks[0].stock).toBe(stock, 'stock kept real');
@@ -269,9 +285,7 @@ describe('CutService', () => {
     const part = addPart(2, 48, 50, false);
     const parts = [part, part];
 
-    const usedStocks: UsedStock[] = [];
-
-    service.cutForStockItem(stock, parts, usedStocks);
+    const usedStocks = service.cutForStockItem(stock, parts);
 
     expect(stock.countLeft).toBe(0, 'stock count left');
     expect(usedStocks.length).toBe(1, 'used stock count');
@@ -311,11 +325,18 @@ describe('CutService', () => {
 
   it('should fit 4 parts', () => {
     addMaterial(4, 12, '');
+    const stock = addStock(1, 700, 500);
+    const part = addPart(4, 200, 300, false);
     const model: ModelCheck = {
       stocks: [
         {
-          stock: addStock(1, 700, 500),
-          parts: [{ part: addPart(4, 200, 300, false) }]
+          stock,
+          parts: [
+            { part, turned: true },
+            { part, turned: true },
+            { part, turned: true },
+            { part, turned: true }
+          ]
         }
       ]
     };

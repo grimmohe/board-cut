@@ -41,12 +41,7 @@ export class StorageService {
     this.stock.forEach((s) => {
       if (s.material) {
         const copy = s.material;
-        const real = this.materials.find(
-          (m) =>
-            m.description === copy.description &&
-            m.cuttingWidth === copy.cuttingWidth &&
-            m.thickness === copy.thickness
-        );
+        const real = this.materials.find((m) => m.id === copy.id);
         s.material = real;
       }
     });
@@ -55,13 +50,7 @@ export class StorageService {
   private restorePartStock() {
     this.parts.forEach((p) => {
       const copy = p.stock;
-      const real = this.stock.find(
-        (s) =>
-          s.count === copy.count &&
-          s.description === copy.description &&
-          s.height === copy.height &&
-          s.width === copy.width
-      );
+      const real = this.stock.find((s) => s.id === copy.id);
       p.stock = real;
     });
   }

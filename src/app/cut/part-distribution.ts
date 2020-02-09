@@ -1,5 +1,5 @@
 import { EventEmitter } from '@angular/core';
-import { Part, Position, UsedPart, UsedStock } from 'app/app.model';
+import { Direction, Part, Position, Stock, UsedPart, UsedStock } from 'app/app.model';
 import { Statistics } from 'app/cut/statistics';
 import { UsedAreaCalculation } from 'app/cut/used-area-calculation';
 import { Observable } from 'rxjs';
@@ -10,32 +10,49 @@ export class PartDistribution {
     return this.updateOnFullRowEmitter.asObservable();
   }
 
-  addRowFor(parts: Part[], usedStock: UsedStock): number {
-    const rowParts = [...parts];
-    const row: UsedPart[] = [];
-    this.addToRow(rowParts, row, 'x', usedStock);
+  fillStock(partsToDo: Part[], usedStock: UsedStock, parts: Part[], stocks: Stock[]) {
+    const best = { partsToDo: [...partsToDo], usedStock: usedStock, usedParts: [], ratio: 0 };
 
-    const colParts = [...parts];
-    const col: UsedPart[] = [];
-    this.addToRow(colParts, col, 'y', usedStock);
+    ['x', 'y'].forEach((direction: Direction) => {
+      const partsToDoCopy = [...partsToDo];
+      const usedStockCopy: UsedStock = JSON.parse(JSON.stringify(usedStock));
+      const usedPartsNew: UsedPart[] = [];
 
-    parts.length = 0;
-    const freeX = usedStock.stock.width - usedStock.usedArea.x;
-    const freeY = usedStock.stock.height - usedStock.usedArea.y;
+      this.addToRow(partsToDoCopy, usedPartsNew, direction, usedStockCopy);
+      UsedAreaCalculation.updateUsedArea(usedStockCopy, usedPartsNew, direction);
+      usedStockCopy.usedParts.push(...usedPartsNew);
 
-    if (Statistics.getRowRatio(row, freeX, 0) > Statistics.getRowRatio(col, 0, freeY)) {
-      parts.push(...rowParts);
-      usedStock.usedParts.push(...row);
-      UsedAreaCalculation.updateUsedArea(usedStock, row, 'x');
+      if (partsToDoCopy.length < partsToDo.length) {
+        this.fillStock(partsToDoCopy, usedStockCopy, parts, stocks);
+      }
 
-      return row.length;
-    } else {
-      parts.push(...colParts);
-      usedStock.usedParts.push(...col);
-      UsedAreaCalculation.updateUsedArea(usedStock, col, 'y');
+      const usedStockArea = Statistics.getStockArea([usedStockCopy]);
+      const usedPartsArea = Statistics.getPartsArea([usedStockCopy]);
+      const ratio = Statistics.getUsageRatio(usedStockArea, usedPartsArea);
 
-      return col.length;
-    }
+      if (
+        ratio > best.ratio ||
+        Statistics.getLeftoverArea(usedStockCopy) > Statistics.getLeftoverArea(best.usedStock)
+      ) {
+        best.partsToDo = partsToDoCopy;
+        best.usedStock = usedStockCopy;
+        best.ratio = ratio;
+      }
+    });
+
+    this.restoreUsedStock(usedStock, best.usedStock, parts, stocks);
+    partsToDo.length = 0;
+    partsToDo.push(...best.partsToDo);
+  }
+
+  private restoreUsedStock(target: UsedStock, source: UsedStock, parts: Part[], stocks: Stock[]) {
+    target.usedArea = source.usedArea;
+    target.usedParts = source.usedParts;
+
+    target.usedParts.forEach((usedPart) => {
+      const copy = usedPart.part;
+      usedPart.part = parts.find((p) => p.id === copy.id);
+    });
   }
 
   private addToRow(

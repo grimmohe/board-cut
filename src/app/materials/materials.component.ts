@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { IdService } from 'app/id/id.service';
 import { Material } from '../app.model';
 import { StorageService } from '../storage/storage.service';
 
@@ -8,7 +9,7 @@ import { StorageService } from '../storage/storage.service';
   styleUrls: ['./materials.component.scss']
 })
 export class MaterialsComponent implements OnInit {
-  constructor(readonly storage: StorageService) {}
+  constructor(readonly storage: StorageService, private readonly idService: IdService) {}
 
   ngOnInit() {}
 
@@ -18,6 +19,7 @@ export class MaterialsComponent implements OnInit {
 
   addMaterialItem() {
     this.storage.materials.push({
+      id: this.idService.getNextId(),
       description: '',
       cuttingWidth: 4,
       thickness: 19

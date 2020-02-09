@@ -48,7 +48,7 @@ describe('MaterialsComponent', () => {
   beforeEach(() => {
     storageChanged = 0;
     storage.materials.length = 0;
-    storage.materials.push({ cuttingWidth: 4, thickness: 12, description: 'test' });
+    storage.materials.push({ id: 0, cuttingWidth: 4, thickness: 12, description: 'test' });
     fixture = TestBed.createComponent(TestHostComponent);
     component = fixture.componentInstance;
     element = fixture.debugElement.nativeElement;

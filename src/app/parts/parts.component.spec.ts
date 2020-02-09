@@ -41,9 +41,10 @@ describe('PartsComponent', () => {
 
   beforeEach(async(() => {
     storage = TestBed.inject(StorageService);
-    storage.materials = [{ description: 'Spahn', thickness: 12, cuttingWidth: 4 }];
+    storage.materials = [{ id: 0, description: 'Spahn', thickness: 12, cuttingWidth: 4 }];
     storage.stock = [
       {
+        id: 0,
         description: 'Standard',
         height: 3000,
         width: 1200,
@@ -51,6 +52,7 @@ describe('PartsComponent', () => {
         material: storage.materials[0]
       },
       {
+        id: 1,
         description: 'Alternativ',
         height: 5000,
         width: 1000,
@@ -60,6 +62,7 @@ describe('PartsComponent', () => {
     ];
     storage.parts = [
       {
+        id: 0,
         description: 'Tür',
         height: 1000,
         width: 600,

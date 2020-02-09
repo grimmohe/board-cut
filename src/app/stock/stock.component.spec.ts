@@ -162,10 +162,11 @@ class TestHostComponent {}
 
 function initStorage(storage: StorageService) {
   storage.materials.push(
-    { description: 'OSB', cuttingWidth: 4, thickness: 12 },
-    { description: 'Spahn', cuttingWidth: 4, thickness: 16 }
+    { id: 0, description: 'OSB', cuttingWidth: 4, thickness: 12 },
+    { id: 1, description: 'Spahn', cuttingWidth: 4, thickness: 16 }
   );
   storage.stock.push({
+    id: 0,
     description: 'Tür',
     count: 1,
     height: 1200,

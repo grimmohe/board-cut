@@ -16,6 +16,10 @@ describe('ResultsComponent', () => {
   let storage: StorageService;
   let cutService: CutService;
 
+  beforeEach(() => {
+    localStorage.clear();
+  });
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ResultsComponent],

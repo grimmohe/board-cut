@@ -4,6 +4,7 @@ import { UsedStockBuilder } from 'app/cut/used-stock.builder';
 describe('getNewUsedStock', () => {
   it('should give new used stock and add to array', () => {
     const stock: Stock = {
+      id: 0,
       count: 1,
       countLeft: 1,
       width: 10,

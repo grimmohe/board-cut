@@ -5,10 +5,11 @@ describe('Statistics', () => {
   const result: Resultset = {
     usedStock: [
       {
-        stock: { count: 1, width: 100, height: 96, material: null },
+        stock: { id: 0, count: 1, width: 100, height: 96, material: null },
         usedParts: [
           {
             part: {
+              id: 0,
               count: 2,
               width: 50,
               height: 50,
@@ -20,6 +21,7 @@ describe('Statistics', () => {
           },
           {
             part: {
+              id: 1,
               count: 2,
               width: 50,
               height: 50,
@@ -33,7 +35,7 @@ describe('Statistics', () => {
         usedArea: null
       },
       {
-        stock: { count: 1, width: 20, height: 20, material: null },
+        stock: { id: 1, count: 1, width: 20, height: 20, material: null },
         usedParts: [],
         usedArea: null
       }
@@ -72,6 +74,7 @@ describe('Statistics', () => {
     const usedParts: UsedPart[] = [
       {
         part: {
+          id: 0,
           count: 2,
           width: 50,
           height: 50,
@@ -83,6 +86,7 @@ describe('Statistics', () => {
       },
       {
         part: {
+          id: 1,
           count: 2,
           width: 50,
           height: 50,
@@ -94,6 +98,7 @@ describe('Statistics', () => {
       },
       {
         part: {
+          id: 2,
           count: 2,
           width: 50,
           height: 100,

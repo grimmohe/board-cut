@@ -50,9 +50,7 @@ export class CutService {
   private cutParts(result: Resultset, stocks: Stock[], parts: Part[]) {
     stocks.forEach((stock) => {
       const partsForStock = this.getPartsForStock(stock, parts);
-      const usedStocks: UsedStock[] = [];
-
-      this.cutForStockItem(stock, partsForStock, usedStocks);
+      const usedStocks: UsedStock[] = this.cutForStockItem(stock, partsForStock);
 
       result.usedStock.push(...usedStocks);
     });
@@ -64,23 +62,24 @@ export class CutService {
     });
   }
 
-  cutForStockItem(stock: Stock, parts: Part[], usedStocks: UsedStock[]): void {
+  cutForStockItem(stock: Stock, parts: Part[]): UsedStock[] {
     let usedStock: UsedStock = null;
+    const usedStocks: UsedStock[] = [];
 
     while (parts.length) {
       if (!usedStock) {
         usedStock = UsedStockBuilder.getNewUsedStock(stock, usedStocks);
       }
 
-      const useCount = this.partDistribution.addRowFor(parts, usedStock);
+      this.partDistribution.fillStock(parts, usedStock, parts, [stock]);
 
-      if (!useCount) {
-        if (usedStock.usedArea.x === 0 && usedStock.usedArea.y === 0) {
-          break;
-        } else {
-          usedStock = null;
-        }
+      if (usedStock.usedArea.x === 0 && usedStock.usedArea.y === 0) {
+        break;
+      } else {
+        usedStock = null;
       }
     }
+
+    return usedStocks;
   }
 }

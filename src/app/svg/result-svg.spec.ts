@@ -7,14 +7,9 @@ describe('ResultSvg', () => {
   const matWidth = 200;
   const matThickness = 12;
   const cutWidth = 4;
-  const material: Material = { thickness: matThickness, cuttingWidth: cutWidth };
-  const stock: Stock = {
-    count: 1,
-    height: matHeight,
-    width: matWidth,
-    material
-  };
-  const part: Part = { count: 1, height: 45, width: 180, stock, followGrain: false };
+  const material: Material = { id: 0, thickness: matThickness, cuttingWidth: cutWidth };
+  const stock: Stock = { id: 0, count: 1, height: matHeight, width: matWidth, material };
+  const part: Part = { id: 0, count: 1, height: 45, width: 180, stock, followGrain: false };
 
   it('should create', () => {
     expect(new ResultSvg());
