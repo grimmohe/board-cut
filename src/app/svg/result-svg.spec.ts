@@ -2,7 +2,7 @@ import { Material, Part, Resultset, Stock, UsedStock } from 'app/app.model';
 import { ResultSvg } from 'app/svg/result-svg';
 
 describe('ResultSvg', () => {
-  const margin = 20;
+  const margin = 30;
   const matHeight = 100;
   const matWidth = 200;
   const matThickness = 12;

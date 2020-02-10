@@ -5,9 +5,9 @@ export class ResultSvg {
   /**
    * margin around every stock in the svg
    */
-  stockMargin = 20;
+  stockMargin = 30;
   readonly rectAttr = { fill: '#fff', stroke: '#000', 'stroke-width': 1 };
-  readonly fontAttr = { family: 'Helvetica', size: 10 };
+  readonly fontAttr = { family: 'Helvetica', size: 18 };
 
   render(resultset: Resultset, addText: boolean): Svg[] {
     const drawOut: Svg[] = [];
@@ -61,7 +61,7 @@ export class ResultSvg {
     if (usedPart.part.description) {
       const partText = draw.text(usedPart.part.description);
       partText.font(this.fontAttr).build(true);
-      partText.x(partRect.x() + partRect.width() / 3);
+      partText.x(partRect.x() + this.fontAttr.size * 2);
       partText.y(partRect.y() + partRect.height() / 2 - this.fontAttr.size / 2);
     }
 
