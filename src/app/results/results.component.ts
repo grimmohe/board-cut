@@ -51,6 +51,9 @@ export class ResultsComponent implements OnInit {
         title: 'Cut-It'
       },
       pageOrientation: 'landscape',
+      footer: function(currentPage, pageCount) {
+        return { text: currentPage.toString() + ' of ' + pageCount, margin: 10 };
+      },
       content
     };
 
