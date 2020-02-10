@@ -1,5 +1,5 @@
 {
-  "name": "cut-it",
+  "name": "board-cut",
   "version": "0.1.0",
   "main": "index.js",
   "license": "MIT",
@@ -10,7 +10,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "electron": "ng build -c production; cp -t dist/cut-it/ src/index.js package.json; electron-packager ./dist/cut-it --out=./dist/electron --overwrite --all --app-category-type=public.app-category.utilities"
+    "electron": "ng build -c production; cp -t dist/board-cut/ src/index.js package.json; electron-packager ./dist/board-cut --out=./dist/electron --overwrite --all --app-category-type=public.app-category.utilities"
   },
   "private": true,
   "dependencies": {

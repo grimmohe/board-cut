@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "cut-it": {
+    "board-cut": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -18,7 +18,7 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "aot": true,
-            "outputPath": "dist/cut-it",
+            "outputPath": "dist/board-cut",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -61,18 +61,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "cut-it:build"
+            "browserTarget": "board-cut:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "cut-it:build:production"
+              "browserTarget": "board-cut:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "cut-it:build"
+            "browserTarget": "board-cut:build"
           }
         },
         "test": {
@@ -106,7 +106,7 @@
         }
       }
     },
-    "cut-it-e2e": {
+    "board-cut-e2e": {
       "root": "e2e/",
       "projectType": "application",
       "architect": {
@@ -114,11 +114,11 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "cut-it:serve"
+            "devServerTarget": "board-cut:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "cut-it:serve:production"
+              "devServerTarget": "board-cut:serve:production"
             }
           }
         },
@@ -134,5 +134,5 @@
       }
     }
   },
-  "defaultProject": "cut-it"
+  "defaultProject": "board-cut"
 }

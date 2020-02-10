@@ -47,9 +47,9 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'cut-it'`, () => {
+  it(`should have as title 'board-cut'`, () => {
     const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('cut-it');
+    expect(app.title).toEqual('board-cut');
   });
 
   it('should have all the components', () => {

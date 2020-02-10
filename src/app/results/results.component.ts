@@ -48,7 +48,7 @@ export class ResultsComponent implements OnInit {
     const content = [];
     const definition = {
       info: {
-        title: 'Cut-It'
+        title: 'board-cut'
       },
       pageOrientation: 'landscape',
       footer: function(currentPage, pageCount) {
