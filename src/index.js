@@ -8,7 +8,10 @@ const url = require('url');
 let mainWindow;
 
 function createWindow() {
-  mainWindow = new BrowserWindow({ title: 'Cut-It' });
+  mainWindow = new BrowserWindow({
+    title: 'Board Cut',
+    icon: path.join(__dirname, 'assets', 'cut.png')
+  });
   mainWindow.setMenuBarVisibility(false);
   mainWindow.maximize();
 
