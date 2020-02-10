@@ -2,7 +2,7 @@ import { Material, Part, Resultset, Stock, UsedStock } from 'app/app.model';
 import { ResultSvg } from 'app/svg/result-svg';
 
 describe('ResultSvg', () => {
-  const margin = 50;
+  const margin = 20;
   const matHeight = 100;
   const matWidth = 200;
   const matThickness = 12;
@@ -18,9 +18,7 @@ describe('ResultSvg', () => {
   it('should render blank for no results', () => {
     const draw = new ResultSvg().render(new Resultset(), false);
     expect(draw).toBeTruthy();
-    expect(draw.viewbox().height).toBe(0);
-    expect(draw.viewbox().width).toBe(0);
-    expect(draw.svg(false)).toBeFalsy();
+    expect(draw.length).toBe(0);
   });
 
   it('should create a valid canvas with a rect and 2 parts', () => {
@@ -35,7 +33,9 @@ describe('ResultSvg', () => {
       usedArea: null
     });
 
-    const draw = new ResultSvg().render(resultset, false);
+    const drawArray = new ResultSvg().render(resultset, false);
+    expect(drawArray.length).toBe(1);
+    const draw = drawArray[0];
     expect(draw.viewbox().height).toBe(matHeight + 2 * margin);
     expect(draw.viewbox().width).toBe(matWidth + 2 * margin);
 
@@ -79,12 +79,6 @@ describe('ResultSvg', () => {
     );
 
     const draw = new ResultSvg().render(resultset, false);
-
-    const mats = draw.children();
-    expect(mats.length).toBe(2);
-    mats.forEach((m, index) => {
-      expect(m.x()).toBe(margin);
-      expect(m.y()).toBe(margin + index * (margin * 2 + stock.height));
-    });
+    expect(draw.length).toBe(2);
   });
 });

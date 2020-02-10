@@ -2,8 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { CutService } from 'app/cut/cut.service';
 import { ResultSvg } from 'app/svg/result-svg';
+import pdfMake from 'pdfmake/build/pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
 import { debounceTime } from 'rxjs/operators';
 import { StorageService } from '../storage/storage.service';
+
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
   selector: 'app-results',
@@ -11,7 +15,7 @@ import { StorageService } from '../storage/storage.service';
   styleUrls: ['./results.component.scss']
 })
 export class ResultsComponent implements OnInit {
-  svg: SafeHtml;
+  svg: SafeHtml[] = [];
 
   constructor(
     private readonly storage: StorageService,
@@ -31,7 +35,29 @@ export class ResultsComponent implements OnInit {
   calculateAndDisplayNewCut() {
     this.cut.cut();
 
-    const svgString = new ResultSvg().render(this.storage.result, true).svg();
-    this.svg = this.sanitizer.bypassSecurityTrustHtml(svgString);
+    this.svg.length = 0;
+
+    const svgList = new ResultSvg().render(this.storage.result, true);
+    svgList.forEach((svg) => {
+      const svgString = svg.svg();
+      this.svg.push(this.sanitizer.bypassSecurityTrustHtml(svgString));
+    });
+  }
+
+  downloadPdf() {
+    const content = [];
+    const definition = {
+      info: {
+        title: 'Cut-It'
+      },
+      pageOrientation: 'landscape',
+      content
+    };
+
+    new ResultSvg().render(this.storage.result, true).forEach((svg) => {
+      content.push({ svg: svg.svg(), fit: [750, 500] });
+    });
+
+    pdfMake.createPdf(definition).open();
   }
 }

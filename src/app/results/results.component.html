@@ -1,3 +1,9 @@
 <mat-card>
-  <div [innerHtml]="svg"></div>
+  <button mat-icon-button class="big-button" (click)="downloadPdf()">
+    <mat-icon>picture_as_pdf</mat-icon>
+  </button>
+
+  <ng-container *ngFor="let svgItem of svg">
+    <div [innerHtml]="svgItem"></div>
+  </ng-container>
 </mat-card>

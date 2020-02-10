@@ -5,29 +5,30 @@ export class ResultSvg {
   /**
    * margin around every stock in the svg
    */
-  stockMargin = 50;
+  stockMargin = 20;
   readonly rectAttr = { fill: '#fff', stroke: '#000', 'stroke-width': 1 };
   readonly fontAttr = { family: 'Helvetica', size: 10 };
 
-  render(resultset: Resultset, addText: boolean): Svg {
-    const size = this.getRequiredSize(resultset.usedStock);
-    const draw = SVG();
-    draw.viewbox(0, 0, size[0], size[1]);
+  render(resultset: Resultset, addText: boolean): Svg[] {
+    const drawOut: Svg[] = [];
 
-    let currentY = 0;
     resultset.usedStock.forEach((usedStock) => {
-      const stockRect: Rect = this.addStock(usedStock, draw, currentY, addText);
-      currentY = stockRect.y() + stockRect.height() + this.stockMargin;
+      const draw = SVG();
+      drawOut.push(draw);
+      const size = this.getRequiredSize(usedStock);
+      draw.viewbox(0, 0, size[0], size[1]);
+      this.addStock(usedStock, draw, addText);
     });
 
-    return draw;
+    return drawOut;
   }
 
-  private addStock(usedStock: UsedStock, draw: Svg, currentY: number, addText: boolean): Rect {
+  private addStock(usedStock: UsedStock, draw: Svg, addText: boolean): void {
     const stock = usedStock.stock;
+
     const stockRect = draw.rect(stock.width, stock.height);
     stockRect.x(this.stockMargin);
-    stockRect.y(currentY + this.stockMargin);
+    stockRect.y(this.stockMargin);
     stockRect.attr(this.rectAttr);
 
     if (addText) {
@@ -47,8 +48,6 @@ export class ResultSvg {
         this.addPartText(draw, partRect, usedPart);
       }
     });
-
-    return stockRect;
   }
 
   private addStockText(draw: Svg, stockRect: Rect, usedStock: UsedStock) {
@@ -86,15 +85,10 @@ export class ResultSvg {
     return `${stock.description} ${stock.width}x${stock.height} (${stock.material.description})`;
   }
 
-  private getRequiredSize(usedStock: UsedStock[]) {
-    let width = 0;
-    let height = 0;
-
-    usedStock.forEach((s) => {
-      width = Math.max(width, s.stock.width + 2 * this.stockMargin);
-      height += s.stock.height + 2 * this.stockMargin;
-    });
-
-    return [width, height];
+  private getRequiredSize(usedStock: UsedStock) {
+    return [
+      usedStock.stock.width + 2 * this.stockMargin,
+      usedStock.stock.height + 2 * this.stockMargin
+    ];
   }
 }
