@@ -61,6 +61,6 @@ export class ResultsComponent implements OnInit {
       content.push({ svg: svg.svg(), fit: [750, 500] });
     });
 
-    pdfMake.createPdf(definition).open();
+    pdfMake.createPdf(definition).download(`cut${new Date().toISOString()}.pdf`);
   }
 }
