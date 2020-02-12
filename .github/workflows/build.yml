@@ -12,8 +12,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: install ci
-      run: npm ci
+      run: npm install
     - name: test
-      run: ng test
+      run: npm run test -- --no-watch --no-progress --browsers=ChromeHeadless
     - name: build
-      run: ng build -c production
+      run: npm run build -- -c production
