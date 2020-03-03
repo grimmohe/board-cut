@@ -84,7 +84,7 @@ export class PartDistribution {
           rowIsFinished = false;
         }
 
-        const usedRatio = Statistics.getRowRatio(usedPartsCopy, usedStock.stock, direction);
+        const usedRatio = Statistics.getRowRatio(usedPartsCopy, usedStock.stock);
 
         if (usedRatio > best.usedRatio) {
           best.usedRatio = usedRatio;

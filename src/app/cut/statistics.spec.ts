@@ -1,4 +1,4 @@
-import { Resultset, UsedPart } from 'app/app.model';
+import { Resultset, Stock, UsedPart } from 'app/app.model';
 import { Statistics } from 'app/cut/statistics';
 
 describe('Statistics', () => {
@@ -55,13 +55,6 @@ describe('Statistics', () => {
     expect(Statistics.getPartsArea(result.usedStock)).toBe(5000);
   });
 
-  it('should get me the usage ratio', () => {
-    expect(Statistics.getUsageRatio(10, 5)).toBe(0.5);
-    expect(Statistics.getUsageRatio(10, 0)).toBe(0);
-    expect(Statistics.getUsageRatio(10, 10)).toBe(1);
-    expect(Statistics.getUsageRatio(10, 11)).toBe(1.1);
-  });
-
   it('should create areas and ratio', () => {
     Statistics.updateStatistics(result);
 
@@ -110,8 +103,14 @@ describe('Statistics', () => {
       }
     ];
 
-    const ratio = Statistics.getRowRatio(usedParts, 0, 0);
+    const ratio = Statistics.getRowRatio(usedParts, <Stock>{
+      count: 1,
+      id: 1,
+      width: 250,
+      height: 150,
+      material: null
+    });
 
-    expect(ratio).toBe(0.6666666666666666);
+    expect(ratio).toBe(0.9333333333333333);
   });
 });

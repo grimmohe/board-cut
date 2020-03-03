@@ -1,4 +1,4 @@
-import { Direction, Resultset, Stock, UsedPart, UsedStock } from 'app/app.model';
+import { Resultset, Stock, UsedPart, UsedStock } from 'app/app.model';
 
 export class Statistics {
   static getStockArea(usedStock: UsedStock[]): number {
@@ -36,7 +36,7 @@ export class Statistics {
     r.usageRatio = r.partsArea / r.stockArea;
   }
 
-  static getRowRatio(usedParts: UsedPart[], stock: Stock, direction: Direction): number {
+  static getRowRatio(usedParts: UsedPart[], stock: Stock): number {
     if (usedParts.length === 0) {
       return 0;
     }
