@@ -26,13 +26,12 @@ export class PartDistribution {
         this.fillStock(partsToDoCopy, usedStockCopy, parts, stocks);
       }
 
-      const usedStockArea = Statistics.getStockArea([usedStockCopy]);
-      const usedPartsArea = Statistics.getPartsArea([usedStockCopy]);
-      const ratio = Statistics.getUsageRatio(usedStockArea, usedPartsArea);
+      const ratio = Statistics.getUsageRatio(usedStockCopy);
 
       if (
         ratio > best.ratio ||
-        Statistics.getLeftoverArea(usedStockCopy) > Statistics.getLeftoverArea(best.usedStock)
+        (ratio === best.ratio &&
+          Statistics.getLeftoverArea(usedStockCopy) > Statistics.getLeftoverArea(best.usedStock))
       ) {
         best.partsToDo = partsToDoCopy;
         best.usedStock = usedStockCopy;
@@ -58,11 +57,11 @@ export class PartDistribution {
   private addToRow(
     parts: Part[],
     usedParts: UsedPart[],
-    direction: 'x' | 'y',
+    direction: Direction,
     usedStock: UsedStock
   ): void {
     const best = { parts: [...parts], usedParts: [...usedParts], usedRatio: 0 };
-    const position = this.getNextPartPosition(usedParts, usedStock, direction);
+    const position: Position = this.getNextPartPosition(usedParts, usedStock, direction);
     let rowIsFinished = true;
 
     parts.forEach((part, partIndex) => {
@@ -70,29 +69,22 @@ export class PartDistribution {
         return;
       }
 
-      [false, true].forEach((turning) => {
-        if (
-          this.hinderTurning(turning, part) ||
-          !this.partFits(position, part, usedStock, turning)
-        ) {
+      [false, true].forEach((turned) => {
+        if (this.hinderTurning(turned, part) || !this.partFits(position, part, usedStock, turned)) {
           return;
         }
 
         const partsCopy = [...parts];
         partsCopy.splice(partIndex, 1);
 
-        const usedPartsCopy = [...usedParts, { part: part, position: position, turned: turning }];
+        const usedPartsCopy = [...usedParts, <UsedPart>{ part, position, turned }];
 
         if (partsCopy.length) {
           this.addToRow(partsCopy, usedPartsCopy, direction, usedStock);
           rowIsFinished = false;
         }
 
-        const usedRatio = Statistics.getRowRatio(
-          usedPartsCopy,
-          direction === 'x' ? usedStock.stock.width : 0,
-          direction === 'y' ? usedStock.stock.height : 0
-        );
+        const usedRatio = Statistics.getRowRatio(usedPartsCopy, usedStock.stock, direction);
 
         if (usedRatio > best.usedRatio) {
           best.usedRatio = usedRatio;

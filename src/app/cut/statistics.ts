@@ -1,7 +1,7 @@
-import { Resultset, UsedPart, UsedStock } from 'app/app.model';
+import { Direction, Resultset, Stock, UsedPart, UsedStock } from 'app/app.model';
 
 export class Statistics {
-  static getStockArea(usedStock: UsedStock[]): any {
+  static getStockArea(usedStock: UsedStock[]): number {
     let stockArea = 0;
 
     usedStock.forEach((s) => {
@@ -11,7 +11,7 @@ export class Statistics {
     return stockArea;
   }
 
-  static getPartsArea(usedStock: UsedStock[]): any {
+  static getPartsArea(usedStock: UsedStock[]): number {
     let partsArea = 0;
 
     usedStock.forEach((s) => {
@@ -23,17 +23,20 @@ export class Statistics {
     return partsArea;
   }
 
-  static getUsageRatio(stockArea: number, partsArea: number): any {
+  static getUsageRatio(usedStock: UsedStock): number {
+    const partsArea = this.getPartsArea([usedStock]);
+    const stockArea = this.getStockArea([usedStock]);
+
     return partsArea / stockArea;
   }
 
   static updateStatistics(r: Resultset): void {
     r.stockArea = this.getStockArea(r.usedStock);
     r.partsArea = this.getPartsArea(r.usedStock);
-    r.usageRatio = this.getUsageRatio(r.stockArea, r.partsArea);
+    r.usageRatio = r.partsArea / r.stockArea;
   }
 
-  static getRowRatio(usedParts: UsedPart[], stockWidth: number, stockHeight: number): number {
+  static getRowRatio(usedParts: UsedPart[], stock: Stock, direction: Direction): number {
     if (usedParts.length === 0) {
       return 0;
     }
@@ -62,9 +65,10 @@ export class Statistics {
       }
     });
 
-    const minMaxArea = Math.max(stockWidth, max.x - min.x) * Math.max(stockHeight, max.y - min.y);
+    const partOnStockArea = (max.x - min.x) * (max.y - min.y);
+    const stockArea = stock.width * stock.height;
 
-    return partArea / minMaxArea;
+    return partArea / stockArea + partArea / partOnStockArea;
   }
 
   static getLeftoverArea(usedStock: UsedStock): number {
