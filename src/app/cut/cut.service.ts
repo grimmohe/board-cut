@@ -39,8 +39,10 @@ export class CutService {
     const e: Part[] = [];
 
     parts.forEach((part) => {
-      for (let i = 0; i < part.count; i++) {
-        e.push(part);
+      if (part.width > 0 && part.height > 0) {
+        for (let i = 0; i < part.count; i++) {
+          e.push(part);
+        }
       }
     });
 
