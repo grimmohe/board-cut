@@ -31,7 +31,10 @@ export class PartsComponent implements OnInit {
   }
 
   copyPartItem(item: Part) {
-    this.storage.parts.splice(this.storage.parts.indexOf(item) + 1, 0, Object.assign({}, item));
+    const newPart = Object.assign({}, item);
+    newPart.id = this.idService.getNextId();
+
+    this.storage.parts.splice(this.storage.parts.indexOf(item) + 1, 0, newPart);
     this.emitUpdate();
   }
 

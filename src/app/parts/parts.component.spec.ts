@@ -7,6 +7,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { IdService } from 'app/id/id.service';
 import { StorageService } from 'app/storage/storage.service';
 import { PartsComponent } from './parts.component';
 
@@ -108,6 +109,9 @@ describe('PartsComponent', () => {
   }));
 
   it('should copy a part', async(() => {
+    const idService: IdService = TestBed.get(IdService);
+    idService.getNextId();
+
     const button: HTMLButtonElement = element.querySelector('button.copy');
     button.click();
 
@@ -118,6 +122,8 @@ describe('PartsComponent', () => {
       expect((names.item(1) as HTMLInputElement).value).toBe('Tür');
       expect(storage.parts.length).toBe(2);
       expect(storage.parts[0]).not.toBe(storage.parts[1]);
+      expect(storage.parts[0].id).not.toEqual(storage.parts[1].id);
+      storage.parts[0].id = storage.parts[1].id;
       expect(storage.parts[0]).toEqual(storage.parts[1]);
       expect(changeTriggerCount).toBe(1);
     });
