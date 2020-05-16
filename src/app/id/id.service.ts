@@ -15,4 +15,10 @@ export class IdService {
       this.nextId++;
     }
   }
+
+  registerId(id: number) {
+    if (id + 1 > this.nextId) {
+      this.nextId = id + 1;
+    }
+  }
 }

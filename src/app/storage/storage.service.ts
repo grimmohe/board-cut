@@ -1,4 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
+import { IdService } from 'app/id/id.service';
 import { Material, Part, Resultset, Stock } from '../app.model';
 
 const localStorageKey = 'cut-mats';
@@ -15,7 +16,7 @@ export class StorageService {
 
   sourceMatsChanged = new EventEmitter<any>();
 
-  constructor() {
+  constructor(private idService: IdService) {
     this.sourceMatsChanged.subscribe(this.updateLocalStorage.bind(this));
   }
 
@@ -25,14 +26,17 @@ export class StorageService {
     if (stored) {
       if (stored.materials) {
         this.materials.push(...stored.materials);
+        this.materials.forEach((mat) => this.idService.registerId(mat.id));
       }
       if (stored.stock) {
         this.stock.push(...stored.stock);
         this.restoreStockMaterial();
+        this.stock.forEach((s) => this.idService.registerId(s.id));
       }
       if (stored.parts) {
         this.parts.push(...stored.parts);
         this.restorePartStock();
+        this.parts.forEach((p) => this.idService.registerId(p.id));
       }
     }
   }

@@ -32,7 +32,9 @@ export class StockComponent implements OnInit {
   }
 
   copyStockItem(item: Stock) {
-    this.stock.splice(this.stock.indexOf(item) + 1, 0, Object.assign({}, item));
+    const newStock = Object.assign({}, item);
+    newStock.id = this.idService.getNextId();
+    this.stock.splice(this.stock.indexOf(item) + 1, 0, newStock);
     this.emitUpdate();
   }
 

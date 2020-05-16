@@ -11,6 +11,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { IdService } from 'app/id/id.service';
 import { StorageService } from 'app/storage/storage.service';
 import { MaterialsComponent } from './materials.component';
 
@@ -18,7 +19,7 @@ describe('MaterialsComponent', () => {
   let component: TestHostComponent;
   let fixture: ComponentFixture<TestHostComponent>;
   let element: HTMLElement;
-  const storage = new StorageService();
+  const storage = new StorageService(new IdService());
   let storageChanged = 0;
 
   beforeAll(() => {

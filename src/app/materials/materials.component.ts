@@ -28,11 +28,9 @@ export class MaterialsComponent implements OnInit {
   }
 
   copyMaterialItem(item: Material) {
-    this.storage.materials.splice(
-      this.storage.materials.indexOf(item) + 1,
-      0,
-      Object.assign({}, item)
-    );
+    const newMat = Object.assign({}, item);
+    newMat.id = this.idService.getNextId();
+    this.storage.materials.splice(this.storage.materials.indexOf(item) + 1, 0, newMat);
     this.emitUpdate();
   }
 
