@@ -19,6 +19,10 @@ export class StorageService {
     this.sourceMatsChanged.subscribe(this.updateLocalStorage.bind(this));
   }
 
+  isLocalStorageFilled(): boolean {
+    return localStorage.getItem(localStorageKey) > '';
+  }
+
   loadLocalStorage() {
     const stored: Storage = JSON.parse(localStorage.getItem(localStorageKey));
 

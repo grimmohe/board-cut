@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { BrowserModule } from '@angular/platform-browser';
@@ -10,6 +11,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { MaterialsComponent } from './materials/materials.component';
 import { PartsComponent } from './parts/parts.component';
+import { RestoreComponent } from './restore/restore.component';
 import { ResultsComponent } from './results/results.component';
 import { StockComponent } from './stock/stock.component';
 
@@ -19,7 +21,8 @@ import { StockComponent } from './stock/stock.component';
     StockComponent,
     PartsComponent,
     ResultsComponent,
-    MaterialsComponent
+    MaterialsComponent,
+    RestoreComponent
   ],
   imports: [
     BrowserModule,
@@ -29,7 +32,8 @@ import { StockComponent } from './stock/stock.component';
     MatIconModule,
     MatCheckboxModule,
     FormsModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MatDialogModule
   ],
   bootstrap: [AppComponent]
 })
