@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { CutService } from 'app/cut/cut.service';
+import { RestoreComponent } from 'app/restore/restore.component';
 import { ResultSvg } from 'app/svg/result-svg';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
@@ -20,7 +22,8 @@ export class ResultsComponent implements OnInit {
   constructor(
     private readonly storage: StorageService,
     private readonly cut: CutService,
-    private readonly sanitizer: DomSanitizer
+    private readonly sanitizer: DomSanitizer,
+    private readonly dialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -28,8 +31,10 @@ export class ResultsComponent implements OnInit {
       .pipe(debounceTime(1000))
       .subscribe(this.calculateAndDisplayNewCut.bind(this));
 
-    this.storage.loadLocalStorage();
-    this.calculateAndDisplayNewCut();
+    if (this.storage.isLocalStorageFilled()) {
+      const dialogRef = this.dialog.open(RestoreComponent);
+      dialogRef.afterClosed().subscribe(() => this.calculateAndDisplayNewCut());
+    }
   }
 
   calculateAndDisplayNewCut() {

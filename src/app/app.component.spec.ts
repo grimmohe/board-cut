@@ -3,10 +3,12 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RestoreComponent } from 'app/restore/restore.component';
 import { MaterialsComponent } from 'src/app/materials/materials.component';
 import { PartsComponent } from 'src/app/parts/parts.component';
 import { ResultsComponent } from 'src/app/results/results.component';
@@ -23,7 +25,8 @@ describe('AppComponent', () => {
         StockComponent,
         PartsComponent,
         ResultsComponent,
-        MaterialsComponent
+        MaterialsComponent,
+        RestoreComponent
       ],
       imports: [
         BrowserModule,
@@ -34,7 +37,8 @@ describe('AppComponent', () => {
         MatCheckboxModule,
         FormsModule,
         BrowserAnimationsModule
-      ]
+      ],
+      providers: [{ provide: MatDialog, useValue: {} }]
     }).compileComponents();
   }));
 
