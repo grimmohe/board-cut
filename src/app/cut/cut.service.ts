@@ -10,9 +10,11 @@ import { StorageService } from 'app/storage/storage.service';
 export class CutService {
   partDistribution = new PartDistribution();
 
-  constructor(private readonly storage: StorageService) {}
+  constructor(private readonly storage: StorageService) { }
 
   cut() {
+    const startTime = Date.now();
+
     this.cleanResultStorage();
     this.resetStockCounter(this.storage.stock);
 
@@ -23,6 +25,8 @@ export class CutService {
     const flatPartList = this.extentPartArray(this.storage.parts);
 
     this.cutParts(this.storage.result, this.storage.stock, flatPartList);
+
+    console.log(`cutting took ${Date.now() - startTime}ms`);
   }
 
   private cleanResultStorage() {
