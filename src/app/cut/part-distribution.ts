@@ -69,9 +69,9 @@ export class PartDistribution {
         return;
       }
 
-      [false, true].forEach((turned) => {
-        if (this.hinderTurning(turned, part) || !this.partFits(position, part, usedStock, turned)) {
-          return;
+      for (const turned of this.getTurningPossibilities(part, usedParts, direction)) {
+        if (!this.partFits(position, part, usedStock, turned)) {
+          continue;
         }
 
         const partsCopy = [...parts];
@@ -91,7 +91,7 @@ export class PartDistribution {
           best.usedParts = usedPartsCopy;
           best.parts = partsCopy;
         }
-      });
+      };
     });
 
     usedParts.length = 0;
@@ -103,6 +103,39 @@ export class PartDistribution {
     if (rowIsFinished) {
       this.updateOnFullRowEmitter.next();
     }
+  }
+
+  private getTurningPossibilities(part: Part, usedParts: UsedPart[], direction: Direction) {
+    let allowTurned = true;
+    let allowUnturned = true;
+
+    if (part.followGrain || part.width === part.height) {
+      allowTurned = false;
+    }
+
+    if (usedParts.length > 0) {
+      let size = 0;
+
+      if (direction === 'x') {
+        for (const usedPart of usedParts) {
+          size = Math.max(size, usedPart.turned ? usedPart.part.width : usedPart.part.height);
+        }
+        allowUnturned = allowUnturned && (part.height <= size);
+        allowTurned = allowTurned && (part.width <= size)
+      } else {
+        for (const usedPart of usedParts) {
+          size = Math.max(size, usedPart.turned ? usedPart.part.height : usedPart.part.width);
+        }
+        allowUnturned = allowUnturned && (part.width <= size);
+        allowTurned = allowTurned && (part.height <= size)
+      }
+    }
+
+    const result = [];
+    if (allowUnturned) result.push(false);
+    if (allowTurned) result.push(true);
+
+    return result;
   }
 
   private partFits(
