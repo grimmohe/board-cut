@@ -14,6 +14,7 @@ export class CutService {
 
   cut() {
     const startTime = Date.now();
+    this.partDistribution.partsAdded = 0;
 
     this.cleanResultStorage();
     this.resetStockCounter(this.storage.stock);
@@ -27,6 +28,7 @@ export class CutService {
     this.cutParts(this.storage.result, this.storage.stock, flatPartList);
 
     console.log(`cutting took ${Date.now() - startTime}ms`);
+    console.log(`${this.partDistribution.partsAdded} iterations`);
   }
 
   private cleanResultStorage() {

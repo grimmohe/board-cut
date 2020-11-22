@@ -5,6 +5,7 @@ import { UsedAreaCalculation } from 'app/cut/used-area-calculation';
 import { Observable } from 'rxjs';
 
 export class PartDistribution {
+  partsAdded = 0;
   private readonly updateOnFullRowEmitter = new EventEmitter<void>();
   get updateOnFullRow(): Observable<void> {
     return this.updateOnFullRowEmitter.asObservable();
@@ -73,6 +74,8 @@ export class PartDistribution {
         if (!this.partFits(position, part, usedStock, turned)) {
           continue;
         }
+
+        this.partsAdded++;
 
         const partsCopy = [...parts];
         partsCopy.splice(partIndex, 1);
