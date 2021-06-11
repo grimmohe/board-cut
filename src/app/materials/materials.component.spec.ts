@@ -1,10 +1,5 @@
 import { Component } from '@angular/core';
-import {
-  async,
-  ComponentFixture,
-  ComponentFixtureAutoDetect,
-  TestBed
-} from '@angular/core/testing';
+import { ComponentFixture, ComponentFixtureAutoDetect, TestBed, waitForAsync } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -28,7 +23,7 @@ describe('MaterialsComponent', () => {
     });
   });
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [MaterialsComponent, TestHostComponent],
       imports: [
@@ -82,7 +77,7 @@ describe('MaterialsComponent', () => {
     expect(addButton).toBeTruthy('add button');
   });
 
-  it('should tell when the width input changed', async(() => {
+  it('should tell when the width input changed', waitForAsync(() => {
     const input = getWidthInputElement();
     input.value = '10';
     input.dispatchEvent(new Event('input'));
@@ -92,7 +87,7 @@ describe('MaterialsComponent', () => {
     });
   }));
 
-  it('should tell when the thickness input changed', async(() => {
+  it('should tell when the thickness input changed', waitForAsync(() => {
     const input = getThicknessInputElement();
     input.value = '10';
     input.dispatchEvent(new Event('input'));
@@ -102,7 +97,7 @@ describe('MaterialsComponent', () => {
     });
   }));
 
-  it('should tell when the description input changed', async(() => {
+  it('should tell when the description input changed', waitForAsync(() => {
     const input = getDescInputElement();
     input.value = 'hallo';
     input.dispatchEvent(new Event('input'));

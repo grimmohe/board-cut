@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -18,7 +18,7 @@ describe('PartsComponent', () => {
   let element: HTMLElement;
   let changeTriggerCount: number;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [PartsComponent, TestHostComponent],
       imports: [
@@ -40,7 +40,7 @@ describe('PartsComponent', () => {
     fixture.detectChanges();
   });
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     storage = TestBed.inject(StorageService);
     storage.materials = [{ id: 0, description: 'Spahn', thickness: 12, cuttingWidth: 4 }];
     storage.stock = [
@@ -95,7 +95,7 @@ describe('PartsComponent', () => {
     expect(getStockOption().textContent.trim()).toBe('Standard (3000:1200)');
   });
 
-  it('should add a part', async(() => {
+  it('should add a part', waitForAsync(() => {
     const button: HTMLButtonElement = element.querySelector('button.add');
     button.click();
 
@@ -108,7 +108,7 @@ describe('PartsComponent', () => {
     });
   }));
 
-  it('should copy a part', async(() => {
+  it('should copy a part', waitForAsync(() => {
     const idService: IdService = TestBed.get(IdService);
     idService.getNextId();
 
@@ -129,7 +129,7 @@ describe('PartsComponent', () => {
     });
   }));
 
-  it('should delete a part', async(() => {
+  it('should delete a part', waitForAsync(() => {
     const button: HTMLButtonElement = element.querySelector('button.delete');
     button.click();
 
@@ -142,7 +142,7 @@ describe('PartsComponent', () => {
     });
   }));
 
-  it('should change the name', async(() => {
+  it('should change the name', waitForAsync(() => {
     getDescInput().value = 'Test';
     getDescInput().dispatchEvent(new Event('input'));
 
@@ -153,7 +153,7 @@ describe('PartsComponent', () => {
     });
   }));
 
-  it('should change the height', async(() => {
+  it('should change the height', waitForAsync(() => {
     getHeightInput().value = '123';
     getHeightInput().dispatchEvent(new Event('input'));
 
@@ -164,7 +164,7 @@ describe('PartsComponent', () => {
     });
   }));
 
-  it('should change the width', async(() => {
+  it('should change the width', waitForAsync(() => {
     getWidthInput().value = '123';
     getWidthInput().dispatchEvent(new Event('input'));
 
@@ -175,7 +175,7 @@ describe('PartsComponent', () => {
     });
   }));
 
-  it('should change the count', async(() => {
+  it('should change the count', waitForAsync(() => {
     getCountInput().value = '123';
     getCountInput().dispatchEvent(new Event('input'));
 
@@ -186,7 +186,7 @@ describe('PartsComponent', () => {
     });
   }));
 
-  it('should change follow grain', async(() => {
+  it('should change follow grain', waitForAsync(() => {
     getFollowInput().checked = false;
     getFollowInput().click();
 
@@ -197,7 +197,7 @@ describe('PartsComponent', () => {
     });
   }));
 
-  it('should change the stock', async(() => {
+  it('should change the stock', waitForAsync(() => {
     storage.parts[0].stock = storage.stock[1];
     getStockSelect().dispatchEvent(new Event('change'));
 

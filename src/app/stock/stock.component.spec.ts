@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -16,7 +16,7 @@ describe('StockComponent', () => {
   let storage: StorageService;
   let changeEventCount: number;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [StockComponent, TestHostComponent],
       imports: [
@@ -42,7 +42,7 @@ describe('StockComponent', () => {
     fixture.detectChanges();
   });
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     fixture.whenStable().then(() => {
       changeEventCount = 0;
     });
@@ -92,7 +92,7 @@ describe('StockComponent', () => {
     expect(changeEventCount).toBe(1);
   });
 
-  it('should change the material', async(() => {
+  it('should change the material', waitForAsync(() => {
     storage.stock[0].material = storage.materials[1];
     getMaterialSelect().dispatchEvent(new Event('change'));
 
