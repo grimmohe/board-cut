@@ -29,6 +29,7 @@ export class CutService {
 
     console.log(`cutting took ${Date.now() - startTime}ms`);
     console.log(`${this.partDistribution.partsAdded} iterations`);
+    console.log(`${this.partDistribution.partsSkipped} skipped`);
   }
 
   private cleanResultStorage() {

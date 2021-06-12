@@ -1,15 +1,10 @@
-import { EventEmitter } from '@angular/core';
 import { Direction, Part, Position, Stock, UsedPart, UsedStock } from 'app/app.model';
 import { Statistics } from 'app/cut/statistics';
 import { UsedAreaCalculation } from 'app/cut/used-area-calculation';
-import { Observable } from 'rxjs';
 
 export class PartDistribution {
   partsAdded = 0;
-  private readonly updateOnFullRowEmitter = new EventEmitter<void>();
-  get updateOnFullRow(): Observable<void> {
-    return this.updateOnFullRowEmitter.asObservable();
-  }
+  partsSkipped = 0;
 
   fillStock(partsToDo: Part[], usedStock: UsedStock, parts: Part[], stocks: Stock[]) {
     const best = { partsToDo: [...partsToDo], usedStock: usedStock, usedParts: [], ratio: 0 };
@@ -59,14 +54,14 @@ export class PartDistribution {
     parts: Part[],
     usedParts: UsedPart[],
     direction: Direction,
-    usedStock: UsedStock
+    usedStock: UsedStock,
   ): void {
     const best = { parts: [...parts], usedParts: [...usedParts], usedRatio: 0 };
     const position: Position = this.getNextPartPosition(usedParts, usedStock, direction);
-    let rowIsFinished = true;
 
     parts.forEach((part, partIndex) => {
       if (parts.indexOf(part) < partIndex) {
+        this.partsSkipped++;
         return;
       }
 
@@ -84,7 +79,6 @@ export class PartDistribution {
 
         if (partsCopy.length) {
           this.addToRow(partsCopy, usedPartsCopy, direction, usedStock);
-          rowIsFinished = false;
         }
 
         const usedRatio = Statistics.getRowRatio(usedPartsCopy, usedStock.stock);
@@ -102,10 +96,6 @@ export class PartDistribution {
 
     parts.length = 0;
     parts.push(...best.parts);
-
-    if (rowIsFinished) {
-      this.updateOnFullRowEmitter.next();
-    }
   }
 
   private getTurningPossibilities(part: Part, usedParts: UsedPart[], direction: Direction) {
@@ -118,23 +108,20 @@ export class PartDistribution {
 
     if (usedParts.length > 0) {
       let size = 0;
+      const usedPart = usedParts[0];
 
       if (direction === 'x') {
-        for (const usedPart of usedParts) {
-          size = Math.max(size, usedPart.turned ? usedPart.part.width : usedPart.part.height);
-        }
-        allowUnturned = allowUnturned && (part.height <= size);
-        allowTurned = allowTurned && (part.width <= size)
+        size = usedPart.turned ? usedPart.part.width : usedPart.part.height;
+        allowTurned = allowTurned && (part.width <= size) && (part.width > part.height);
+        allowUnturned = allowUnturned && !allowTurned && (part.height <= size);
       } else {
-        for (const usedPart of usedParts) {
-          size = Math.max(size, usedPart.turned ? usedPart.part.height : usedPart.part.width);
-        }
-        allowUnturned = allowUnturned && (part.width <= size);
-        allowTurned = allowTurned && (part.height <= size)
+        size = usedPart.turned ? usedPart.part.height : usedPart.part.width;
+        allowTurned = allowTurned && (part.height <= size) && (part.height > part.width);
+        allowUnturned = allowUnturned && !allowTurned && (part.width <= size);
       }
     }
 
-    const result = [];
+    const result: boolean[] = [];
     if (allowUnturned) result.push(false);
     if (allowTurned) result.push(true);
 
