@@ -55,12 +55,13 @@ export class PartDistribution {
     usedParts: UsedPart[],
     direction: Direction,
     usedStock: UsedStock,
+    startIndex = 0
   ): void {
     const best = { parts: [...parts], usedParts: [...usedParts], usedRatio: 0 };
     const position: Position = this.getNextPartPosition(usedParts, usedStock, direction);
 
     parts.forEach((part, partIndex) => {
-      if (parts.indexOf(part) < partIndex) {
+      if (partIndex < startIndex || parts.indexOf(part) < partIndex) {
         this.partsSkipped++;
         return;
       }
@@ -78,7 +79,7 @@ export class PartDistribution {
         const usedPartsCopy = [...usedParts, <UsedPart>{ part, position, turned }];
 
         if (partsCopy.length) {
-          this.addToRow(partsCopy, usedPartsCopy, direction, usedStock);
+          this.addToRow(partsCopy, usedPartsCopy, direction, usedStock, partIndex);
         }
 
         const usedRatio = Statistics.getRowRatio(usedPartsCopy, usedStock.stock);
