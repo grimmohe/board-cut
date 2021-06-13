@@ -6,14 +6,13 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: install ci
-      run: npm install
-    - name: test
-      run: npm run test -- --no-watch --no-progress --browsers=ChromeHeadless
-    - name: build
-      run: npm run build -- -c production
+      - uses: actions/checkout@v2
+      - name: install ci
+        run: npm install
+      - name: test
+        run: npm run test -- --no-watch --no-progress --browsers=ChromeHeadless
+      - name: build
+        run: npm run build
