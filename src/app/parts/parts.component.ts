@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { IdService } from 'app/id/id.service';
 import { Part } from '../app.model';
 import { StorageService } from '../storage/storage.service';
@@ -9,9 +9,9 @@ import { StorageService } from '../storage/storage.service';
   styleUrls: ['./parts.component.scss']
 })
 export class PartsComponent implements OnInit {
-  constructor(readonly storage: StorageService, private readonly idService: IdService) {}
+  constructor(readonly storage: StorageService, private readonly idService: IdService, private readonly componentRef: ElementRef<HTMLElement>) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   emitUpdate() {
     this.storage.sourceMatsChanged.next();
@@ -28,14 +28,25 @@ export class PartsComponent implements OnInit {
       stock: null
     });
     this.emitUpdate();
+
+    setTimeout(() => {
+      const nameElements: NodeListOf<HTMLInputElement> = this.componentRef.nativeElement.querySelectorAll('.name');
+      nameElements[nameElements.length - 1]?.focus();
+    });
   }
 
   copyPartItem(item: Part) {
     const newPart = Object.assign({}, item);
     newPart.id = this.idService.getNextId();
+    const index = this.storage.parts.indexOf(item) + 1;
 
-    this.storage.parts.splice(this.storage.parts.indexOf(item) + 1, 0, newPart);
+    this.storage.parts.splice(index, 0, newPart);
     this.emitUpdate();
+
+    setTimeout(() => {
+      const nameElements: NodeListOf<HTMLInputElement> = this.componentRef.nativeElement.querySelectorAll('.name');
+      nameElements[index]?.focus();
+    });
   }
 
   deletePartItem(item: Part) {

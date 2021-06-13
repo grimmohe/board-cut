@@ -74,7 +74,7 @@
       </mat-form-field>
     </td>
     <td>
-      <mat-checkbox class="follow" [(ngModel)]="item.followGrain" (change)="emitUpdate()">
+      <mat-checkbox class="follow" [(ngModel)]="item.followGrain" (change)="emitUpdate()" matTooltip="don't rotate this part">
         follow grain
       </mat-checkbox>
     </td>
