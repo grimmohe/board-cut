@@ -28,19 +28,23 @@ export class StorageService {
     const stored: Storage = JSON.parse(localStorage.getItem(localStorageKey));
 
     if (stored) {
-      if (stored.materials) {
-        this.materials.push(...stored.materials);
-        this.materials.forEach((mat) => this.idService.registerId(mat.id));
-      }
-      if (stored.stock) {
-        this.stock.push(...stored.stock);
-        this.restoreStockMaterial();
-        this.stock.forEach((s) => this.idService.registerId(s.id));
-      }
-      if (stored.parts) {
-        this.parts.push(...stored.parts);
-        this.restorePartStock();
-        this.parts.forEach((p) => this.idService.registerId(p.id));
+      try {
+        if (stored.materials) {
+          this.materials.push(...stored.materials);
+          this.materials.forEach((mat) => this.idService.registerId(mat.id));
+        }
+        if (stored.stock) {
+          this.stock.push(...stored.stock);
+          this.restoreStockMaterial();
+          this.stock.forEach((s) => this.idService.registerId(s.id));
+        }
+        if (stored.parts) {
+          this.parts.push(...stored.parts);
+          this.restorePartStock();
+          this.parts.forEach((p) => this.idService.registerId(p.id));
+        }
+      } catch (error) {
+        console.error(error);
       }
     }
   }
