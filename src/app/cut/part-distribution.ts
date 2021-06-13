@@ -11,7 +11,7 @@ export class PartDistribution {
 
     ['x', 'y'].forEach((direction: Direction) => {
       const partsToDoCopy = [...partsToDo];
-      const usedStockCopy: UsedStock = JSON.parse(JSON.stringify(usedStock));
+      const usedStockCopy: UsedStock = this.copyUsedStock(usedStock);
       const usedPartsNew: UsedPart[] = [];
 
       this.addToRow(partsToDoCopy, usedPartsNew, direction, usedStockCopy);
@@ -35,19 +35,13 @@ export class PartDistribution {
       }
     });
 
-    this.restoreUsedStock(usedStock, best.usedStock, parts, stocks);
+    Object.assign(usedStock, best.usedStock);
     partsToDo.length = 0;
     partsToDo.push(...best.partsToDo);
   }
 
-  private restoreUsedStock(target: UsedStock, source: UsedStock, parts: Part[], stocks: Stock[]) {
-    target.usedArea = source.usedArea;
-    target.usedParts = source.usedParts;
-
-    target.usedParts.forEach((usedPart) => {
-      const copy = usedPart.part;
-      usedPart.part = parts.find((p) => p.id === copy.id);
-    });
+  private copyUsedStock(source: UsedStock): UsedStock {
+    return { stock: source.stock, usedArea: Object.assign({}, source.usedArea), usedParts: [...source.usedParts] };
   }
 
   private addToRow(
