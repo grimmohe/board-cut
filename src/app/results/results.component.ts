@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { CutService } from 'app/cut/cut.service';
-import { RestoreComponent } from 'app/restore/restore.component';
-import { ResultSvg } from 'app/svg/result-svg';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 import { debounceTime } from 'rxjs/operators';
+import { CutService } from 'src/app/cut/cut.service';
+import { RestoreComponent } from 'src/app/restore/restore.component';
+import { ResultSvg } from 'src/app/svg/result-svg';
 import { StorageService } from '../storage/storage.service';
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;

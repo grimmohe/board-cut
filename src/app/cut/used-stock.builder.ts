@@ -1,4 +1,4 @@
-import { Stock, UsedStock } from 'app/app.model';
+import { Stock, UsedStock } from 'src/app/app.model';
 
 export class UsedStockBuilder {
   static getNewUsedStock(stock: Stock, usedStocks: UsedStock[]): UsedStock {

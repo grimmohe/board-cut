@@ -6,8 +6,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { CutService } from 'app/cut/cut.service';
-import { StorageService } from 'app/storage/storage.service';
+import { CutService } from 'src/app/cut/cut.service';
+import { StorageService } from 'src/app/storage/storage.service';
 import { ResultsComponent } from './results.component';
 
 describe('ResultsComponent', () => {

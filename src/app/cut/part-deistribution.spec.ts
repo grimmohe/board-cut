@@ -1,5 +1,5 @@
-import { Part, Stock, UsedStock } from 'app/app.model';
-import { PartDistribution } from 'app/cut/part-distribution';
+import { Part, Stock, UsedStock } from 'src/app/app.model';
+import { PartDistribution } from 'src/app/cut/part-distribution';
 
 describe('PartDistribution', () => {
   const defaultStock: Stock = {

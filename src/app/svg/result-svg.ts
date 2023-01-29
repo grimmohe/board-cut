@@ -1,5 +1,5 @@
 import { Rect, SVG, Svg } from '@svgdotjs/svg.js';
-import { Resultset, Stock, UsedPart, UsedStock } from 'app/app.model';
+import { Resultset, Stock, UsedPart, UsedStock } from 'src/app/app.model';
 
 export class ResultSvg {
   /**
@@ -40,8 +40,8 @@ export class ResultSvg {
         usedPart.turned ? usedPart.part.height : usedPart.part.width,
         usedPart.turned ? usedPart.part.width : usedPart.part.height
       );
-      partRect.x(stockRect.x() + usedPart.position.x);
-      partRect.y(stockRect.y() + usedPart.position.y);
+      partRect.x(Number(stockRect.x()) + usedPart.position.x);
+      partRect.y(Number(stockRect.y()) + usedPart.position.y);
       partRect.attr(this.rectAttr);
 
       if (addText) {
@@ -54,30 +54,30 @@ export class ResultSvg {
     const stockText = draw.plain(this.getStockText(usedStock.stock));
     stockText.font(this.fontAttr);
     stockText.x(stockRect.x());
-    stockText.y(stockRect.y() - this.fontAttr.size * 1.5);
+    stockText.y(Number(stockRect.y()) - this.fontAttr.size * 1.5);
   }
 
   private addPartText(draw: Svg, partRect: Rect, usedPart: UsedPart): void {
     if (usedPart.part.description) {
       const partText = draw.text(usedPart.part.description);
       partText.font(this.fontAttr).build(true);
-      partText.x(partRect.x() + this.fontAttr.size * 2);
-      partText.y(partRect.y() + partRect.height() / 2 - this.fontAttr.size / 2);
+      partText.x(Number(partRect.x()) + this.fontAttr.size * 2);
+      partText.y(Number(partRect.y()) + Number(partRect.height()) / 2 - this.fontAttr.size / 2);
     }
 
     const widthText = draw.plain(
       String(usedPart.turned ? usedPart.part.height : usedPart.part.width)
     );
     widthText.font(this.fontAttr);
-    widthText.x(partRect.x() + this.fontAttr.size);
-    widthText.y(partRect.y() + this.fontAttr.size / 2);
+    widthText.x(Number(partRect.x()) + this.fontAttr.size);
+    widthText.y(Number(partRect.y()) + this.fontAttr.size / 2);
 
     const heightText = draw.plain(
       String(usedPart.turned ? usedPart.part.width : usedPart.part.height)
     );
     heightText.font(this.fontAttr);
     heightText.x(partRect.x());
-    heightText.y(partRect.y() + partRect.height() - heightText.text().length * this.fontAttr.size);
+    heightText.y(Number(partRect.y()) + Number(partRect.height()) - heightText.text().length * this.fontAttr.size);
     heightText.rotate(-90);
   }
 

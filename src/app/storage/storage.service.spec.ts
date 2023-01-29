@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { IdService } from 'app/id/id.service';
+import { IdService } from 'src/app/id/id.service';
 import { StorageService } from './storage.service';
 
 describe('StorageService', () => {

@@ -1,4 +1,4 @@
-import { Direction, UsedPart, UsedStock } from 'app/app.model';
+import { Direction, UsedPart, UsedStock } from 'src/app/app.model';
 
 export class UsedAreaCalculation {
   static updateUsedArea(usedStock: UsedStock, newUsedParts: UsedPart[], direction: Direction) {

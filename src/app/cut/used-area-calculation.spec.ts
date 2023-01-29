@@ -1,5 +1,5 @@
-import { Part, Stock, UsedStock } from 'app/app.model';
-import { UsedAreaCalculation } from 'app/cut/used-area-calculation';
+import { Part, Stock, UsedStock } from 'src/app/app.model';
+import { UsedAreaCalculation } from 'src/app/cut/used-area-calculation';
 
 describe('UsedAreaCalculation', () => {
   it('should substract a row', () => {

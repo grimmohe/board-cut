@@ -12,10 +12,10 @@
       </button>
     </td>
     <td>
-      <mat-form-field>
+      <mat-form-field subscriptSizing="dynamic">
+        <mat-label>name</mat-label>
         <input
           matInput
-          placeholder="name"
           class="name"
           [(ngModel)]="item.description"
           (input)="emitUpdate()"
@@ -23,10 +23,10 @@
       </mat-form-field>
     </td>
     <td>
-      <mat-form-field>
+      <mat-form-field subscriptSizing="dynamic">
+        <mat-label>from stock</mat-label>
         <select
           matNativeControl
-          placeholder="from stock"
           class="stock"
           [(ngModel)]="item.stock"
           (ngModelChange)="emitUpdate()"
@@ -38,11 +38,11 @@
       </mat-form-field>
     </td>
     <td>
-      <mat-form-field>
+      <mat-form-field subscriptSizing="dynamic">
+        <mat-label>count</mat-label>
         <input
           matInput
           type="number"
-          placeholder="count"
           class="count"
           [(ngModel)]="item.count"
           (input)="emitUpdate()"
@@ -50,11 +50,11 @@
       </mat-form-field>
     </td>
     <td>
-      <mat-form-field>
+      <mat-form-field subscriptSizing="dynamic">
+        <mat-label>width</mat-label>
         <input
           matInput
           type="number"
-          placeholder="width"
           class="width"
           [(ngModel)]="item.width"
           (input)="emitUpdate()"
@@ -62,11 +62,11 @@
       </mat-form-field>
     </td>
     <td>
-      <mat-form-field>
+      <mat-form-field subscriptSizing="dynamic">
+        <mat-label>height</mat-label>
         <input
           matInput
           type="number"
-          placeholder="height"
           class="height"
           [(ngModel)]="item.height"
           (input)="emitUpdate()"
@@ -79,10 +79,8 @@
       </mat-checkbox>
     </td>
   </tr>
+  <tr>
+    <td></td>
+    <td><button class="add" mat-icon-button (click)="addPartItem()"><mat-icon>add</mat-icon></button></td>
+  </tr>
 </table>
-
-<div>
-  <button mat-icon-button class="add" (click)="addPartItem()">
-    <mat-icon>add</mat-icon>
-  </button>
-</div>

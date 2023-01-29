@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IdService } from 'app/id/id.service';
+import { IdService } from 'src/app/id/id.service';
 import { Material } from '../app.model';
 import { StorageService } from '../storage/storage.service';
 

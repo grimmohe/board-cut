@@ -1,6 +1,6 @@
-import { Direction, Part, Position, Stock, UsedPart, UsedStock } from 'app/app.model';
-import { Statistics } from 'app/cut/statistics';
-import { UsedAreaCalculation } from 'app/cut/used-area-calculation';
+import { Direction, Part, Position, Stock, UsedPart, UsedStock } from 'src/app/app.model';
+import { Statistics } from 'src/app/cut/statistics';
+import { UsedAreaCalculation } from 'src/app/cut/used-area-calculation';
 
 export class PartDistribution {
   partsAdded = 0;

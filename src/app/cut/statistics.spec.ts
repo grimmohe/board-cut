@@ -1,5 +1,5 @@
-import { Resultset, Stock, UsedPart } from 'app/app.model';
-import { Statistics } from 'app/cut/statistics';
+import { Resultset, Stock, UsedPart } from 'src/app/app.model';
+import { Statistics } from 'src/app/cut/statistics';
 
 describe('Statistics', () => {
   const result: Resultset = {

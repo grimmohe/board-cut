@@ -1,38 +1,33 @@
-@use '~@angular/material' as mat;
-// Plus imports for other components in your app.
+@use '@angular/material' as mat;
 
-// Include the common styles for Angular Material. We include this here so that you only
-// have to load a single css file for Angular Material in your app.
-// Be sure that you only ever include this mixin once!
 @include mat.core();
 
-// Define the palettes for your theme using the Material Design palettes available in palette.scss
-// (imported above). For each palette, you can optionally specify a default, lighter, and darker
-// hue. Available color palettes: https://material.io/design/color/
-$candy-app-primary: mat.define-palette(mat.$indigo-palette);
-$candy-app-accent:  mat.define-palette(mat.$pink-palette, A200, A100, A400);
+$my-primary: mat.define-palette(mat.$indigo-palette, 500);
+$my-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
 
-// The warn palette is optional (defaults to red).
-$candy-app-warn:    mat.define-palette(mat.$red-palette);
+$my-theme: mat.define-light-theme((
+ color: (
+   primary: $my-primary,
+   accent: $my-accent,
+ ),
+ typography: mat.define-typography-config(),
+ density: -2,
+));
 
-// Create the theme object (a Sass map containing all of the palettes).
-$candy-app-theme: mat.define-light-theme($candy-app-primary, $candy-app-accent, $candy-app-warn);
-
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
-@include mat.all-component-themes($candy-app-theme);
+@include mat.all-component-themes($my-theme);
 
 body {
     background-color: lightgray;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', 'sans-serif';
 }
 
-.mat-card {
+mat-card {
     background-color: white;
-    margin-top: 16px;
-    margin-bottom: 16px;
+    margin: 2em 0;
+    padding: 1em;
 }
 
 .title {
     font-size: 22px;
+    margin-top: 0;
 }

@@ -12,10 +12,10 @@
       </button>
     </td>
     <td>
-      <mat-form-field>
+      <mat-form-field subscriptSizing="dynamic">
+        <mat-label>name</mat-label>
         <input
           matInput
-          placeholder="name"
           class="desc"
           (input)="emitUpdate()"
           [(ngModel)]="item.description"
@@ -23,10 +23,10 @@
       </mat-form-field>
     </td>
     <td>
-      <mat-form-field>
+      <mat-form-field subscriptSizing="dynamic">
+        <mat-label>material</mat-label>
         <select
           matNativeControl
-          placeholder="material"
           class="material"
           (input)="emitUpdate()"
           [(ngModel)]="item.material"
@@ -37,11 +37,11 @@
       </mat-form-field>
     </td>
     <td>
-      <mat-form-field>
+      <mat-form-field subscriptSizing="dynamic">
+        <mat-label>count</mat-label>
         <input
           matInput
           type="number"
-          placeholder="count"
           class="count"
           (input)="emitUpdate()"
           [(ngModel)]="item.count"
@@ -49,11 +49,11 @@
       </mat-form-field>
     </td>
     <td>
-      <mat-form-field>
+      <mat-form-field subscriptSizing="dynamic">
+        <mat-label>width</mat-label>
         <input
           matInput
           type="number"
-          placeholder="width"
           class="width"
           (input)="emitUpdate()"
           [(ngModel)]="item.width"
@@ -61,11 +61,11 @@
       </mat-form-field>
     </td>
     <td>
-      <mat-form-field>
+      <mat-form-field subscriptSizing="dynamic">
+        <mat-label>height</mat-label>
         <input
           matInput
           type="number"
-          placeholder="height"
           class="height"
           (input)="emitUpdate()"
           [(ngModel)]="item.height"
@@ -73,10 +73,8 @@
       </mat-form-field>
     </td>
   </tr>
+  <tr>
+    <td></td>
+    <td><button class="add" mat-icon-button (click)="addStockItem()"><mat-icon>add</mat-icon></button></td>
+  </tr>
 </table>
-
-<div>
-  <button mat-icon-button class="add" (click)="addStockItem()">
-    <mat-icon>add</mat-icon>
-  </button>
-</div>

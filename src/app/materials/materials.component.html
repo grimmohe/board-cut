@@ -12,43 +12,43 @@
       </button>
     </td>
     <td>
-      <mat-form-field>
+      <mat-form-field subscriptSizing="dynamic">
+        <mat-label>name</mat-label>
         <input
           class="desc"
           matInput
-          placeholder="name"
           [(ngModel)]="item.description"
           (input)="emitUpdate()"
         />
       </mat-form-field>
     </td>
     <td>
-      <mat-form-field>
+      <mat-form-field subscriptSizing="dynamic">
+        <mat-label>thickness</mat-label>
         <input
           class="thickness"
           matInput
           type="number"
-          placeholder="thickness"
           [(ngModel)]="item.thickness"
           (input)="emitUpdate()"
         />
       </mat-form-field>
     </td>
     <td>
-      <mat-form-field>
+      <mat-form-field subscriptSizing="dynamic">
+        <mat-label>cut width</mat-label>
         <input
           class="width"
           matInput
           type="number"
-          placeholder="cut width"
           [(ngModel)]="item.cuttingWidth"
           (input)="emitUpdate()"
         />
       </mat-form-field>
     </td>
   </tr>
+  <tr>
+    <td></td>
+    <td><button class="add" mat-icon-button (click)="addMaterialItem()"><mat-icon>add</mat-icon></button></td>
+  </tr>
 </table>
-
-<div>
-  <button class="add" mat-icon-button (click)="addMaterialItem()"><mat-icon>add</mat-icon></button>
-</div>

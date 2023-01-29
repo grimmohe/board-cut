@@ -1,5 +1,5 @@
-import { Stock } from 'app/app.model';
-import { UsedStockBuilder } from 'app/cut/used-stock.builder';
+import { Stock } from 'src/app/app.model';
+import { UsedStockBuilder } from 'src/app/cut/used-stock.builder';
 
 describe('getNewUsedStock', () => {
   it('should give new used stock and add to array', () => {

@@ -7,8 +7,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { IdService } from 'app/id/id.service';
-import { StorageService } from 'app/storage/storage.service';
+import { IdService } from 'src/app/id/id.service';
+import { StorageService } from 'src/app/storage/storage.service';
 import { PartsComponent } from './parts.component';
 
 describe('PartsComponent', () => {

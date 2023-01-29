@@ -1,5 +1,5 @@
-import { Material, Part, Resultset, Stock, UsedStock } from 'app/app.model';
-import { ResultSvg } from 'app/svg/result-svg';
+import { Material, Part, Resultset, Stock, UsedStock } from 'src/app/app.model';
+import { ResultSvg } from 'src/app/svg/result-svg';
 
 describe('ResultSvg', () => {
   const margin = 30;

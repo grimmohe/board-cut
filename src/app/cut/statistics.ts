@@ -1,4 +1,4 @@
-import { Resultset, Stock, UsedPart, UsedStock } from 'app/app.model';
+import { Resultset, Stock, UsedPart, UsedStock } from 'src/app/app.model';
 
 export class Statistics {
   static getStockArea(usedStock: UsedStock[]): number {

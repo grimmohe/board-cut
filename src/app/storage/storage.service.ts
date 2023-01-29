@@ -1,5 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { IdService } from 'app/id/id.service';
+import { IdService } from 'src/app/id/id.service';
 import { Material, Part, Resultset, Stock } from '../app.model';
 
 const localStorageKey = 'cut-mats';
@@ -14,7 +14,7 @@ export class StorageService {
 
   result: Resultset;
 
-  sourceMatsChanged = new EventEmitter<any>();
+  sourceMatsChanged = new EventEmitter<void>();
 
   constructor(private idService: IdService) {
     this.sourceMatsChanged.subscribe(this.updateLocalStorage.bind(this));
