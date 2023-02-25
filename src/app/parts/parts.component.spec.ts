@@ -28,8 +28,8 @@ describe('PartsComponent', () => {
         FormsModule,
         MatInputModule,
         MatCheckboxModule,
-        NoopAnimationsModule
-      ]
+        NoopAnimationsModule,
+      ],
     }).compileComponents();
   }));
 
@@ -50,7 +50,7 @@ describe('PartsComponent', () => {
         height: 3000,
         width: 1200,
         count: 1,
-        material: storage.materials[0]
+        material: storage.materials[0],
       },
       {
         id: 1,
@@ -58,8 +58,8 @@ describe('PartsComponent', () => {
         height: 5000,
         width: 1000,
         count: 1,
-        material: storage.materials[0]
-      }
+        material: storage.materials[0],
+      },
     ];
     storage.parts = [
       {
@@ -69,10 +69,10 @@ describe('PartsComponent', () => {
         width: 600,
         count: 2,
         followGrain: true,
-        stock: storage.stock[0]
-      }
+        stock: storage.stock[0],
+      },
     ];
-    storage.sourceMatsChanged.subscribe(() => {
+    storage.dataChanged.subscribe(() => {
       changeTriggerCount++;
     });
 

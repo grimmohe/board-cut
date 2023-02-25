@@ -1,33 +1,48 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { IdService } from 'src/app/id/id.service';
-import { Material, Part, Resultset, Stock } from '../app.model';
-
-const localStorageKey = 'cut-mats';
+import { Material, Part, Project, Resultset, Stock } from '../app.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class StorageService {
+  projectName: string = '';
+  created: Date = new Date();
+  lastEdit: Date = new Date();
+
   materials: Material[] = [];
   stock: Stock[] = [];
   parts: Part[] = [];
 
   result: Resultset;
 
-  sourceMatsChanged = new EventEmitter<void>();
+  dataChanged = new EventEmitter<void>();
 
   constructor(private idService: IdService) {
-    this.sourceMatsChanged.subscribe(this.updateLocalStorage.bind(this));
+    this.dataChanged.subscribe(this.updateLocalStorage.bind(this));
   }
 
-  isLocalStorageFilled(): boolean {
-    return localStorage.getItem(localStorageKey) > '';
+  getProjects(): string[] {
+    const projects: string[] = [];
+    for (let index = 0; index < localStorage.length; index++) {
+      projects.push(localStorage.key(index));
+    }
+
+    return projects.sort();
   }
 
-  loadLocalStorage() {
-    const stored: Storage = JSON.parse(localStorage.getItem(localStorageKey));
+  loadProject(projectName: string) {
+    const stored: Project = JSON.parse(localStorage.getItem(projectName));
+    this.projectName = projectName;
+    this.created = new Date();
+    this.materials.length = 0;
+    this.stock.length = 0;
+    this.parts.length = 0;
 
     if (stored) {
+      this.created = new Date(stored.created);
+      this.lastEdit = new Date(stored.lastEdit);
+
       try {
         if (stored.materials) {
           this.materials.push(...stored.materials);
@@ -49,6 +64,29 @@ export class StorageService {
     }
   }
 
+  deleteProject(projectName: string) {
+    localStorage.removeItem(projectName);
+  }
+
+  getNewProject(): string {
+    let newName = 'new project 1';
+    for (const project of this.getProjects()) {
+      if (project.match('^new project \\d+$')) {
+        newName = `new project ${Number(project.split(' ')[2]) + 1}`;
+      }
+    }
+
+    this.projectName = newName;
+    this.created = new Date();
+    this.materials.length = 0;
+    this.stock.length = 0;
+    this.parts.length = 0;
+
+    this.updateLocalStorage();
+
+    return newName;
+  }
+
   private restoreStockMaterial() {
     this.stock.forEach((s) => {
       if (s.material) {
@@ -61,26 +99,25 @@ export class StorageService {
 
   private restorePartStock() {
     this.parts.forEach((p) => {
-      const copy = p.stock;
-      const real = this.stock.find((s) => s.id === copy.id);
-      p.stock = real;
+      if (p.stock) {
+        const copy = p.stock;
+        const real = this.stock.find((s) => s.id === copy.id);
+        p.stock = real;
+      }
     });
   }
 
   private updateLocalStorage() {
-    localStorage.setItem(
-      localStorageKey,
-      JSON.stringify(<Storage>{
-        materials: this.materials,
-        stock: this.stock,
-        parts: this.parts
-      })
-    );
-  }
-}
+    this.lastEdit = new Date();
 
-interface Storage {
-  materials: Material[];
-  stock: Stock[];
-  parts: Part[];
+    const project: Project = {
+      created: this.created.toISOString(),
+      lastEdit: this.lastEdit.toISOString(),
+      materials: this.materials,
+      stock: this.stock,
+      parts: this.parts,
+    };
+
+    localStorage.setItem(this.projectName, JSON.stringify(project));
+  }
 }

@@ -1,0 +1,22 @@
+<div class="tool-row" mat-body>
+  <button mat-icon-button id="new-project" aria-label="new project" (click)="onNewProject()">
+    <mat-icon>add</mat-icon>
+  </button>
+  <mat-form-field subscriptSizing="dynamic">
+    <mat-label>name project</mat-label>
+    <input matInput [ngModel]="projectName" (ngModelChange)="onNameChange($event)" />
+  </mat-form-field>
+</div>
+
+<div
+  *ngFor="let project of projects"
+  mat-body
+  id="project-row"
+  class="project-row"
+  [class.current]="project === projectName"
+>
+  <span id="label" (click)="onProjectSelect(project)">{{ project }}</span>
+  <button mat-icon-button id="delete" aria-label="delete project" (click)="onDelete(project)">
+    <mat-icon>delete</mat-icon>
+  </button>
+</div>

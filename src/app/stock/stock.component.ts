@@ -6,7 +6,7 @@ import { StorageService } from '../storage/storage.service';
 @Component({
   selector: 'app-stock',
   templateUrl: './stock.component.html',
-  styleUrls: ['./stock.component.scss']
+  styleUrls: ['./stock.component.scss'],
 })
 export class StockComponent implements OnInit {
   materials: Material[];
@@ -26,7 +26,7 @@ export class StockComponent implements OnInit {
       width: 0,
       count: 1,
       description: '',
-      material: null
+      material: null,
     });
     this.emitUpdate();
   }
@@ -44,6 +44,6 @@ export class StockComponent implements OnInit {
   }
 
   emitUpdate() {
-    this.storage.sourceMatsChanged.next();
+    this.storage.dataChanged.next();
   }
 }

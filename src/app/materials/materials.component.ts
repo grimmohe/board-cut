@@ -6,7 +6,7 @@ import { StorageService } from '../storage/storage.service';
 @Component({
   selector: 'app-materials',
   templateUrl: './materials.component.html',
-  styleUrls: ['./materials.component.scss']
+  styleUrls: ['./materials.component.scss'],
 })
 export class MaterialsComponent implements OnInit {
   constructor(readonly storage: StorageService, private readonly idService: IdService) {}
@@ -14,7 +14,7 @@ export class MaterialsComponent implements OnInit {
   ngOnInit() {}
 
   emitUpdate() {
-    this.storage.sourceMatsChanged.next();
+    this.storage.dataChanged.next();
   }
 
   addMaterialItem() {
@@ -22,7 +22,7 @@ export class MaterialsComponent implements OnInit {
       id: this.idService.getNextId(),
       description: '',
       cuttingWidth: 4,
-      thickness: 19
+      thickness: 19,
     });
     this.emitUpdate();
   }

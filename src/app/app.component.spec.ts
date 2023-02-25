@@ -1,22 +1,18 @@
+import { HarnessLoader } from '@angular/cdk/testing';
+import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { FormsModule } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatDialog } from '@angular/material/dialog';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatDrawerContainerHarness } from '@angular/material/sidenav/testing';
+import { AppModule } from 'src/app/app.module';
 import { MaterialsComponent } from 'src/app/materials/materials.component';
 import { PartsComponent } from 'src/app/parts/parts.component';
-import { RestoreComponent } from 'src/app/restore/restore.component';
+import { ProjectsComponent } from 'src/app/projects/projects.component';
 import { ResultsComponent } from 'src/app/results/results.component';
 import { StockComponent } from 'src/app/stock/stock.component';
 import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
   let fixture: ComponentFixture<AppComponent>;
+  let loader: HarnessLoader;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -26,24 +22,19 @@ describe('AppComponent', () => {
         PartsComponent,
         ResultsComponent,
         MaterialsComponent,
-        RestoreComponent
+        ProjectsComponent,
       ],
-      imports: [
-        BrowserModule,
-        MatCardModule,
-        MatButtonModule,
-        MatInputModule,
-        MatIconModule,
-        MatCheckboxModule,
-        FormsModule,
-        BrowserAnimationsModule
-      ],
-      providers: [{ provide: MatDialog, useValue: {} }]
+      imports: [AppModule],
     }).compileComponents();
   }));
 
-  beforeEach(() => {
+  beforeEach(async () => {
     fixture = TestBed.createComponent(AppComponent);
+    loader = TestbedHarnessEnvironment.loader(fixture);
+
+    const container = await loader.getHarness(MatDrawerContainerHarness);
+    const content = await container.getContent();
+    await content.host();
   });
 
   it('should create the app', () => {

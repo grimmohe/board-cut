@@ -1,5 +1,10 @@
 import { Component } from '@angular/core';
-import { ComponentFixture, ComponentFixtureAutoDetect, TestBed, waitForAsync } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  ComponentFixtureAutoDetect,
+  TestBed,
+  waitForAsync,
+} from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -18,7 +23,7 @@ describe('MaterialsComponent', () => {
   let storageChanged = 0;
 
   beforeAll(() => {
-    storage.sourceMatsChanged.subscribe(() => {
+    storage.dataChanged.subscribe(() => {
       storageChanged++;
     });
   });
@@ -32,12 +37,12 @@ describe('MaterialsComponent', () => {
         MatCardModule,
         FormsModule,
         MatInputModule,
-        NoopAnimationsModule
+        NoopAnimationsModule,
       ],
       providers: [
         { provide: StorageService, useValue: storage },
-        { provide: ComponentFixtureAutoDetect, useValue: true }
-      ]
+        { provide: ComponentFixtureAutoDetect, useValue: true },
+      ],
     }).compileComponents();
   }));
 
@@ -167,6 +172,6 @@ describe('MaterialsComponent', () => {
 
 @Component({
   selector: 'app-test-host',
-  template: '<app-materials></app-materials>'
+  template: '<app-materials></app-materials>',
 })
 class TestHostComponent {}

@@ -1,19 +1,42 @@
-<mat-card>
-  <app-materials></app-materials>
-</mat-card>
+<mat-toolbar>
+  <button
+    mat-icon-button
+    id="projects"
+    aria-label="projects"
+    (click)="drawer.toggle()"
+  >
+    <mat-icon>bookmarks</mat-icon>
+  </button>
+</mat-toolbar>
 
-<mat-card>
-  <app-stock></app-stock>
-</mat-card>
+<mat-sidenav-container>
+  <mat-sidenav
+    #drawer
+    mode="side"
+    [fixedInViewport]="false"
+    fixedTopGap="0"
+    fixedBottomGap="0"
+  >
+    <app-projects></app-projects>
+  </mat-sidenav>
 
-<mat-card>
-  <app-parts></app-parts>
-</mat-card>
+  <mat-card>
+    <app-materials></app-materials>
+  </mat-card>
 
-<app-results></app-results>
+  <mat-card>
+    <app-stock></app-stock>
+  </mat-card>
 
-<p>
-  Visit <a href="https://github.com/grimmohe/board-cut">github</a> for
-  license and maybe support. File bugs
-  <a href="https://github.com/grimmohe/board-cut/issues">here</a>.
-</p>
+  <mat-card>
+    <app-parts></app-parts>
+  </mat-card>
+
+  <app-results></app-results>
+
+  <p>
+    Visit <a href="https://github.com/grimmohe/board-cut">github</a> for license
+    and maybe support. File bugs
+    <a href="https://github.com/grimmohe/board-cut/issues">here</a>.
+  </p>
+</mat-sidenav-container>

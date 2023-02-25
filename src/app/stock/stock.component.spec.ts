@@ -25,8 +25,8 @@ describe('StockComponent', () => {
         MatCardModule,
         FormsModule,
         MatInputModule,
-        NoopAnimationsModule
-      ]
+        NoopAnimationsModule,
+      ],
     }).compileComponents();
   }));
 
@@ -35,7 +35,7 @@ describe('StockComponent', () => {
     testHost = fixture.componentInstance;
     element = fixture.debugElement.nativeElement;
     storage = TestBed.inject(StorageService);
-    storage.sourceMatsChanged.subscribe(() => {
+    storage.dataChanged.subscribe(() => {
       changeEventCount++;
     });
     initStorage(storage);
@@ -171,6 +171,6 @@ function initStorage(storage: StorageService) {
     count: 1,
     height: 1200,
     width: 600,
-    material: storage.materials[0]
+    material: storage.materials[0],
   });
 }

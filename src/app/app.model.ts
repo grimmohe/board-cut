@@ -1,3 +1,12 @@
+export interface Project {
+  created: string;
+  lastEdit: string;
+
+  materials: Material[];
+  stock: Stock[];
+  parts: Part[];
+}
+
 export interface Material {
   id: number;
   description?: string;
@@ -54,4 +63,4 @@ export interface Statistics {
   wasteArea: number;
 }
 
-export type Direction = 'x' | 'y';
+export type Direction = "x" | "y";

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class IdService {
   private nextId = 0;
@@ -17,7 +17,7 @@ export class IdService {
   }
 
   registerId(id: number) {
-    if (id + 1 > this.nextId) {
+    if (typeof id === 'number' && id + 1 > this.nextId) {
       this.nextId = id + 1;
     }
   }

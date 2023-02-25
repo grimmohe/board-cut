@@ -6,15 +6,19 @@ import { StorageService } from '../storage/storage.service';
 @Component({
   selector: 'app-parts',
   templateUrl: './parts.component.html',
-  styleUrls: ['./parts.component.scss']
+  styleUrls: ['./parts.component.scss'],
 })
 export class PartsComponent implements OnInit {
-  constructor(readonly storage: StorageService, private readonly idService: IdService, private readonly componentRef: ElementRef<HTMLElement>) { }
+  constructor(
+    readonly storage: StorageService,
+    private readonly idService: IdService,
+    private readonly componentRef: ElementRef<HTMLElement>
+  ) {}
 
-  ngOnInit() { }
+  ngOnInit() {}
 
   emitUpdate() {
-    this.storage.sourceMatsChanged.next();
+    this.storage.dataChanged.next();
   }
 
   addPartItem() {
@@ -25,12 +29,13 @@ export class PartsComponent implements OnInit {
       width: 0,
       followGrain: false,
       count: 1,
-      stock: null
+      stock: null,
     });
     this.emitUpdate();
 
     setTimeout(() => {
-      const nameElements: NodeListOf<HTMLInputElement> = this.componentRef.nativeElement.querySelectorAll('.name');
+      const nameElements: NodeListOf<HTMLInputElement> =
+        this.componentRef.nativeElement.querySelectorAll('.name');
       nameElements[nameElements.length - 1]?.focus();
     });
   }
@@ -44,7 +49,8 @@ export class PartsComponent implements OnInit {
     this.emitUpdate();
 
     setTimeout(() => {
-      const nameElements: NodeListOf<HTMLInputElement> = this.componentRef.nativeElement.querySelectorAll('.name');
+      const nameElements: NodeListOf<HTMLInputElement> =
+        this.componentRef.nativeElement.querySelectorAll('.name');
       nameElements[index]?.focus();
     });
   }

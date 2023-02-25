@@ -5,7 +5,6 @@ import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 import { debounceTime } from 'rxjs/operators';
 import { CutService } from 'src/app/cut/cut.service';
-import { RestoreComponent } from 'src/app/restore/restore.component';
 import { ResultSvg } from 'src/app/svg/result-svg';
 import { StorageService } from '../storage/storage.service';
 
@@ -14,7 +13,7 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 @Component({
   selector: 'app-results',
   templateUrl: './results.component.html',
-  styleUrls: ['./results.component.scss']
+  styleUrls: ['./results.component.scss'],
 })
 export class ResultsComponent implements OnInit {
   svg: SafeHtml[] = [];
@@ -27,14 +26,9 @@ export class ResultsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.storage.sourceMatsChanged
+    this.storage.dataChanged
       .pipe(debounceTime(1000))
       .subscribe(this.calculateAndDisplayNewCut.bind(this));
-
-    if (this.storage.isLocalStorageFilled()) {
-      const dialogRef = this.dialog.open(RestoreComponent);
-      dialogRef.afterClosed().subscribe(() => this.calculateAndDisplayNewCut());
-    }
   }
 
   calculateAndDisplayNewCut() {
@@ -53,13 +47,16 @@ export class ResultsComponent implements OnInit {
     const content = [];
     const definition = {
       info: {
-        title: 'board-cut'
+        title: 'board-cut',
       },
       pageOrientation: 'landscape',
-      footer: function(currentPage, pageCount) {
-        return { text: currentPage.toString() + ' of ' + pageCount, margin: 10 };
+      footer: function (currentPage, pageCount) {
+        return {
+          text: currentPage.toString() + ' of ' + pageCount,
+          margin: 10,
+        };
       },
-      content
+      content,
     };
 
     new ResultSvg().render(this.storage.result, true).forEach((svg) => {
