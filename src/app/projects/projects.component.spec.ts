@@ -104,10 +104,6 @@ describe('ProjectsComponent', () => {
     expect(storageService.deleteProject).toHaveBeenCalledOnceWith(projects[0]);
   });
 
-  it('should export a project');
-
-  it('should import a project');
-
   function setProjects(projects: string[]): void {
     storageService.getProjects.and.returnValue(projects);
 

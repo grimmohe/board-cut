@@ -14,7 +14,7 @@ export class MaterialsComponent implements OnInit {
   ngOnInit() {}
 
   emitUpdate() {
-    this.storage.dataChanged.next();
+    this.storage.dataChanged.next({ updateTimestamp: true });
   }
 
   addMaterialItem() {

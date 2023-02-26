@@ -8,6 +8,7 @@ import { PartsComponent } from 'src/app/parts/parts.component';
 import { ProjectsComponent } from 'src/app/projects/projects.component';
 import { ResultsComponent } from 'src/app/results/results.component';
 import { StockComponent } from 'src/app/stock/stock.component';
+import { TitleComponent } from 'src/app/title/title.component';
 import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
@@ -23,6 +24,7 @@ describe('AppComponent', () => {
         ResultsComponent,
         MaterialsComponent,
         ProjectsComponent,
+        TitleComponent,
       ],
       imports: [AppModule],
     }).compileComponents();

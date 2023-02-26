@@ -1,0 +1,10 @@
+<h3>{{ storage.projectName }}</h3>
+
+<div class="dates">
+  <span *ngIf="storage.created">
+    created {{ storage.created | date : 'dd.MM.YYYY - HH:mm:ss' }}
+  </span>
+  <span *ngIf="storage.lastEdit">
+    edited {{ storage.lastEdit | date : 'dd.MM.YYYY - HH:mm:ss' }}
+  </span>
+</div>

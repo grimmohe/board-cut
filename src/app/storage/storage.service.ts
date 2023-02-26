@@ -1,4 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { IdService } from 'src/app/id/id.service';
 import { Material, Part, Project, Resultset, Stock } from '../app.model';
 
@@ -16,10 +17,12 @@ export class StorageService {
 
   result: Resultset;
 
-  dataChanged = new EventEmitter<void>();
+  sanitizedBlobUrl: SafeUrl;
 
-  constructor(private idService: IdService) {
-    this.dataChanged.subscribe(this.updateLocalStorage.bind(this));
+  dataChanged = new EventEmitter<{ updateTimestamp: boolean }>();
+
+  constructor(private readonly idService: IdService, private readonly sanitizer: DomSanitizer) {
+    this.dataChanged.subscribe((opt) => this.updateLocalStorage(opt.updateTimestamp));
   }
 
   getProjects(): string[] {
@@ -62,6 +65,8 @@ export class StorageService {
         console.error(error);
       }
     }
+
+    this.dataChanged.next({ updateTimestamp: false });
   }
 
   deleteProject(projectName: string) {
@@ -78,13 +83,25 @@ export class StorageService {
 
     this.projectName = newName;
     this.created = new Date();
+    this.lastEdit = new Date();
     this.materials.length = 0;
     this.stock.length = 0;
     this.parts.length = 0;
 
-    this.updateLocalStorage();
+    this.updateLocalStorage(false);
 
     return newName;
+  }
+
+  async addProjectFromFile(file: File): Promise<void> {
+    let projectName = file.name.replace('.bcut', '');
+    if (this.getProjects().includes(projectName)) {
+      projectName = projectName + ' ' + new Date().getTime();
+    }
+
+    const content = await file.text();
+
+    localStorage.setItem(projectName, content);
   }
 
   private restoreStockMaterial() {
@@ -107,8 +124,10 @@ export class StorageService {
     });
   }
 
-  private updateLocalStorage() {
-    this.lastEdit = new Date();
+  private updateLocalStorage(updateTimestamp: boolean) {
+    if (updateTimestamp) {
+      this.lastEdit = new Date();
+    }
 
     const project: Project = {
       created: this.created.toISOString(),
@@ -118,6 +137,10 @@ export class StorageService {
       parts: this.parts,
     };
 
-    localStorage.setItem(this.projectName, JSON.stringify(project));
+    const projectData = JSON.stringify(project);
+    localStorage.setItem(this.projectName, projectData);
+
+    const blob = new Blob([projectData], { type: 'application/json' });
+    this.sanitizedBlobUrl = this.sanitizer.bypassSecurityTrustUrl(window.URL.createObjectURL(blob));
   }
 }

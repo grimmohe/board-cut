@@ -1,6 +1,6 @@
 {
   "name": "board-cut",
-  "version": "0.2.5",
+  "version": "0.3.0",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
@@ -10,7 +10,9 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "electron": "ng build -c production; cp -t dist/board-cut/ src/index.js package.json; electron-packager ./dist/board-cut --out=./dist/electron --overwrite --all --app-category-type=public.app-category.utilities"
+    "electron": "ng build -c production; cp -t dist/board-cut/ src/index.js package.json; electron-packager ./dist/board-cut --out=./dist/electron --overwrite --all --app-category-type=public.app-category.utilities",
+    "firebase login": "firebase login",
+    "firebase deploy": "firebase deploy"
   },
   "prettier": {
     "singleQuote": true,

@@ -1,22 +1,13 @@
 <mat-toolbar>
-  <button
-    mat-icon-button
-    id="projects"
-    aria-label="projects"
-    (click)="drawer.toggle()"
-  >
+  <button mat-icon-button id="projects" aria-label="projects" (click)="drawer.toggle()">
     <mat-icon>bookmarks</mat-icon>
   </button>
+
+  <app-title></app-title>
 </mat-toolbar>
 
 <mat-sidenav-container>
-  <mat-sidenav
-    #drawer
-    mode="side"
-    [fixedInViewport]="false"
-    fixedTopGap="0"
-    fixedBottomGap="0"
-  >
+  <mat-sidenav #drawer mode="side" [fixedInViewport]="false" fixedTopGap="0" fixedBottomGap="0">
     <app-projects></app-projects>
   </mat-sidenav>
 
@@ -35,8 +26,7 @@
   <app-results></app-results>
 
   <p>
-    Visit <a href="https://github.com/grimmohe/board-cut">github</a> for license
-    and maybe support. File bugs
-    <a href="https://github.com/grimmohe/board-cut/issues">here</a>.
+    Visit <a href="https://github.com/grimmohe/board-cut">github</a> for license and maybe support.
+    File bugs <a href="https://github.com/grimmohe/board-cut/issues">here</a>.
   </p>
 </mat-sidenav-container>

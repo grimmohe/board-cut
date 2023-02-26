@@ -1,18 +1,17 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { StorageService } from 'src/app/storage/storage.service';
 
 @Component({
   selector: 'app-projects',
   templateUrl: './projects.component.html',
   styleUrls: ['./projects.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectsComponent implements OnInit {
   protected projectName: string;
 
   protected projects: string[] = [];
 
-  constructor(private readonly cd: ChangeDetectorRef, private readonly storage: StorageService) {}
+  constructor(private readonly cd: ChangeDetectorRef, protected readonly storage: StorageService) {}
 
   ngOnInit(): void {
     this.reloadProjects();
@@ -42,10 +41,15 @@ export class ProjectsComponent implements OnInit {
 
   protected onNameChange(newValue: string): void {
     this.storage.projectName = newValue;
-    this.storage.dataChanged.emit();
+    this.storage.dataChanged.next({ updateTimestamp: true });
     this.storage.deleteProject(this.projectName);
     this.projectName = newValue;
 
+    this.reloadProjects();
+  }
+
+  protected async onFileSelect(file: File): Promise<void> {
+    await this.storage.addProjectFromFile(file);
     this.reloadProjects();
   }
 

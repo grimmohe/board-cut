@@ -44,6 +44,6 @@ export class StockComponent implements OnInit {
   }
 
   emitUpdate() {
-    this.storage.dataChanged.next();
+    this.storage.dataChanged.next({ updateTimestamp: true });
   }
 }

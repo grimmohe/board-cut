@@ -18,6 +18,7 @@ import { PartsComponent } from './parts/parts.component';
 import { ProjectsComponent } from './projects/projects.component';
 import { ResultsComponent } from './results/results.component';
 import { StockComponent } from './stock/stock.component';
+import { TitleComponent } from './title/title.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { StockComponent } from './stock/stock.component';
     ResultsComponent,
     MaterialsComponent,
     ProjectsComponent,
+    TitleComponent,
   ],
   imports: [
     BrowserModule,

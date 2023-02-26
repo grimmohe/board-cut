@@ -6,6 +6,15 @@
     <mat-label>name project</mat-label>
     <input matInput [ngModel]="projectName" (ngModelChange)="onNameChange($event)" />
   </mat-form-field>
+  <a
+    mat-icon-button
+    id="download"
+    aria-label="download project"
+    [href]="storage.sanitizedBlobUrl"
+    [download]="projectName + '.bcut'"
+  >
+    <mat-icon>download</mat-icon>
+  </a>
 </div>
 
 <div
@@ -19,4 +28,9 @@
   <button mat-icon-button id="delete" aria-label="delete project" (click)="onDelete(project)">
     <mat-icon>delete</mat-icon>
   </button>
+</div>
+<span class="divider"></span>
+<div class="file-input">
+  <input #fileUpload type="file" (change)="onFileSelect($event.target['files'][0])" />
+  <button mat-button (click)="fileUpload.click()">load project from file</button>
 </div>

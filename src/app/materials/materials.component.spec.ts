@@ -10,6 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { DomSanitizer } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { IdService } from 'src/app/id/id.service';
 import { StorageService } from 'src/app/storage/storage.service';
@@ -19,7 +20,10 @@ describe('MaterialsComponent', () => {
   let component: TestHostComponent;
   let fixture: ComponentFixture<TestHostComponent>;
   let element: HTMLElement;
-  const storage = new StorageService(new IdService());
+  const storage = new StorageService(
+    new IdService(),
+    jasmine.createSpyObj<DomSanitizer>('DomSanitizer', ['bypassSecurityTrustUrl'])
+  );
   let storageChanged = 0;
 
   beforeAll(() => {

@@ -18,7 +18,7 @@ export class PartsComponent implements OnInit {
   ngOnInit() {}
 
   emitUpdate() {
-    this.storage.dataChanged.next();
+    this.storage.dataChanged.next({ updateTimestamp: true });
   }
 
   addPartItem() {
