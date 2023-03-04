@@ -12,69 +12,69 @@
       </button>
     </td>
     <td>
-      <mat-form-field subscriptSizing="dynamic">
-        <mat-label>name</mat-label>
-        <input
-          matInput
-          class="desc"
-          (input)="emitUpdate()"
-          [(ngModel)]="item.description"
-        />
-      </mat-form-field>
-    </td>
-    <td>
-      <mat-form-field subscriptSizing="dynamic">
-        <mat-label>material</mat-label>
-        <select
-          matNativeControl
-          class="material"
-          (input)="emitUpdate()"
-          [(ngModel)]="item.material"
-          (ngModelChange)="emitUpdate()"
-        >
-          <option *ngFor="let m of materials" [ngValue]="m">{{ m.description }}</option>
-        </select>
-      </mat-form-field>
-    </td>
-    <td>
-      <mat-form-field subscriptSizing="dynamic">
-        <mat-label>count</mat-label>
-        <input
-          matInput
-          type="number"
-          class="count"
-          (input)="emitUpdate()"
-          [(ngModel)]="item.count"
-        />
-      </mat-form-field>
-    </td>
-    <td>
-      <mat-form-field subscriptSizing="dynamic">
-        <mat-label>width</mat-label>
-        <input
-          matInput
-          type="number"
-          class="width"
-          (input)="emitUpdate()"
-          [(ngModel)]="item.width"
-        />
-      </mat-form-field>
-    </td>
-    <td>
-      <mat-form-field subscriptSizing="dynamic">
-        <mat-label>height</mat-label>
-        <input
-          matInput
-          type="number"
-          class="height"
-          (input)="emitUpdate()"
-          [(ngModel)]="item.height"
-        />
-      </mat-form-field>
+      <div class="flex-row">
+        <mat-form-field subscriptSizing="dynamic">
+          <mat-label>name</mat-label>
+          <input
+            matInput
+            appSelect
+            class="desc"
+            (input)="emitUpdate()"
+            [(ngModel)]="item.description"
+          />
+        </mat-form-field>
+        <mat-form-field subscriptSizing="dynamic">
+          <mat-label>material</mat-label>
+          <select
+            matNativeControl
+            class="material"
+            (input)="emitUpdate()"
+            [(ngModel)]="item.material"
+            (ngModelChange)="emitUpdate()"
+          >
+            <option *ngFor="let m of materials" [ngValue]="m">{{ m.description }}</option>
+          </select>
+        </mat-form-field>
+        <mat-form-field subscriptSizing="dynamic">
+          <mat-label>count</mat-label>
+          <input
+            matInput
+            appSelect
+            type="number"
+            class="count"
+            (input)="emitUpdate()"
+            [(ngModel)]="item.count"
+          />
+        </mat-form-field>
+        <mat-form-field subscriptSizing="dynamic">
+          <mat-label>width</mat-label>
+          <input
+            matInput
+            appSelect
+            type="number"
+            class="width"
+            (input)="emitUpdate()"
+            [(ngModel)]="item.width"
+          />
+        </mat-form-field>
+        <mat-form-field subscriptSizing="dynamic">
+          <mat-label>height</mat-label>
+          <input
+            matInput
+            appSelect
+            type="number"
+            class="height"
+            (input)="emitUpdate()"
+            [(ngModel)]="item.height"
+          />
+        </mat-form-field>
+      </div>
     </td>
   </tr>
   <tr>
     <td></td>
-    <td><button class="add" mat-icon-button (click)="addStockItem()"><mat-icon>add</mat-icon></button></td>
+    <td>
+      <button class="add" mat-icon-button (click)="addStockItem()"><mat-icon>add</mat-icon></button>
+    </td>
   </tr>
 </table>

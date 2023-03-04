@@ -19,6 +19,7 @@ import { ProjectsComponent } from './projects/projects.component';
 import { ResultsComponent } from './results/results.component';
 import { StockComponent } from './stock/stock.component';
 import { TitleComponent } from './title/title.component';
+import { SelectDirective } from './select.directive';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { TitleComponent } from './title/title.component';
     MaterialsComponent,
     ProjectsComponent,
     TitleComponent,
+    SelectDirective,
   ],
   imports: [
     BrowserModule,

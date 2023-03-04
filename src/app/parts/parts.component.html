@@ -12,75 +12,78 @@
       </button>
     </td>
     <td>
-      <mat-form-field subscriptSizing="dynamic">
-        <mat-label>name</mat-label>
-        <input
-          matInput
-          class="name"
-          [(ngModel)]="item.description"
-          (input)="emitUpdate()"
-        />
-      </mat-form-field>
-    </td>
-    <td>
-      <mat-form-field subscriptSizing="dynamic">
-        <mat-label>from stock</mat-label>
-        <select
-          matNativeControl
-          class="stock"
-          [(ngModel)]="item.stock"
-          (ngModelChange)="emitUpdate()"
+      <div class="flex-row">
+        <mat-form-field subscriptSizing="dynamic">
+          <mat-label>name</mat-label>
+          <input
+            matInput
+            appSelect
+            class="name"
+            [(ngModel)]="item.description"
+            (input)="emitUpdate()"
+          />
+        </mat-form-field>
+        <mat-form-field subscriptSizing="dynamic">
+          <mat-label>from stock</mat-label>
+          <select
+            matNativeControl
+            class="stock"
+            [(ngModel)]="item.stock"
+            (ngModelChange)="emitUpdate()"
+          >
+            <option *ngFor="let s of storage.stock" [ngValue]="s">
+              {{ s.description }} ({{ s.height }}:{{ s.width }})
+            </option>
+          </select>
+        </mat-form-field>
+        <mat-form-field subscriptSizing="dynamic">
+          <mat-label>count</mat-label>
+          <input
+            matInput
+            appSelect
+            type="number"
+            class="count"
+            [(ngModel)]="item.count"
+            (input)="emitUpdate()"
+          />
+        </mat-form-field>
+        <mat-form-field subscriptSizing="dynamic">
+          <mat-label>width</mat-label>
+          <input
+            matInput
+            appSelect
+            type="number"
+            class="width"
+            [(ngModel)]="item.width"
+            (input)="emitUpdate()"
+          />
+        </mat-form-field>
+        <mat-form-field subscriptSizing="dynamic">
+          <mat-label>height</mat-label>
+          <input
+            matInput
+            appSelect
+            type="number"
+            class="height"
+            [(ngModel)]="item.height"
+            (input)="emitUpdate()"
+          />
+        </mat-form-field>
+        <mat-checkbox
+          class="follow"
+          [(ngModel)]="item.followGrain"
+          (change)="emitUpdate()"
+          matTooltip="don't rotate this part"
         >
-          <option *ngFor="let s of storage.stock" [ngValue]="s">
-            {{ s.description }} ({{ s.height }}:{{ s.width }})
-          </option>
-        </select>
-      </mat-form-field>
-    </td>
-    <td>
-      <mat-form-field subscriptSizing="dynamic">
-        <mat-label>count</mat-label>
-        <input
-          matInput
-          type="number"
-          class="count"
-          [(ngModel)]="item.count"
-          (input)="emitUpdate()"
-        />
-      </mat-form-field>
-    </td>
-    <td>
-      <mat-form-field subscriptSizing="dynamic">
-        <mat-label>width</mat-label>
-        <input
-          matInput
-          type="number"
-          class="width"
-          [(ngModel)]="item.width"
-          (input)="emitUpdate()"
-        />
-      </mat-form-field>
-    </td>
-    <td>
-      <mat-form-field subscriptSizing="dynamic">
-        <mat-label>height</mat-label>
-        <input
-          matInput
-          type="number"
-          class="height"
-          [(ngModel)]="item.height"
-          (input)="emitUpdate()"
-        />
-      </mat-form-field>
-    </td>
-    <td>
-      <mat-checkbox class="follow" [(ngModel)]="item.followGrain" (change)="emitUpdate()" matTooltip="don't rotate this part">
-        follow grain
-      </mat-checkbox>
+          follow grain
+        </mat-checkbox>
+      </div>
     </td>
   </tr>
   <tr>
     <td></td>
-    <td><button class="add" mat-icon-button (click)="addPartItem()"><mat-icon>add</mat-icon></button></td>
+    <td>
+      <button class="add" mat-icon-button (click)="addPartItem()"><mat-icon>add</mat-icon></button>
+    </td>
   </tr>
 </table>

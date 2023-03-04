@@ -124,7 +124,7 @@ describe('StorageService', () => {
     service.stock = project.stock;
     service.parts = project.parts;
 
-    service.dataChanged.emit({ updateTimestamp: true });
+    service.dataChanged.next({ updateTimestamp: true });
 
     project.lastEdit = service.lastEdit.toISOString();
 

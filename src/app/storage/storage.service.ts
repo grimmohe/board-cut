@@ -1,5 +1,6 @@
-import { EventEmitter, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { ReplaySubject } from 'rxjs';
 import { IdService } from 'src/app/id/id.service';
 import { Material, Part, Project, Resultset, Stock } from '../app.model';
 
@@ -19,7 +20,7 @@ export class StorageService {
 
   sanitizedBlobUrl: SafeUrl;
 
-  dataChanged = new EventEmitter<{ updateTimestamp: boolean }>();
+  dataChanged = new ReplaySubject<{ updateTimestamp: boolean }>(1);
 
   constructor(private readonly idService: IdService, private readonly sanitizer: DomSanitizer) {
     this.dataChanged.subscribe((opt) => this.updateLocalStorage(opt.updateTimestamp));

@@ -7,6 +7,7 @@ import { MaterialsComponent } from 'src/app/materials/materials.component';
 import { PartsComponent } from 'src/app/parts/parts.component';
 import { ProjectsComponent } from 'src/app/projects/projects.component';
 import { ResultsComponent } from 'src/app/results/results.component';
+import { SelectDirective } from 'src/app/select.directive';
 import { StockComponent } from 'src/app/stock/stock.component';
 import { TitleComponent } from 'src/app/title/title.component';
 import { AppComponent } from './app.component';
@@ -25,6 +26,7 @@ describe('AppComponent', () => {
         MaterialsComponent,
         ProjectsComponent,
         TitleComponent,
+        SelectDirective,
       ],
       imports: [AppModule],
     }).compileComponents();

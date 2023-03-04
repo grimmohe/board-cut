@@ -26,7 +26,9 @@ export class StockComponent implements OnInit {
       width: 0,
       count: 1,
       description: '',
-      material: null,
+      material: this.storage.materials?.length
+        ? this.storage.materials[this.storage.materials.length - 1]
+        : null,
     });
     this.emitUpdate();
   }

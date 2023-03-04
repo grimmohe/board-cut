@@ -1,12 +1,12 @@
 {
   "name": "board-cut",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build -c production",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
@@ -51,7 +51,7 @@
     "@types/node": "^18.11.18",
     "@typescript-eslint/eslint-plugin": "^5.49.0",
     "@typescript-eslint/parser": "^5.49.0",
-    "electron": "^22.1.0",
+    "electron": "^23.1.1",
     "eslint": "^8.33.0",
     "jasmine-core": "~4.5.0",
     "karma": "~6.4.0",

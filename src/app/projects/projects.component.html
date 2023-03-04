@@ -1,5 +1,11 @@
 <div class="tool-row" mat-body>
-  <button mat-icon-button id="new-project" aria-label="new project" (click)="onNewProject()">
+  <button
+    mat-icon-button
+    id="new-project"
+    aria-label="new project"
+    matTooltip="new project"
+    (click)="onNewProject()"
+  >
     <mat-icon>add</mat-icon>
   </button>
   <mat-form-field subscriptSizing="dynamic">
@@ -9,7 +15,8 @@
   <a
     mat-icon-button
     id="download"
-    aria-label="download project"
+    aria-label="download project definition"
+    matTooltip="download project definition"
     [href]="storage.sanitizedBlobUrl"
     [download]="projectName + '.bcut'"
   >

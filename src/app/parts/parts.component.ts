@@ -29,7 +29,7 @@ export class PartsComponent implements OnInit {
       width: 0,
       followGrain: false,
       count: 1,
-      stock: null,
+      stock: this.storage.stock?.length ? this.storage.stock[this.storage.stock.length - 1] : null,
     });
     this.emitUpdate();
 

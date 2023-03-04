@@ -1,7 +1,7 @@
 <mat-card>
-  <button mat-icon-button (click)="downloadPdf()">
-    <mat-icon>picture_as_pdf</mat-icon>
-  </button>
+  <mat-card-actions align="start">
+    <button mat-flat-button (click)="downloadPdf()" color="primary">download pdf</button>
+  </mat-card-actions>
 
   <ng-container *ngFor="let svgItem of svg">
     <div [innerHtml]="svgItem"></div>

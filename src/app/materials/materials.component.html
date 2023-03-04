@@ -12,43 +12,48 @@
       </button>
     </td>
     <td>
-      <mat-form-field subscriptSizing="dynamic">
-        <mat-label>name</mat-label>
-        <input
-          class="desc"
-          matInput
-          [(ngModel)]="item.description"
-          (input)="emitUpdate()"
-        />
-      </mat-form-field>
-    </td>
-    <td>
-      <mat-form-field subscriptSizing="dynamic">
-        <mat-label>thickness</mat-label>
-        <input
-          class="thickness"
-          matInput
-          type="number"
-          [(ngModel)]="item.thickness"
-          (input)="emitUpdate()"
-        />
-      </mat-form-field>
-    </td>
-    <td>
-      <mat-form-field subscriptSizing="dynamic">
-        <mat-label>cut width</mat-label>
-        <input
-          class="width"
-          matInput
-          type="number"
-          [(ngModel)]="item.cuttingWidth"
-          (input)="emitUpdate()"
-        />
-      </mat-form-field>
+      <div class="flex-row">
+        <mat-form-field subscriptSizing="dynamic">
+          <mat-label>name</mat-label>
+          <input
+            class="desc"
+            matInput
+            appSelect
+            [(ngModel)]="item.description"
+            (input)="emitUpdate()"
+          />
+        </mat-form-field>
+        <mat-form-field subscriptSizing="dynamic">
+          <mat-label>thickness</mat-label>
+          <input
+            class="thickness"
+            matInput
+            appSelect
+            type="number"
+            [(ngModel)]="item.thickness"
+            (input)="emitUpdate()"
+          />
+        </mat-form-field>
+        <mat-form-field subscriptSizing="dynamic">
+          <mat-label>cut width</mat-label>
+          <input
+            class="width"
+            matInput
+            appSelect
+            type="number"
+            [(ngModel)]="item.cuttingWidth"
+            (input)="emitUpdate()"
+          />
+        </mat-form-field>
+      </div>
     </td>
   </tr>
   <tr>
     <td></td>
-    <td><button class="add" mat-icon-button (click)="addMaterialItem()"><mat-icon>add</mat-icon></button></td>
+    <td>
+      <button class="add" mat-icon-button (click)="addMaterialItem()">
+        <mat-icon>add</mat-icon>
+      </button>
+    </td>
   </tr>
 </table>
